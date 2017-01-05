@@ -1,43 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
     tools:context="com.batsw.anonimitychat.MainActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Connect To Partner"
-        android:id="@+id/btn_tor_connect"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="27dp" />
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop TOR Bundle"
-        android:id="@+id/btn_tor_stop"
-        android:layout_above="@+id/btn_tor_connect"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="23dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter Partner Hostname"
-        android:id="@+id/partner_hostname"
-        android:layout_above="@+id/btn_tor_stop"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="31dp" />
+        <LinearLayout
+            android:id="@+id/tor_status_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/tor_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="STARTING"
+                android:textColor="@color/colorStartingTorStatus"
+                android:textSize="35dp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/partner_hostname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tor_status_layout"
+            android:hint="Enter Partner Hostname"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/btn_tor_connect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/partner_hostname"
+            android:layout_marginTop="10dp"
+            android:text="Connect To Partner"
+            android:textSize="16dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/btn_tor_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start TOR Bundle" />
+
+            <Button
+                android:id="@+id/btn_tor_stop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_tor_start"
+                android:layout_marginBottom="23dp"
+                android:text="Stop TOR Bundle" />
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
