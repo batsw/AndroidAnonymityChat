@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -36,6 +37,10 @@ public class TorPublisher {
     DataOutputStream writeMessage;
     private OutputStream outToServer;
 
+    public TorPublisher (String partnerHostName) {
+        destinationAddress = partnerHostName;
+    }
+
     public void run() {
         try {
 
@@ -55,10 +60,17 @@ public class TorPublisher {
 //            outToServer = socket.getOutputStream();
 
             // 1. creating a socket to connect to the server
-            Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", SOCKS_PORT));
-            requestSocket = new Socket(torProxy);
+//            Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", SOCKS_PORT));
+//            requestSocket = new Socket(torProxy);
             Log.i(LOG, "destinationAddress: " + destinationAddress);
-            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
+
+            SocketAddress address = new InetSocketAddress("127.0.0.1", SOCKS_PORT);
+            Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
+            requestSocket = new Socket(proxy);
+            InetSocketAddress dest = new InetSocketAddress(destinationAddress, 80);
+            requestSocket.connect(dest, 50);
+
+//            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
             Log.i(LOG, "Connected to target address");
 
             outToServer = requestSocket.getOutputStream();
@@ -66,15 +78,10 @@ public class TorPublisher {
 
             writeMessage = new DataOutputStream(outToServer);
 
-//            // 2. get Input and Output streams
-//            outputStream = new ObjectOutputStream(requestSocket.getOutputStream());
-//            outputStream.flush();
-
-            // 3: Communicating with the server
             do {
                 message = "hello from Android Galaxy S2";
-                String EOL = System.getProperty("line.separator");
-                writeMessage.writeUTF((message + EOL).format("%n").intern());
+                String EOL = "\n";
+                writeMessage.writeUTF((message + EOL));
                 writeMessage.flush();
 //                sendMessage(message);
 

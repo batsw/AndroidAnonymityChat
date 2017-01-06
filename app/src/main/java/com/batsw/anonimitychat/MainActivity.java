@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.batsw.anonimitychat.common.NetworkingPermissions;
 import com.batsw.anonimitychat.tor.bundle.CopyTorResource;
@@ -25,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final String MAIN_ACTIVITY_TAG = MainActivity.class.getSimpleName();
 
-    Button torStopButton, connectToWindowsTorClient;
+    Button torStopButton, connectToTorClient, mOpenPortButton;
+
+    TextView mPatnerHostname, mPortToOpen;
 
     private Process mTorProcess;
     private int mTorPID = 0;
     private String mTorHostnamee = "";
 
     private TorBundleListenerManager mTorBundleListenerManager;
-
-    private boolean runOnceIpTablesRule = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         torStopButton = (Button) findViewById(R.id.btn_tor_stop);
-        connectToWindowsTorClient = (Button) findViewById(R.id.btn_tor_connect);
+        connectToTorClient = (Button) findViewById(R.id.btn_tor_connect);
+        mOpenPortButton = (Button) findViewById(R.id.open_port);
+
+        mPatnerHostname = (TextView) findViewById(R.id.partner_hostname);
+        mPortToOpen = (TextView) findViewById(R.id.text_port);
 
         ////////////////////////////////////////
         /////////TODO: Tudor refactoring////////
@@ -129,47 +134,45 @@ public class MainActivity extends AppCompatActivity {
         /////////Buttons//////////////////////////////////////////
         ///////////////////////////////////////////////////////////
 
-
-        connectToWindowsTorClient.setOnClickListener(new View.OnClickListener()
+        connectToTorClient.setOnClickListener(new View.OnClickListener()
 
                                                      {
                                                          @Override
                                                          public void onClick(View v) {
                                                              Log.i(MAIN_ACTIVITY_TAG, "Accessing TOR Publisher");
 
-                                                             if (!runOnceIpTablesRule) {
+                                                             String partnerName = mPatnerHostname.getText().toString();
+                                                             Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
 
-                                                                 NetworkingPermissions networkingPermissions2 = new NetworkingPermissions(8080);
-                                                                 String iptablesCommand2 = networkingPermissions2.ipTableRuleMaker();
-                                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand2);
-
-                                                                 try {
-                                                                     Runtime.getRuntime().exec(iptablesCommand2);
-                                                                 } catch (IOException e) {
-                                                                     Log.e(MAIN_ACTIVITY_TAG, "ERROR when launching TOR Bundle" + e.getMessage(), e);
-                                                                 }
-
-                                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: executed for " + 8080);
-
-                                                                 NetworkingPermissions networkingPermissions = new NetworkingPermissions(11158);
-                                                                 String iptablesCommand = networkingPermissions.ipTableRuleMaker();
-                                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand);
-
-                                                                 try {
-                                                                     Runtime.getRuntime().exec(iptablesCommand);
-                                                                 } catch (IOException e) {
-                                                                     Log.e(MAIN_ACTIVITY_TAG, "ERROR when launching TOR Bundle" + e.getMessage(), e);
-                                                                 }
-
-                                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: executed for " + 11158);
-
-                                                                 runOnceIpTablesRule = true;
-                                                             }
-//
-                                                             TorPublisher torPublisher = new TorPublisher();
+                                                             TorPublisher torPublisher = new TorPublisher(partnerName);
                                                              torPublisher.run();
                                                          }
                                                      }
+        );
+
+        mOpenPortButton.setOnClickListener(new View.OnClickListener()
+
+                                         {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 Log.i(MAIN_ACTIVITY_TAG, "Opening another port");
+                                                 String enteredStringPort = mPortToOpen.getText().toString();
+                                                 int enteredPort = Integer.parseInt(enteredStringPort);
+
+                                                 NetworkingPermissions networkingPermissions = new NetworkingPermissions(enteredPort);
+                                                 String iptablesCommand = networkingPermissions.ipTableRuleMaker();
+                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand);
+
+                                                 try {
+                                                     Runtime.getRuntime().exec(iptablesCommand);
+                                                 } catch (IOException e) {
+                                                     Log.e(MAIN_ACTIVITY_TAG, "ERROR when launching TOR Bundle" + e.getMessage(), e);
+                                                 }
+
+                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: executed for " + enteredPort);
+                                             }
+                                         }
+
         );
 
         torStopButton.setOnClickListener(new View.OnClickListener()

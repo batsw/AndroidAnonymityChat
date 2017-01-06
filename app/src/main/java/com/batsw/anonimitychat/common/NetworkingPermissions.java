@@ -12,7 +12,7 @@ public class NetworkingPermissions {
 
     private static final String LOG = "NetworkingPermissions";
 
-    private String ruleArguments1 = " -I OUTPUT -p tcp -d 127.0.0.1 --dport";
+    private String ruleArguments1 = " -I OUTPUT -p tcp --dport";
     private String ruleArguments2 = " -j ACCEPT";
 
     private int mPort;

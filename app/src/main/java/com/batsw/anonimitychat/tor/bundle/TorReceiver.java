@@ -23,7 +23,6 @@ public class TorReceiver {
     DataInputStream dataInputStream;
     String message;
 
-
     public static final int LOCAL_PORT = 8080;
 
     public void run() {
@@ -40,69 +39,6 @@ public class TorReceiver {
             Log.i(LOG, "Connection received from " + connection.getInetAddress().getHostName());
             dataInputStream = new DataInputStream(connection.getInputStream());
 
-
-//            InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
-//            final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    while (true) {
-//
-////            while (bufferedReader.ready()) {
-//                        String message = null;
-//                        try {
-//                            message = bufferedReader.readLine();
-//                            if (message != null)
-//                                Log.i(LOG, "BR Message Receved___" + message);
-//                        } catch (IOException e) {
-//                            Log.e(LOG, "error: " + e.getMessage(), e);
-//                        }
-//                    }
-//
-//                }
-//            }).start();
-//
-//            final BufferedInputStream bufferedInputStream = new BufferedInputStream(connection.getInputStream());
-//
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while (true) {
-//                        try {
-//
-//                            int message = bufferedInputStream.read();
-//                            if (message > 0)
-//                                Log.i(LOG, "BIS Message Receved___" + message);
-//                        } catch (IOException e) {
-//                            Log.e(LOG, "error: " + e.getMessage(), e);
-//                        }
-//                    }
-//
-//                }
-//            }).start();
-
-            //SCANNER
-//            final InputStream inputStream = connection.getInputStream();
-//
-//
-//            final Scanner scanner = new Scanner(connection.getInputStream(), "UTF8");
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while (true) {
-//                        while (scanner.hasNext()) {
-//                            Log.i(LOG, "Scanner Message Receved_11__" + scanner.nextLine());
-//                            scanner.reset();
-//                        }
-//                    }
-//                }
-//            }).start();
-
-
-//DATAINPUTSTREAM
-
             while (true) {
                 String incomingMessageFromServer = "";
                 try {
@@ -117,29 +53,6 @@ public class TorReceiver {
                     break;
                 }
             }
-
-            //Obj input stream
-            //must inject a breaking logic
-//            final ObjectInputStream objectInputStream = new ObjectInputStream(connection.getInputStream());
-//
-//            while (true) {
-//                while (objectInputStream.available() > 0) {
-//                    String message = objectInputStream.readUTF();
-//                    Log.i(LOG, "Message Receved___" + message);
-//                }
-
-//            //SCANNER
-//            while (true) {
-//                while (scanner.hasNext()) {
-//                    Log.i(LOG, "Message Receved___" + scanner.next());
-//                    scanner.reset();
-//                }
-//            }
-
-//
-//            } catch (IOException ioException) {
-//                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-//            }
 
         } catch (
                 IOException ioException
