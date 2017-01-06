@@ -7,6 +7,8 @@
     android:fillViewport="true"
     tools:context="com.batsw.anonimitychat.MainActivity">
 
+    <!--android:layout_marginBottom="50dp"-->
+    <!--android:layout_marginTop="30dp"-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,8 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -31,6 +31,8 @@
                 android:text="STARTING"
                 android:textColor="@color/colorStartingTorStatus"
                 android:textSize="35dp" />
+
+
         </LinearLayout>
 
         <EditText
@@ -44,18 +46,43 @@
             android:textSize="20dp" />
 
         <Button
+            android:id="@+id/open_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open Port"
+            android:textSize="16dp"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="30dp" />
+
+        <EditText
+            android:id="@+id/text_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Port"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
             android:id="@+id/btn_tor_connect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/partner_hostname"
-            android:layout_marginTop="10dp"
             android:text="Connect To Partner"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_above="@+id/text_port"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:id="@+id/relativeLayout">
 
             <Button
                 android:id="@+id/btn_tor_start"
@@ -71,5 +98,7 @@
                 android:layout_marginBottom="23dp"
                 android:text="Stop TOR Bundle" />
         </RelativeLayout>
+
+
     </RelativeLayout>
 </ScrollView>
