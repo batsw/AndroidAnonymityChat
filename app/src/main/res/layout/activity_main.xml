@@ -7,10 +7,7 @@
     android:fillViewport="true"
     tools:context="com.batsw.anonimitychat.MainActivity">
 
-    <!--android:layout_marginBottom="50dp"-->
-    <!--android:layout_marginTop="30dp"-->
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/tor_status"
@@ -35,70 +33,75 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/partner_hostname"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tor_status_layout"
-            android:hint="Enter Partner Hostname"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:textSize="20dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/open_port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Open Port"
-            android:textSize="16dp"
-            android:layout_above="@+id/relativeLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="30dp" />
-
-        <EditText
-            android:id="@+id/text_port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Port"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:textSize="20dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/btn_tor_connect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Connect To Partner"
-            android:textSize="16dp"
-            android:layout_above="@+id/text_port"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/relativeLayout">
-
-            <Button
-                android:id="@+id/btn_tor_start"
+            <EditText
+                android:id="@+id/partner_hostname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start TOR Bundle" />
+                android:layout_below="@+id/tor_status_layout"
+                android:hint="Enter Partner Hostname"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:textSize="20dp" />
 
             <Button
-                android:id="@+id/btn_tor_stop"
+                android:id="@+id/open_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_tor_start"
-                android:layout_marginBottom="23dp"
-                android:text="Stop TOR Bundle" />
-        </RelativeLayout>
+                android:layout_above="@+id/relativeLayout"
+                android:layout_marginBottom="15dp"
+                android:text="Open Port"
+                android:textSize="16dp" />
 
+            <EditText
+                android:id="@+id/text_port"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:hint="Enter Port"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:textSize="20dp" />
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btn_tor_connect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Connect To Partner"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="30dp"
+                android:alpha="0.5"
+                android:background="@color/colorGray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_tor_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Start TOR Bundle" />
+
+                <Button
+                    android:id="@+id/btn_tor_stop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Stop TOR Bundle" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>
