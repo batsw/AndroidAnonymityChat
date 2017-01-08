@@ -22,7 +22,7 @@ public class TorPublisher {
 
     private static final String LOG = "TorPublisher";
 
-    public static String destinationAddress = "kpgijj4zenzjlutx.onion";
+    public static String destinationAddress = "";
 
     private static Socket socket;
     private static PrintWriter out;
@@ -67,8 +67,8 @@ public class TorPublisher {
             SocketAddress address = new InetSocketAddress("127.0.0.1", SOCKS_PORT);
             Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
             requestSocket = new Socket(proxy);
-            InetSocketAddress dest = new InetSocketAddress(destinationAddress, 80);
-            requestSocket.connect(dest, 50);
+            InetSocketAddress dest = new InetSocketAddress(destinationAddress, 8080);
+            requestSocket.connect(dest, 100);
 
 //            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
             Log.i(LOG, "Connected to target address");
@@ -80,7 +80,7 @@ public class TorPublisher {
 
             do {
                 message = "hello from Android Galaxy S2";
-                String EOL = "\n";
+                String EOL = "\r\n";
                 writeMessage.writeUTF((message + EOL));
                 writeMessage.flush();
 //                sendMessage(message);
