@@ -20,7 +20,7 @@ public class NetworkingPermissions {
 
 //    -d 127.0.0.1
 
-    private String ruleArguments1 = " -t nat -A OUTPUT -p all -m owner --uid-owner --dport";
+    private String ruleArguments1 = " -I OUTPUT -p all --dport";
     private String ruleArguments2 = " -j ACCEPT";
 
     private int mPort;

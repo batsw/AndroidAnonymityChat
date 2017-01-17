@@ -4,8 +4,10 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,9 +23,14 @@ public class TorReceiver {
     Socket connection = null;
     ObjectOutputStream out;
     DataInputStream dataInputStream;
+    DataOutputStream outToPublisher;
+    OutputStream outputStream;
     String message;
 
-    public static final int LOCAL_PORT = 8080;
+//    public static final int LOCAL_PORT = 8080;
+    public static final int LOCAL_PORT = 44444;
+//    public static final int LOCAL_PORT = 11158;
+//    public static final int LOCAL_PORT = 80;
 
     public void run() {
         try {
@@ -39,15 +46,23 @@ public class TorReceiver {
             Log.i(LOG, "Connection received from " + connection.getInetAddress().getHostName());
             dataInputStream = new DataInputStream(connection.getInputStream());
 
+            outputStream = connection.getOutputStream();
+
+            outToPublisher = new DataOutputStream(outputStream);
+
             while (true) {
                 String incomingMessageFromServer = "";
                 try {
                     if (dataInputStream != null) {
                         incomingMessageFromServer = dataInputStream.readUTF();
                         Log.i(LOG, "Message Receved___" + incomingMessageFromServer);
+
+                        outToPublisher.writeUTF(incomingMessageFromServer);
+                        outToPublisher.flush();
+                        Log.i(LOG, "Message Repeated");
                     }
                 } catch (IOException e) {
-                    //TODO : I don't think the connetion should be closed ... EVER ... for the future
+                    //TODO : I don't think the connection should be closed ... EVER ... for the future
                     Log.e(LOG, "error: " + e.getMessage(), e);
                     connection.close();
                     break;
@@ -63,11 +78,11 @@ public class TorReceiver {
         } finally
 
         {
-            try {
-                providerSocket.close();
-            } catch (IOException ioException) {
-                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-            }
+//            try {
+//                providerSocket.close();
+//            } catch (IOException ioException) {
+//                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
+//            }
         }
     }
 }

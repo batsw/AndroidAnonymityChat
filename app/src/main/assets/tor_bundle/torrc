@@ -20,7 +20,18 @@ HiddenServiceDir /data/data/com.batsw.anonimitychat/files/torBundle/
 # The port on which the server is listening
 # Example:
 # All traffic comming on port 80 will be routed to port 8080 of the local proxy
-HiddenServicePort 8080 127.0.0.1:8080
+#HiddenServicePort 80 127.0.0.1:8080
+HiddenServicePort 80 127.0.0.1:44444
+#HiddenServicePort 80 127.0.0.1:80
+
+#HTTPProxy 127.0.0.1:80
+
+#Socks5Proxy 127.0.0.1:80
+
+#RunAsDaemon 1
+
+#FascistFirewall 1
+#FirewallPorts 80,443,11158
 
 #ReachableDirAddresses *:80
 #ReachableORAddresses *:443

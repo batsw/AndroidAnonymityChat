@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button torStopButton, connectToTorClient, mOpenPortButton;
 
+    private boolean runOnce = true;
+
     TextView mPatnerHostname, mPortToOpen;
 
     private Process mTorProcess;
@@ -136,42 +138,63 @@ public class MainActivity extends AppCompatActivity {
 
         connectToTorClient.setOnClickListener(new View.OnClickListener()
 
-                                                     {
-                                                         @Override
-                                                         public void onClick(View v) {
-                                                             Log.i(MAIN_ACTIVITY_TAG, "Accessing TOR Publisher");
+                                              {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      Log.i(MAIN_ACTIVITY_TAG, "Accessing TOR Publisher");
 
-                                                             String partnerName = mPatnerHostname.getText().toString();
-                                                             Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
+                                                      final String partnerName = mPatnerHostname.getText().toString();
+                                                      Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
 
-                                                             TorPublisher torPublisher = new TorPublisher(partnerName);
-                                                             torPublisher.run();
-                                                         }
-                                                     }
+                                                      Thread thread = new Thread(new Runnable() {
+
+                                                          @Override
+                                                          public void run() {
+                                                              TorPublisher torPublisher = new TorPublisher(partnerName);
+                                                              torPublisher.run();
+                                                          }
+
+                                                      });
+
+                                                      thread.start();
+
+                                                  }
+                                              }
+
         );
 
         mOpenPortButton.setOnClickListener(new View.OnClickListener()
 
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 Log.i(MAIN_ACTIVITY_TAG, "Opening another port");
-                                                 String enteredStringPort = mPortToOpen.getText().toString();
-                                                 int enteredPort = Integer.parseInt(enteredStringPort);
+                                           {
+                                               @Override
+                                               public void onClick(View v) {
+                                                   Log.i(MAIN_ACTIVITY_TAG, "Opening another port");
+                                                   String enteredStringPort = mPortToOpen.getText().toString();
+                                                   int enteredPort = Integer.parseInt(enteredStringPort);
 
-                                                 NetworkingPermissions networkingPermissions = new NetworkingPermissions(enteredPort);
-                                                 String iptablesCommand = networkingPermissions.ipTableRuleMaker();
-                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand);
+                                                   NetworkingPermissions networkingPermissions = new NetworkingPermissions(enteredPort);
+                                                   String iptablesCommand = networkingPermissions.ipTableRuleMaker();
+                                                   Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand);
 
-                                                 try {
-                                                     Runtime.getRuntime().exec(iptablesCommand);
-                                                 } catch (IOException e) {
-                                                     Log.e(MAIN_ACTIVITY_TAG, "ERROR when launching TOR Bundle" + e.getMessage(), e);
-                                                 }
+                                                   try {
+                                                           Runtime.getRuntime().exec(iptablesCommand);
+//                                                           if (runOnce) {
+//
+////                                                         Runtime.getRuntime().exec("iptables -I OUTPUT -o wlan0 -d 0.0.0.0/0 -j ACCEPT");
+////                                                         Runtime.getRuntime().exec("iptables -I INPUT -i wlan0 -m state --state ESTABLISHED,RELATED -j ACCEPT");
+//
+//                                                               Runtime.getRuntime().exec("iptables -t nat -I OUTPUT -p tcp --dport 80 -j DNAT --to-destination :80");
+//
+//                                                               runOnce = false;
+//                                                           }
 
-                                                 Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: executed for " + enteredPort);
-                                             }
-                                         }
+                                                   } catch (IOException e) {
+                                                       Log.e(MAIN_ACTIVITY_TAG, "ERROR when executing iptables command: " + e.getMessage(), e);
+                                                   }
+
+                                                   Log.i(MAIN_ACTIVITY_TAG, "Open Port command executed for: " + enteredPort);
+                                               }
+                                           }
 
         );
 
