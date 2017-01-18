@@ -22,26 +22,18 @@ public class TorPublisher {
 
     private static final String LOG = "TorPublisher";
 
-    public static String destinationAddress = "";
+    public static String mDestinationAddress = "";
 
-    private static Socket socket;
-    private static PrintWriter out;
+    private Socket mSocketConnection;
 
-    //    public static final int LOCAL_PORT = 8080;
-//    public static final int LOCAL_PORT = 44444;
-    //    public static final int LOCAL_PORT = 11158;
-    public static final int INBOUND_PORT = 80;
-    public static final int SOCKS_PORT = 11158;
+    //TODO: remove when finished testing
+    private String message = "";
 
-    Socket requestSocket;
-    ObjectOutputStream outputStream;
-    String message = "";
-
-    DataOutputStream writeMessage;
-    private OutputStream outToServer;
+    private OutputStream mOutputStream;
+    DataOutputStream mDataOutputStream;
 
     public TorPublisher(String partnerHostName) {
-        destinationAddress = partnerHostName;
+        mDestinationAddress = partnerHostName;
     }
 
     public void run() {
@@ -70,32 +62,30 @@ public class TorPublisher {
 //            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress,
 //                    44444));
 
-            SocketAddress address = new InetSocketAddress("127.0.0.1", SOCKS_PORT);
+            SocketAddress address = new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
             Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
-            requestSocket = new Socket(proxy);
-            InetSocketAddress dest = new InetSocketAddress(destinationAddress, INBOUND_PORT);
-            requestSocket.connect(dest);
+            mSocketConnection = new Socket(proxy);
+            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
+            mSocketConnection.connect(destination);
 
 //            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
             Log.i(LOG, "Connected to target address");
 
-            outToServer = requestSocket.getOutputStream();
-
-            writeMessage = new DataOutputStream(outToServer);
+            mOutputStream = mSocketConnection.getOutputStream();
+            mDataOutputStream = new DataOutputStream(mOutputStream);
 
             do {
-                message = "hello from Android Galaxy S2";
+                message = "hello from Android";
                 String EOL = System.getProperty("line.separator");
-                writeMessage.writeUTF((message + EOL));
-                writeMessage.flush();
-//                sendMessage(message);
+                mDataOutputStream.writeUTF((message + EOL));
+                mDataOutputStream.flush();
 
                 Log.i(LOG, "message sent to destination");
 
                 message = "bye";
-                writeMessage.writeUTF(message + EOL);
-                writeMessage.flush();
-//                sendMessage(message);
+                mDataOutputStream.writeUTF(message + EOL);
+                mDataOutputStream.flush();
+
                 Log.i(LOG, "message sent to destination");
             } while (!message.equals("bye"));
 
@@ -103,24 +93,24 @@ public class TorPublisher {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getMessage(), unknownHost);
         } catch (IOException ioException) {
             Log.e(LOG, "error: " + ioException.getMessage(), ioException);
+
+        } finally {
+            try {
+                mDataOutputStream.close();
+                mSocketConnection.close();
+            } catch (IOException ioException) {
+                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
+            }
         }
-//        } finally {
-//            // 4: Closing connection
-//            try {
-//                out.close();
-//                requestSocket.close();
-//            } catch (IOException ioException) {
-//                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-//            }
-//        }
     }
 
-    private void sendMessage(String msg) {
-        try {
-            outputStream.writeObject(msg);
-            outputStream.flush();
-        } catch (IOException ioException) {
-            Log.e(LOG, "error when sending message: " + ioException.getMessage(), ioException);
-        }
-    }
+    //TODO: use it later
+//    private void sendMessage(String msg) {
+//        try {
+//            outputStream.writeObject(msg);
+//            outputStream.flush();
+//        } catch (IOException ioException) {
+//            Log.e(LOG, "error when sending message: " + ioException.getMessage(), ioException);
+//        }
+//    }
 }

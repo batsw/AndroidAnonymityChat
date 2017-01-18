@@ -19,18 +19,12 @@ public class TorReceiver {
 
     private static final String LOG = "TorReceiver";
 
-    ServerSocket providerSocket;
-    Socket connection = null;
-    ObjectOutputStream out;
-    DataInputStream dataInputStream;
-    DataOutputStream outToPublisher;
-    OutputStream outputStream;
-    String message;
-
-//    public static final int LOCAL_PORT = 8080;
-    public static final int LOCAL_PORT = 44444;
-//    public static final int LOCAL_PORT = 11158;
-//    public static final int LOCAL_PORT = 80;
+    private ServerSocket providerSocket;
+    private Socket connection = null;
+    private ObjectOutputStream out;
+    private DataInputStream dataInputStream;
+    private DataOutputStream outToPublisher;
+    private OutputStream outputStream;
 
     public void run() {
         try {
@@ -40,7 +34,7 @@ public class TorReceiver {
                 StrictMode.setThreadPolicy(policy);
             }
 
-            providerSocket = new ServerSocket(LOCAL_PORT, 10);
+            providerSocket = new ServerSocket(TorConstants.TOR_BUNDLE_INTERNAL_HIDDEN_SERVICES_PORT, 10);
             Log.i(LOG, "Waiting for connection");
             connection = providerSocket.accept();
             Log.i(LOG, "Connection received from " + connection.getInetAddress().getHostName());
@@ -57,26 +51,24 @@ public class TorReceiver {
                         incomingMessageFromServer = dataInputStream.readUTF();
                         Log.i(LOG, "Message Receved___" + incomingMessageFromServer);
 
+                        // TODO delete when testing phase is DONE
+                        //Sending back to sender the received message to test bidirectional communication
                         outToPublisher.writeUTF(incomingMessageFromServer);
                         outToPublisher.flush();
                         Log.i(LOG, "Message Repeated");
                     }
                 } catch (IOException e) {
-                    //TODO : I don't think the connection should be closed ... EVER ... for the future
+                    //TODO : I don't think the connection should be closed . Only when exiting the application
                     Log.e(LOG, "error: " + e.getMessage(), e);
                     connection.close();
                     break;
                 }
             }
 
-        } catch (
-                IOException ioException
-                )
-
-        {
+        } catch (IOException ioException) {
             Log.i(LOG, "error: " + ioException.getMessage(), ioException);
         } finally
-
+//Epmty for now
         {
 //            try {
 //                providerSocket.close();

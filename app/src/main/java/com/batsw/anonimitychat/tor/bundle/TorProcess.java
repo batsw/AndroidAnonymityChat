@@ -49,7 +49,7 @@ public class TorProcess implements Runnable {
             while (torLogMessages.hasNextLine()) {
                 String torData = torLogMessages.nextLine();
 
-                //Waits for the Ready signal
+                //Waits for the Ready signal: Bootstrapped 100%: Done
                 String formattedTorLog = torData.substring(29, torData.length());
                 mTorBundleListenerManager.statusMessageReceived(formattedTorLog);
 

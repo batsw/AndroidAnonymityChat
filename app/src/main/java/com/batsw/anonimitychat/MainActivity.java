@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         ////////////////////////////////////////////////////////////
         boolean torReady = false;
         while (!torReady) {
-            if (torBundleStatusListener.getStatusMessage().equals(TorConstants.TOR_READY_STATUS_MESSATGE)) {
+            if (torBundleStatusListener.getStatusMessage().equals(TorConstants.TOR_READY_STATUS_MESSAGE)) {
                 torReady = true;
             }
         }
