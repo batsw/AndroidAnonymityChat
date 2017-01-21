@@ -49,50 +49,6 @@ public class TorPublisher {
                 StrictMode.setThreadPolicy(policy);
             }
 
-
-//            final Random rndForTorCircuits = new Random();
-//            String user = rndForTorCircuits.nextInt(100000) + "";
-//            String pass = rndForTorCircuits.nextInt(100000) + "";
-//            ProxyInfo proxyInfo = new ProxyInfo(ProxyInfo.ProxyType.SOCKS5, "127.0.0.1", SOCKS_PORT, user, pass);
-//            socket = proxyInfo.getSocketFactory().createSocket("127.0.0.1", SOCKS_PORT);
-//            socket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
-//            Log.i(LOG, "Connected to target address");
-//            outToServer = socket.getOutputStream();
-
-            // 1. creating a socket to connect to the server
-//            Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", SOCKS_PORT));
-//            requestSocket = new Socket(torProxy);
-//            Log.i(LOG, "destinationAddress: " + destinationAddress);
-//
-//            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress,
-//                    44444));
-
-//            ///// before jSock library
-//            SocketAddress address = new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
-//            Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
-//
-//            mSocketConnection = new Socket(proxy);
-//            InetSocketAddress inetSoketDestination = new InetSocketAddress(InetAddress.getByName(mDestinationAddress), TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
-//            mSocketConnection.connect(inetSoketDestination);
-//            Log.i(LOG, "Connected to target address");
-//
-//            mOutputStream = mSocketConnection.getOutputStream();
-//            mDataOutputStream = new DataOutputStream(mOutputStream);
-
-//            ProxyInfo proxyInfo = new ProxyInfo(ProxyInfo.ProxyType.SOCKS5, "localhost", 1080, "admin", "admin");
-//            socket = proxyInfo.getSocketFactory().createSocket("127.0.0.1", SOCKS_PORT);
-//            proxyInfo.getSocketFactory().createSocket();
-
-//            Proxy proxy2 = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT));
-//            mSocketConnection = new Socket(proxy2);
-//            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
-//            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, 80);
-//            mSocketConnection.connect(destination);
-
-//                mSocketConnection.connect(InetSocketAddress.createUnresolved(mDestinationAddress, 80));
-//            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
-
-
             Socks5Proxy socks5Proxy = new Socks5Proxy("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
             socks5Proxy.resolveAddrLocally(false);
             mSocketConnection = new SocksSocket(socks5Proxy, mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);

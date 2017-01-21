@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.batsw.anonimitychat.common.NetworkingPermissions;
 import com.batsw.anonimitychat.tor.bundle.CopyTorResource;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcess;
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected static final String MAIN_ACTIVITY_TAG = MainActivity.class.getSimpleName();
 
     Button torStopButton, connectToTorClient, mOpenPortButton;
-
-    private boolean runOnce = true;
 
     TextView mPatnerHostname, mPortToOpen, mTorStatusTextView;
 
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         mOpenPortButton = (Button) findViewById(R.id.open_port);
 
         mPatnerHostname = (TextView) findViewById(R.id.partner_hostname);
-        mPortToOpen = (TextView) findViewById(R.id.text_port);
 
         mTorStatusTextView = (TextView) findViewById(R.id.tor_status);
         mTorStatusTextView.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
@@ -78,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         File hiddenServicesDir = new File(torResourceLocation + "/hidden_service");
         hiddenServicesDir.mkdir();
-
 
         String chmodCmd = "chmod " + 777 + ' ' + torFile.getAbsolutePath();
 
@@ -171,31 +166,8 @@ public class MainActivity extends AppCompatActivity {
                                            {
                                                @Override
                                                public void onClick(View v) {
-                                                   Log.i(MAIN_ACTIVITY_TAG, "Opening another port");
-                                                   String enteredStringPort = mPortToOpen.getText().toString();
-                                                   int enteredPort = Integer.parseInt(enteredStringPort);
+                                                   Log.i(MAIN_ACTIVITY_TAG, "It does nothing now");
 
-                                                   NetworkingPermissions networkingPermissions = new NetworkingPermissions(enteredPort);
-                                                   String iptablesCommand = networkingPermissions.ipTableRuleMaker();
-                                                   Log.i(MAIN_ACTIVITY_TAG, "iptablesCommand::: " + iptablesCommand);
-
-                                                   try {
-                                                           Runtime.getRuntime().exec(iptablesCommand);
-//                                                           if (runOnce) {
-//
-////                                                         Runtime.getRuntime().exec("iptables -I OUTPUT -o wlan0 -d 0.0.0.0/0 -j ACCEPT");
-////                                                         Runtime.getRuntime().exec("iptables -I INPUT -i wlan0 -m state --state ESTABLISHED,RELATED -j ACCEPT");
-//
-//                                                               Runtime.getRuntime().exec("iptables -t nat -I OUTPUT -p tcp --dport 80 -j DNAT --to-destination :80");
-//
-//                                                               runOnce = false;
-//                                                           }
-
-                                                   } catch (IOException e) {
-                                                       Log.e(MAIN_ACTIVITY_TAG, "ERROR when executing iptables command: " + e.getMessage(), e);
-                                                   }
-
-                                                   Log.i(MAIN_ACTIVITY_TAG, "Open Port command executed for: " + enteredPort);
                                                }
                                            }
 

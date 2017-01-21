@@ -55,29 +55,14 @@
                 android:text="Connect To Partner"
                 android:textSize="16dp" />
 
-            <EditText
-                android:id="@+id/text_port"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:hint="Enter Port"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
-                android:textSize="20dp"
-                android:layout_marginTop="15dp"/>
-
-
             <Button
                 android:id="@+id/open_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/relativeLayout"
                 android:layout_marginBottom="15dp"
-                android:text="Open Port"
+                android:text="Open Port - does nothing"
                 android:textSize="16dp" />
-
 
             <View
                 android:layout_width="match_parent"

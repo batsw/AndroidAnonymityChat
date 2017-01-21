@@ -33,7 +33,6 @@ public class TorProcess implements Runnable {
 
         try {
             torProcess = Runtime.getRuntime().exec(mCommand);
-//            torProcess = Runtime.getRuntime().exec("su -c " + mCommand);
             Log.i(LOG, "TOR prccess launched");
 
             String torProcessString = torProcess.toString();
