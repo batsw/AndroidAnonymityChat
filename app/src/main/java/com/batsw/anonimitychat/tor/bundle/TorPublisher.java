@@ -3,16 +3,21 @@ package com.batsw.anonimitychat.tor.bundle;
 import android.os.StrictMode;
 import android.util.Log;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+
+import socks.Socks5Proxy;
+import socks.SocksSocket;
 
 /**
  * Created by tudor on 12/16/2016.
@@ -62,13 +67,35 @@ public class TorPublisher {
 //            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress,
 //                    44444));
 
-            SocketAddress address = new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
-            Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
-            mSocketConnection = new Socket(proxy);
-            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
-            mSocketConnection.connect(destination);
+//            ///// before jSock library
+//            SocketAddress address = new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
+//            Proxy proxy = new Proxy(Proxy.Type.SOCKS, address);
+//
+//            mSocketConnection = new Socket(proxy);
+//            InetSocketAddress inetSoketDestination = new InetSocketAddress(InetAddress.getByName(mDestinationAddress), TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
+//            mSocketConnection.connect(inetSoketDestination);
+//            Log.i(LOG, "Connected to target address");
+//
+//            mOutputStream = mSocketConnection.getOutputStream();
+//            mDataOutputStream = new DataOutputStream(mOutputStream);
 
+//            ProxyInfo proxyInfo = new ProxyInfo(ProxyInfo.ProxyType.SOCKS5, "localhost", 1080, "admin", "admin");
+//            socket = proxyInfo.getSocketFactory().createSocket("127.0.0.1", SOCKS_PORT);
+//            proxyInfo.getSocketFactory().createSocket();
+
+//            Proxy proxy2 = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT));
+//            mSocketConnection = new Socket(proxy2);
+//            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
+//            InetSocketAddress destination = new InetSocketAddress(mDestinationAddress, 80);
+//            mSocketConnection.connect(destination);
+
+//                mSocketConnection.connect(InetSocketAddress.createUnresolved(mDestinationAddress, 80));
 //            requestSocket.connect(InetSocketAddress.createUnresolved(destinationAddress, 80));
+
+
+            Socks5Proxy socks5Proxy = new Socks5Proxy("127.0.0.1", TorConstants.TOR_BUNDLE_INTERNAL_SOCKS_PORT);
+            socks5Proxy.resolveAddrLocally(false);
+            mSocketConnection = new SocksSocket(socks5Proxy, mDestinationAddress, TorConstants.TOR_BUNDLE_EXTERNAL_PORT);
             Log.i(LOG, "Connected to target address");
 
             mOutputStream = mSocketConnection.getOutputStream();
@@ -90,17 +117,21 @@ public class TorPublisher {
             } while (!message.equals("bye"));
 
         } catch (UnknownHostException unknownHost) {
-            Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getMessage(), unknownHost);
+            Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);
+            unknownHost.printStackTrace();
         } catch (IOException ioException) {
             Log.e(LOG, "error: " + ioException.getMessage(), ioException);
 
         } finally {
-            try {
-                mDataOutputStream.close();
-                mSocketConnection.close();
-            } catch (IOException ioException) {
-                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-            }
+//            try {
+//                if (mDataOutputStream != null)
+//                    mDataOutputStream.close();
+//
+//                if (mSocketConnection != null)
+//                    mSocketConnection.close();
+//            } catch (IOException ioException) {
+//                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
+//            }
         }
     }
 
@@ -113,4 +144,5 @@ public class TorPublisher {
 //            Log.e(LOG, "error when sending message: " + ioException.getMessage(), ioException);
 //        }
 //    }
+
 }

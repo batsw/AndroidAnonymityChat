@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jsocks">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/jsocks.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -28,6 +28,10 @@ HiddenServicePort 80 127.0.0.1:44444
 
 #Socks5Proxy 127.0.0.1:80
 
+#Socks5Proxy 127.0.0.1
+#Socks5ProxyUsername admin
+#Socks5ProxyPassword admin
+
 #RunAsDaemon 1
 
 #FascistFirewall 1

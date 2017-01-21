@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean runOnce = true;
 
-    TextView mPatnerHostname, mPortToOpen;
+    TextView mPatnerHostname, mPortToOpen, mTorStatusTextView;
 
     private Process mTorProcess;
     private int mTorPID = 0;
@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
         mPatnerHostname = (TextView) findViewById(R.id.partner_hostname);
         mPortToOpen = (TextView) findViewById(R.id.text_port);
+
+        mTorStatusTextView = (TextView) findViewById(R.id.tor_status);
+        mTorStatusTextView.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
 
         ////////////////////////////////////////
         /////////TODO: Tudor refactoring////////
