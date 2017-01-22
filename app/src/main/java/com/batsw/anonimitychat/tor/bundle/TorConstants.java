@@ -15,4 +15,9 @@ public interface TorConstants {
     public static final int TOR_BUNDLE_EXTERNAL_PORT = 80;
     public static final int TOR_BUNDLE_INTERNAL_SOCKS_PORT = 11158;
     public static final int TOR_BUNDLE_INTERNAL_HIDDEN_SERVICES_PORT = 44444;
+
+    //TOR Bundle Status constants
+    public static final String TOR_BUNDLE_STOPPED = "TOR STOPPED";
+    public static final String TOR_BUNDLE_IS_STARTING = "TOR STARTING";
+    public static final String TOR_BUNDLE_STARTED = "TOR STARTED";
 }

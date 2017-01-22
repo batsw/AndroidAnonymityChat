@@ -3,8 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorStartingTorStatus">#32CD32</color>
+    <color name="colorStartedTorStatus">#32CD32</color>
     <color name="colorStoppedTorStatus">#cc0000</color>
     <color name="colorGray">#878787</color>
-
+    <color name="colorLightBlue">#0A32FA</color>
 </resources>

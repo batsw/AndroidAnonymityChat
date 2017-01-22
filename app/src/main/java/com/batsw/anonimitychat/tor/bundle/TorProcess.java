@@ -20,6 +20,8 @@ public class TorProcess implements Runnable {
     private Process torProcess;
     private int mPID = 0;
 
+    private Scanner torLogMessages = null;
+
     public TorProcess(String command, TorBundleListenerManager torBundleListenerManager) {
         mCommand = command;
         mTorBundleListenerManager = torBundleListenerManager;
@@ -41,7 +43,7 @@ public class TorProcess implements Runnable {
             Log.i(LOG, "TOR process successfully started: " + torPID);
             mPID = torPID;
 
-            Scanner torLogMessages = new Scanner(torProcess.getInputStream());
+            torLogMessages = new Scanner(torProcess.getInputStream());
 
             Log.i(LOG, "TOR process scanner has something: " + torLogMessages.hasNextLine());
 
@@ -56,16 +58,25 @@ public class TorProcess implements Runnable {
             }
 
         } catch (IOException e) {
-
             Log.i(LOG, "TOR process is closing");
-            if (torProcess != null)
+
+            if (torProcess != null) {
                 torProcess.destroy();
+                mPID = 0;
+            }
+
+            if (torLogMessages != null) {
+                torLogMessages.close();
+            }
+
             Log.e(LOG, "ERROR when launching TOR Bundle" + e.getMessage(), e);
         }
     }
 
     public void stopTorProcess() {
         torProcess.destroy();
+        mPID = 0;
+        torLogMessages.close();
     }
 
     public Process getTorProcess() {

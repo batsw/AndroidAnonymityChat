@@ -15,6 +15,9 @@ import java.io.OutputStream;
 
 public class CopyTorResource {
 
+    //TODO: insert logger
+//    protected static final String TOR_PROCESS_MANAGER_TAG = TorProcessManager.class.getSimpleName();
+
     //TODO: insert logger to ENTER and LEAVE in the method
     public String provideTorResource(String internalRootFilesDir, AssetManager assetManager, String activityTagName) {
 

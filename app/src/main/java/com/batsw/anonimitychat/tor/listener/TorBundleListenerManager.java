@@ -24,4 +24,10 @@ public class TorBundleListenerManager {
             torStatusListener.tellStatusMessage(torLogMessage);
         }
     }
+
+    public void removeTorBundleListener(ITorBundleStatusListener iTorBundleStatusListener) {
+        if (mTorListenersList.contains(iTorBundleStatusListener)) {
+            mTorListenersList.remove(mTorListenersList);
+        }
+    }
 }

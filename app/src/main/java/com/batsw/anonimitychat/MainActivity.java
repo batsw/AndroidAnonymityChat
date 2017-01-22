@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.tor.bundle.CopyTorResource;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcess;
+import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.tor.bundle.TorPublisher;
 import com.batsw.anonimitychat.tor.bundle.TorReceiver;
 import com.batsw.anonimitychat.tor.listener.TorBundleListenerManager;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final String MAIN_ACTIVITY_TAG = MainActivity.class.getSimpleName();
 
-    Button torStopButton, connectToTorClient, mOpenPortButton;
+    Button torStopButton, connectToTorClient, mOpenPortButton, mStartTorButton;
 
     TextView mPatnerHostname, mPortToOpen, mTorStatusTextView;
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TorBundleListenerManager mTorBundleListenerManager;
 
+    private TorProcessManager mTorProcessManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         torStopButton = (Button) findViewById(R.id.btn_tor_stop);
+        mStartTorButton = (Button) findViewById(R.id.btn_tor_start);
         connectToTorClient = (Button) findViewById(R.id.btn_tor_connect);
         mOpenPortButton = (Button) findViewById(R.id.open_port);
 
@@ -49,86 +53,90 @@ public class MainActivity extends AppCompatActivity {
 
         mTorStatusTextView = (TextView) findViewById(R.id.tor_status);
         mTorStatusTextView.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
+        mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
 
-        ////////////////////////////////////////
-        /////////TODO: Tudor refactoring////////
-        /////////Prerequisites//////////////////
-        ////////////////////////////////////////
+        mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
+//        mTorProcessManager.startTorBundle();
 
-        mTorBundleListenerManager = new TorBundleListenerManager();
-        TorBundleStatusListenerImpl torBundleStatusListener = new TorBundleStatusListenerImpl();
-        mTorBundleListenerManager.addTorBundleListener(torBundleStatusListener);
-
-        //////////////////////////////
-
-        AssetManager assetManager = this.getAssets();
-
-        CopyTorResource copyTorResource = new CopyTorResource();
-        String torResourceLocation = copyTorResource.provideTorResource(getFilesDir().toString(), assetManager, MAIN_ACTIVITY_TAG);
-        Log.i(MAIN_ACTIVITY_TAG, "tor resources successfully copied to ::: torResourceLocation = " + torResourceLocation);
-
-        Log.i(MAIN_ACTIVITY_TAG, "starting tor bundle ::: ");
-
-        File torFile = new File(torResourceLocation + "/tor");
-        File torrcFile = new File(torResourceLocation + "/torrc");
-
-        File hiddenServicesDir = new File(torResourceLocation + "/hidden_service");
-        hiddenServicesDir.mkdir();
-
-        String chmodCmd = "chmod " + 777 + ' ' + torFile.getAbsolutePath();
-
-        String cmd = torFile.getAbsolutePath() + " DataDirectory " + torResourceLocation + " -f " + torrcFile.getAbsolutePath();
-
-        Log.i(MAIN_ACTIVITY_TAG, ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-
-        TorProcess torProcess = null;
-        try {
-
-            Runtime.getRuntime().exec(chmodCmd);
-
-            File fileTest = new File(torFile.getAbsolutePath());
-            Log.i(MAIN_ACTIVITY_TAG, "testing if tor is executable: " + fileTest.canExecute());
-
-            torProcess = new TorProcess(cmd, mTorBundleListenerManager);
-            new Thread(torProcess).start();
-
-        } catch (IOException e) {
-            Log.e(MAIN_ACTIVITY_TAG, "error: " + e);
-        }
-
-        ////////////////////////////////////////////////////////////
-        /////////TODO: Tudor move it in backend////////
-        /////////Halting the main thread to start the Bundle////////
-        ////////////////////////////////////////////////////////////
-        boolean torReady = false;
-        while (!torReady) {
-            if (torBundleStatusListener.getStatusMessage().equals(TorConstants.TOR_READY_STATUS_MESSAGE)) {
-                torReady = true;
-            }
-        }
-
-        Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is Ready: " + torReady);
-
-        if (torProcess != null) {
-            mTorProcess = torProcess.getTorProcess();
-            mTorPID = torProcess.getPID();
-        }
-        ////////////////////////////////////////////////////////////
-
-        listFilesForFolder(torResourceLocation);
-        Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle provided hostname is: " + mTorHostnamee);
-
-
-        //Starting the TorReceiver and waiting for incoming connections and messages
-
-        Log.i(MAIN_ACTIVITY_TAG, "TOR Receiver is Launching !!!");
-        new Thread(new Runnable() {
-            public void run() {
-                TorReceiver torReceiver = new TorReceiver();
-                torReceiver.run();
-            }
-        }).start();
-        Log.i(MAIN_ACTIVITY_TAG, "TOR Receiver is waiting for messages !!!");
+//        ////////////////////////////////////////
+//        /////////TODO: Tudor refactoring////////
+//        /////////Prerequisites//////////////////
+//        ////////////////////////////////////////
+//
+//        mTorBundleListenerManager = new TorBundleListenerManager();
+//        TorBundleStatusListenerImpl torBundleStatusListener = new TorBundleStatusListenerImpl();
+//        mTorBundleListenerManager.addTorBundleListener(torBundleStatusListener);
+//
+//        //////////////////////////////
+//
+//        AssetManager assetManager = this.getAssets();
+//
+//        CopyTorResource copyTorResource = new CopyTorResource();
+//        String torResourceLocation = copyTorResource.provideTorResource(getFilesDir().toString(), assetManager, MAIN_ACTIVITY_TAG);
+//        Log.i(MAIN_ACTIVITY_TAG, "tor resources successfully copied to ::: torResourceLocation = " + torResourceLocation);
+//
+//        Log.i(MAIN_ACTIVITY_TAG, "starting tor bundle ::: ");
+//
+//        File torFile = new File(torResourceLocation + "/tor");
+//        File torrcFile = new File(torResourceLocation + "/torrc");
+//
+//        File hiddenServicesDir = new File(torResourceLocation + "/hidden_service");
+//        hiddenServicesDir.mkdir();
+//
+//        String chmodCmd = "chmod " + 777 + ' ' + torFile.getAbsolutePath();
+//
+//        String cmd = torFile.getAbsolutePath() + " DataDirectory " + torResourceLocation + " -f " + torrcFile.getAbsolutePath();
+//
+//        Log.i(MAIN_ACTIVITY_TAG, ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+//
+//        TorProcess torProcess = null;
+//        try {
+//
+//            Runtime.getRuntime().exec(chmodCmd);
+//
+//            File fileTest = new File(torFile.getAbsolutePath());
+//            Log.i(MAIN_ACTIVITY_TAG, "testing if tor is executable: " + fileTest.canExecute());
+//
+//            torProcess = new TorProcess(cmd, mTorBundleListenerManager);
+//            new Thread(torProcess).start();
+//
+//        } catch (IOException e) {
+//            Log.e(MAIN_ACTIVITY_TAG, "error: " + e);
+//        }
+//
+//        ////////////////////////////////////////////////////////////
+//        /////////TODO: Tudor move it in backend////////
+//        /////////Halting the main thread to start the Bundle////////
+//        ////////////////////////////////////////////////////////////
+//        boolean torReady = false;
+//        while (!torReady) {
+//            if (torBundleStatusListener.getStatusMessage().equals(TorConstants.TOR_READY_STATUS_MESSAGE)) {
+//                torReady = true;
+//            }
+//        }
+//
+//        Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is Ready: " + torReady);
+//
+//        if (torProcess != null) {
+//            mTorProcess = torProcess.getTorProcess();
+//            mTorPID = torProcess.getPID();
+//        }
+//        ////////////////////////////////////////////////////////////
+//
+//        listFilesForFolder(torResourceLocation);
+//        Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle provided hostname is: " + mTorHostnamee);
+//
+//
+//        //Starting the TorReceiver and waiting for incoming connections and messages
+//
+//        Log.i(MAIN_ACTIVITY_TAG, "TOR Receiver is Launching !!!");
+//        new Thread(new Runnable() {
+//            public void run() {
+//                TorReceiver torReceiver = new TorReceiver();
+//                torReceiver.run();
+//            }
+//        }).start();
+//        Log.i(MAIN_ACTIVITY_TAG, "TOR Receiver is waiting for messages !!!");
 
         ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
@@ -144,17 +152,22 @@ public class MainActivity extends AppCompatActivity {
                                                       final String partnerName = mPatnerHostname.getText().toString();
                                                       Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
 
-                                                      Thread thread = new Thread(new Runnable() {
+                                                      if (mTorProcessManager.isTorBundleStarted()) {
+                                                          Thread thread = new Thread(new Runnable() {
 
-                                                          @Override
-                                                          public void run() {
-                                                              TorPublisher torPublisher = new TorPublisher(partnerName);
-                                                              torPublisher.run();
-                                                          }
+                                                              @Override
+                                                              public void run() {
+                                                                  TorPublisher torPublisher = new TorPublisher(partnerName);
+                                                                  torPublisher.run();
+                                                              }
 
-                                                      });
+                                                          });
 
-                                                      thread.start();
+                                                          thread.start();
+                                                      } else {
+                                                          //TODO: show a message on screen TOR did not started yet
+                                                          Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle has not started yet");
+                                                      }
 
                                                   }
                                               }
@@ -173,14 +186,35 @@ public class MainActivity extends AppCompatActivity {
 
         );
 
+        mStartTorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.i(MAIN_ACTIVITY_TAG, "Starting TOR from GUI command:");
+
+                if (!mTorProcessManager.isTorBundleStarted() && !mTorStatusTextView.getText().equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
+                    mTorProcessManager.startTorBundle();
+                } else {
+                    //TODO: show a message on screen TOR Bundle is already stopped
+                    Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is already started OR starting");
+                }
+            }
+        });
+
         torStopButton.setOnClickListener(new View.OnClickListener()
 
                                          {
                                              @Override
                                              public void onClick(View v) {
                                                  Log.i(MAIN_ACTIVITY_TAG, "Stopping TOR from GUI command:");
-                                                 mTorProcess.destroy();
-                                                 Log.i(MAIN_ACTIVITY_TAG, "TOR bundle successfully stopped!_" + mTorProcess.toString());
+
+                                                 mTorProcessManager.stopTorBundle();
+//                                                     //TODO: show a message on screen TOR Bundle is already stopped
+//                                                     Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is already stopped");
+
+//                                                 mTorProcess.destroy();
+//                                                 Log.i(MAIN_ACTIVITY_TAG, "TOR bundle successfully stopped!_" + mTorProcess.toString());
+                                                 Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is stopped");
                                              }
                                          }
 
