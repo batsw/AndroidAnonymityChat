@@ -1,14 +1,24 @@
 # AndroidAnonymityChat
 
 ## Purpose
-Anonymity Chat is an Android app that provides secure messaging. It is using TOR Network to send the messages.
-Features:
+Anonymity Chat is an Android app that provides secure and anonymous messaging. It is using TOR Network to send the messages.
+### Features:
+
+1. _**Security**_ ---> (we are offering the security in communication by using the Tor Network to send messages between cotnacts)
+2.  _**Anonymity**_ ---> (by connecting to Tor Network, the user becomes anonymous on the Internet, the only identity he has is the TOR HOSTNAME (Example: xxxxxxxxxxxxxxxx.onion))
+3.  _**Availability**_ ---> (This is a **SERVERLESS** application. This means that there is no server involved in offering the communication services. There is NO 'Central Server' or 'Server in the Cloud' to provide any services. The application is functional and available 100% of the time as long as you and your partner are using **Anonymity Chat**).
+4. _**Scalability**_ ---> (Having a **SERVERLESS** software architecture, the application and the communication services are **INFINITELY** scalable (you may encounter technical holdbacks  depending on **YOUR INTERNET CONNECTION**))
+
+Please follow our [WIKI Page](https://github.com/batsw/AndroidAnonymityChat/wiki)
+
+#### Details
 - TOR Network communication (about the TOR Network or Deep Web you can find [here] (https://www.torproject.org/docs/faq.html.en#WhatIsTor)
 - the anonymous and secure communication the TOR Network comes with
-- serverless application (it is created based on a PURE SERVERLESS application architecture (you do not need any servers, third-party services or other resources to use this application))
+- serverless application (it is created based on a SERVERLESS application architecture (you do not need any servers, third-party services or other resources to use this application))
 - message history is kept on each client side as long as they want (no one can retrieve it after it has been deleted)
 - the messaging services are always available and infinitely scalable from the networking point of view
-- it can be used in any employer scale firm/corporation for communication purposes
+
+- it can be used in any employer scale firm/corporation for communication purposes OR in any personal communication purposes
 
 ## How to USE/Install the App
 
