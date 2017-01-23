@@ -10,32 +10,42 @@ Features:
 - the messaging services are always available and infinitely scalable from the networking point of view
 - it can be used in any employer scale firm/corporation for communication purposes
 
-## Contributor Community and Help FAQ
+## How to USE/Install the App
+
+Installation steps are comming soon ...
+
+For more details about features and User Help please refer to our [Wiki Pages] (https://github.com/batsw/AndroidAnonymityChat/wiki).
+
+## Contributor Community, Help and FAQ (Want to Contribute ?)
 
 ### Current development state
+The project development state can be tracked at the configured Kanban board and by accessing the ISSUES page. There is also available the milestones page that describe the focus of the development effort.
+Please follow the following resources:
+- [Project Kanban Page] (https://github.com/batsw/AndroidAnonymityChat/projects/1)
+- [Milestones] (https://github.com/batsw/AndroidAnonymityChat/milestones)
+- [ISSUES page] (https://github.com/batsw/AndroidAnonymityChat/issues)
 
-- the app can receive messages from any desktop TOR environment which has the TORPublisher class set to the Hidden Services of the phone.
-- due to Android environment deployment differences to 'normal' desktop environment, the Android Anonymity Chat cannot initiate communication and
-send messages (only to receive)
-- it has been developed a simple and basic user interface to facilitate development of the core functionality:
-        - Open Port functionality
-        - Connect to Partner Hostname (just enter xxxxxxxx.onion of the partner and click on Connect button)
+### Setting Up Development Environment
 
-### Setting Up Desktop test environment
+Please refer to our [Wiki Pages] (https://github.com/batsw/AndroidAnonymityChat/wiki/Contributor-Guide).
+
+#### Setting Up Desktop test environment
     In order to test the app you need another partner to send/receive messages to/from.
 So far the app has been tested using a partner from Windows OS using [TorExpertBundle] https://github.com/batsw/TorExpertBundleController
 and using the same two classes TorPublisher and TorReceiver. At the specified link you have all the necessary details to set it up.
 
-### Development environment details
-- Platform: Windows and MacOS
+##### Development environment details
+- Platform: Windows and MacOS (so far) but it also works on Linux
 - IDE: Android Studio IntelliJ based IDE
 - Build system: Gradle
-- Dependencies: look into build.gradle
+- Dependencies: look into build.gradle and libs folder
 
-### Building project in Android Studio Intellij based IDE
+##### Building project in Android Studio Intellij based IDE
 Steps:
 - use gitbash or any other Git client tool to clone the  repository
 - Start Intellij
 - File -> Open -> Select project location
-- if you already have configured gradle it will automatically build at opening time
+- if you already have configured gradle it will automatically build at project opening time
 
+## BAT Software Technical SUPPORT
+If you have any questions or you encounter difficulties regarding Development or Testing Environment please create an [ISSUE labeled SUPPORT and HELP WANTED] (https://github.com/batsw/AndroidAnonymityChat/issues).
