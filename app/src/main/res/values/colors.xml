@@ -7,4 +7,12 @@
     <color name="colorStoppedTorStatus">#cc0000</color>
     <color name="colorGray">#878787</color>
     <color name="colorLightBlue">#0A32FA</color>
+
+    <color name="white">@android:color/white</color>
+    <color name="chat_user_reply_background_color">#c8f0ff</color>
+    <color name="chat_company_reply_background_color">#F5F5F5</color>
+    <color name="gray">@android:color/darker_gray</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="orange">@android:color/holo_blue_light</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
 </resources>
