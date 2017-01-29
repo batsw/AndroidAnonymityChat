@@ -17,7 +17,8 @@
             android:id="@+id/textview_time"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:paddingRight="5dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="3dp"
             android:text="11:15 PM"
             style="@style/chat_timings"
             android:layout_gravity="bottom|right"/>
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
+            android:layout_marginBottom="6dp"
             android:autoLink="web"
             android:text="Hello from Partner"
             style="@style/chat_text_message_style"/>
