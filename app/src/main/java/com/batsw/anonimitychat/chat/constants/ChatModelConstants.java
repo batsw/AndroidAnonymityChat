@@ -11,4 +11,6 @@ public interface ChatModelConstants {
 
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
+    public static final String MESSAGE_EOL = System.getProperty("line.separator");;
+
 }

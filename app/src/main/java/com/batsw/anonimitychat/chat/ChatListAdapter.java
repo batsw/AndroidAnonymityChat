@@ -51,9 +51,9 @@ public class ChatListAdapter extends BaseAdapter {
         ChatMessage message = mChatMessageList.get(position);
 
         if (message.getChatMessageType().equals(ChatMessageType.USER)) {
-            retVal = displayMessage(convertView, message, R.layout.partner_chat_item);
+            retVal = displayMessage(convertView, message, R.layout.user_chat_item);
         } else {
-            retVal = displayMessage(convertView, message,R.layout.user_chat_item);
+            retVal = displayMessage(convertView, message,R.layout.partner_chat_item);
         }
 
         return retVal;
@@ -75,7 +75,7 @@ public class ChatListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) retVal.getTag();
         }
 
-        //TODO: Html thing is for api24 amd greater ... reshape the ListView up 
+        //TODO: Html thing is for api24 amd greater ... reshape the ListView up
 //        viewHolder.messageTextView.setText(Html.fromHtml(message.getMessage(), viewHolder.messageTextView.getPaintFlags()));
         viewHolder.messageTextView.setText(message.getMessage());
 

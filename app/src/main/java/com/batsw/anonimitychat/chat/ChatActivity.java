@@ -2,7 +2,6 @@ package com.batsw.anonimitychat.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -15,11 +14,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.tor.bundle.TorPublisher;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by tudor on 1/27/2017.
@@ -31,7 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     // === VARIABLES ===
     // =================
 
-    private static final String MAIN_ACTIVITY_TAG = ChatActivity.class.getSimpleName();
+    private static final String LOG = "ChatActivity";
 
     private RelativeLayout reltiveLayout;
 
@@ -39,18 +44,21 @@ public class ChatActivity extends AppCompatActivity {
     private ChatListAdapter mChatListAdapter;
     private ArrayList<ChatMessage> mChatMessageList;
 
+    private ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
+    private TorPublisher mTorPublisher = null;
+
     // Edit text box for the chat ---> variables
     private EditText chatEditText;
     private EditText.OnKeyListener chatEditTextKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
-            Log.i(MAIN_ACTIVITY_TAG, "EditText.OnKeyListener:onKey - ENTER");
+            Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> ENTER");
 
             // key-down event for "ENTER" key pressed
             if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                Log.i(MAIN_ACTIVITY_TAG, "enter key pressed");
+                Log.i(LOG, "enter key pressed");
 
                 EditText editText = (EditText) view;
 
@@ -60,11 +68,15 @@ public class ChatActivity extends AppCompatActivity {
                     if (chatEditText.getText().toString().isEmpty())
                         return false;
 
-                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
-                    mChatMessageList.add(message);
+//                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+//                    mChatMessageList.add(message);
 
                     final ChatMessage message2 = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
                     mChatMessageList.add(message2);
+
+                    //TODO: I send the message HERE
+                    mTorPublisher.sendMessage(message2.getMessage());
+
 
                     if (mChatListAdapter != null)
                         mChatListAdapter.notifyDataSetChanged();
@@ -73,25 +85,30 @@ public class ChatActivity extends AppCompatActivity {
                 //TODO: call the send message method here ---
                 editText.setText("");
 
+                Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
                 return true;
             }
 
+            Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
             return false;
         }
     };
 
-    private ImageView mEnterChatView;
+    private ImageView mEnterChatMessage;
 
     private ImageView.OnClickListener mClickForEnterChatView = new View.OnClickListener() {
 
         @Override
         public void onClick(View view) {
-            if (view.equals(mEnterChatView)) {
+            if (view.equals(mEnterChatMessage)) {
                 final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
                 mChatMessageList.add(message);
 
-                final ChatMessage message2 = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
-                mChatMessageList.add(message2);
+                //TODO: I send the message HERE
+                mTorPublisher.sendMessage(message.getMessage());
+
+//                final ChatMessage message2 = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
+//                mChatMessageList.add(message2);
             }
             chatEditText.setText("");
         }
@@ -107,13 +124,13 @@ public class ChatActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             if (!chatEditText.getText().toString().isEmpty()) {
-                mEnterChatView.setImageResource(R.drawable.input_send);
+                mEnterChatMessage.setImageResource(R.drawable.input_send);
             }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mEnterChatView.setImageResource(R.drawable.input_send);
+            mEnterChatMessage.setImageResource(R.drawable.input_send);
         }
     };
 
@@ -134,8 +151,8 @@ public class ChatActivity extends AppCompatActivity {
         chatListView = (ListView) findViewById(R.id.chat_list_view);
         chatListView.setAdapter(mChatListAdapter);
 
-        mEnterChatView = (ImageView) findViewById(R.id.enter_chat1);
-        mEnterChatView.setOnClickListener(mClickForEnterChatView);
+        mEnterChatMessage = (ImageView) findViewById(R.id.enter_chat1);
+        mEnterChatMessage.setOnClickListener(mClickForEnterChatView);
 
         // set image on click listener
 
@@ -143,9 +160,58 @@ public class ChatActivity extends AppCompatActivity {
         chatEditText.setOnKeyListener(chatEditTextKeyListener);
         chatEditText.addTextChangedListener(mChatEditTextWatcher);
 
+        Integer contactIndex = 0;
+        mContactedPartnerHostnames = MainActivity.getContactedPartnerHostnames();
+
+        if (mContactedPartnerHostnames != null && !mContactedPartnerHostnames.isEmpty()) {
+
+            if (mContactedPartnerHostnames.size() > 0) {
+                Set<Integer> keys = mContactedPartnerHostnames.keySet();
+                Object[] integersArray = keys.toArray();
+                contactIndex = (Integer) integersArray[0];
+            }
+        }
+
+        //Tudor: after finding the needed partner connection we are REMOVING it from the hashMap
+        if (contactIndex > 0) {
+//            String partnerHostname = mContactedPartnerHostnames.get(contactIndex);
+//            TorPublisher torPublisher = (TorPublisher) getIntent().getSerializableExtra(partnerHostname);
+
+            mTorPublisher = mContactedPartnerHostnames.get(contactIndex);
+            mTorPublisher.setChatActivity(this);
+
+            if (mTorPublisher != null) {
+                mContactedPartnerHostnames.remove(contactIndex);
+            }
+        }
     }
 
-    public static Intent makeIntent (Context context){
+    public void addPartnerMessageToMessageList(ChatMessage partnerMessage) {
+        mChatMessageList.add(partnerMessage);
+        if (mChatListAdapter != null)
+            mChatListAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * This method is used to clean the communication resources when the USER has finished chatting
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(LOG, "closeCommunication -> ENTER");
+
+        if (mTorPublisher != null) mTorPublisher.closeCommunication();
+        Log.i(LOG, "closeCommunication -> ENTER");
+    }
+
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
         return new Intent(context, ChatActivity.class);
     }
 

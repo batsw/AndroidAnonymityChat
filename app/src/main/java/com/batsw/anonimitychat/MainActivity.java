@@ -13,6 +13,9 @@ import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.tor.bundle.TorPublisher;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 public class MainActivity extends AppCompatActivity {
 
     protected static final String MAIN_ACTIVITY_TAG = MainActivity.class.getSimpleName();
@@ -22,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     TextView mPatnerHostname, mTorStatusTextView;
 
     private TorProcessManager mTorProcessManager;
+
+    private static ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
+    private static Integer mPartnersIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
         mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
 
         ///////////////////////////////////////////////////////////
+        /////////Prerequisites////////////////////////////////////
+        ///////////////////////////////////////////////////////////
+        mContactedPartnerHostnames = new ConcurrentHashMap<>();
+
+
+        ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
         ///////////////////////////////////////////////////////////
 
@@ -56,30 +68,31 @@ public class MainActivity extends AppCompatActivity {
                                                       final String partnerName = mPatnerHostname.getText().toString();
                                                       Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
 
-//                                                      if (mTorProcessManager.isTorBundleStarted()) {
-//                                                          Thread thread = new Thread(new Runnable() {
-//
-//                                                              @Override
-//                                                              public void run() {
-//                                                                  TorPublisher torPublisher = new TorPublisher(partnerName);
-//                                                                  torPublisher.run();
-//                                                              }
-//
-//                                                          });
-//
-//                                                          thread.start();
-//                                                      } else {
-//                                                          //TODO: show a message on screen TOR did not started yet
-//                                                          Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle has not started yet");
-//                                                      }
+                                                      final TorPublisher torPublisher = new TorPublisher(partnerName);
 
-                                                      //starting the chat activity based on client connection
+                                                      if (mTorProcessManager.isTorBundleStarted()) {
+                                                          Thread thread = new Thread(new Runnable() {
 
-                                                      startActivity(ChatActivity.makeIntent(MainActivity.this));
+                                                              @Override
+                                                              public void run() {
 
-//                                                      startActivity(new Intent(MainActivity.this, ChatActivity.class));
-//                                                      ChatActivity chatActivity = new ChatActivity();
-//                                                      chatActivity.startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                                                                  torPublisher.run();
+                                                              }
+
+                                                          });
+
+                                                          thread.start();
+                                                          mPartnersIndex++;
+                                                          mContactedPartnerHostnames.put(mPartnersIndex, torPublisher);
+
+//                                                          getIntent().putExtra(partnerName, torPublisher);
+
+                                                          startActivity(ChatActivity.makeIntent(MainActivity.this));
+
+                                                      } else {
+                                                          //TODO: show a message on screen TOR did not started yet
+                                                          Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle has not started yet");
+                                                      }
 
                                                   }
                                               }
@@ -128,6 +141,10 @@ public class MainActivity extends AppCompatActivity {
 
         );
 
+    }
+
+    public static ConcurrentHashMap<Integer, TorPublisher> getContactedPartnerHostnames(){
+        return mContactedPartnerHostnames;
     }
 
 }
