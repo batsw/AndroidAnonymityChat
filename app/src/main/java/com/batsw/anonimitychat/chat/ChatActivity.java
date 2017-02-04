@@ -47,52 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
     private TorPublisher mTorPublisher = null;
 
-    // Edit text box for the chat ---> variables
     private EditText chatEditText;
-    private EditText.OnKeyListener chatEditTextKeyListener = new View.OnKeyListener() {
-        @Override
-        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-
-            Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> ENTER");
-
-            // key-down event for "ENTER" key pressed
-            if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
-                Log.i(LOG, "enter key pressed");
-
-                EditText editText = (EditText) view;
-
-                //checking to make sure that the text comes from the actual chatEditText
-                if (editText.getText().toString().equals(chatEditText.getText().toString())) {
-
-                    if (chatEditText.getText().toString().isEmpty())
-                        return false;
-
-//                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
-//                    mChatMessageList.add(message);
-
-                    final ChatMessage message2 = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
-                    mChatMessageList.add(message2);
-
-                    //TODO: I send the message HERE
-                    mTorPublisher.sendMessage(message2.getMessage());
-
-
-                    if (mChatListAdapter != null)
-                        mChatListAdapter.notifyDataSetChanged();
-                }
-
-                //TODO: call the send message method here ---
-                editText.setText("");
-
-                Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
-                return true;
-            }
-
-            Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
-            return false;
-        }
-    };
 
     private ImageView mEnterChatMessage;
 
@@ -107,8 +62,6 @@ public class ChatActivity extends AppCompatActivity {
                 //TODO: I send the message HERE
                 mTorPublisher.sendMessage(message.getMessage());
 
-//                final ChatMessage message2 = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
-//                mChatMessageList.add(message2);
             }
             chatEditText.setText("");
         }
@@ -157,7 +110,16 @@ public class ChatActivity extends AppCompatActivity {
         // set image on click listener
 
         chatEditText = (EditText) findViewById(R.id.chat_edit_text1);
-        chatEditText.setOnKeyListener(chatEditTextKeyListener);
+//        chatEditText.setOnKeyListener(chatEditTextKeyListener);
+        chatEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                return processChatEditTextKey(view, keyCode, keyEvent);
+            }
+        });
+
+
+
         chatEditText.addTextChangedListener(mChatEditTextWatcher);
 
         Integer contactIndex = 0;
@@ -213,6 +175,50 @@ public class ChatActivity extends AppCompatActivity {
      */
     public static Intent makeIntent(Context context) {
         return new Intent(context, ChatActivity.class);
+    }
+
+
+    private boolean processChatEditTextKey(View view, int keyCode, KeyEvent keyEvent){
+        Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> ENTER");
+
+        // key-down event for "ENTER" key pressed
+        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+            Log.i(LOG, "enter key pressed");
+
+            EditText editText = (EditText) view;
+
+            //checking to make sure that the text comes from the actual chatEditText
+            if (editText.getText().toString().equals(chatEditText.getText().toString())) {
+
+                if (chatEditText.getText().toString().isEmpty())
+                    return false;
+
+//                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+//                    mChatMessageList.add(message);
+
+                // whi is PARNTER switched with USER type message ....
+//                final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
+                final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+                mChatMessageList.add(message);
+
+                //TODO: I send the message HERE
+                mTorPublisher.sendMessage(message.getMessage());
+
+
+                if (mChatListAdapter != null)
+                    mChatListAdapter.notifyDataSetChanged();
+            }
+
+            //TODO: call the send message method here ---
+            editText.setText("");
+
+            Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
+            return true;
+        }
+
+        Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
+        return false;
     }
 
 }

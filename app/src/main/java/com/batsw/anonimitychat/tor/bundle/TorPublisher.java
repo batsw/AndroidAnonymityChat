@@ -78,38 +78,10 @@ public class TorPublisher implements Serializable {
             });
             mMessageReceiverThread.start();
 
-            //TODO: see if I need to keep resources available ... or simple reference would do ...
-
-//            do {
-//                message = "hello from Android";
-//                mDataOutputStream.writeUTF((message + ChatModelConstants.MESSAGE_EOL));
-//                mDataOutputStream.flush();
-//
-//                Log.i(LOG, "message sent to destination");
-//
-//                message = "bye";
-//                mDataOutputStream.writeUTF(message + EOL);
-//                mDataOutputStream.flush();
-//
-//                Log.i(LOG, "message sent to destination");
-//            } while (!message.equals("bye"));
-
         } catch (UnknownHostException unknownHost) {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);
-            unknownHost.printStackTrace();
         } catch (IOException ioException) {
             Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-
-        } finally {
-//            try {
-//                if (mDataOutputStream != null)
-//                    mDataOutputStream.close();
-//
-//                if (mSocketConnection != null)
-//                    mSocketConnection.close();
-//            } catch (IOException ioException) {
-//                Log.e(LOG, "error: " + ioException.getMessage(), ioException);
-//            }
         }
     }
 
@@ -163,7 +135,7 @@ public class TorPublisher implements Serializable {
                     incomingMessage = mDataInputStream.readUTF();
                     Log.i(LOG, "Message Receved___" + incomingMessage);
 
-                   final ChatMessage receivedChatMessage = new ChatMessage(incomingMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
+                    final ChatMessage receivedChatMessage = new ChatMessage(incomingMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
 
                     mChatActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -194,7 +166,7 @@ public class TorPublisher implements Serializable {
 
     //notific adaptorul respectiv ca a mai venit un mesaj ..... hmmmmm
     //notificarea vine prin activity .... oare e bine????
-    public void setChatActivity(ChatActivity chatActivity){
+    public void setChatActivity(ChatActivity chatActivity) {
         mChatActivity = chatActivity;
     }
 }
