@@ -1,7 +1,9 @@
-package com.batsw.anonimitychat.tor.bundle;
+package com.batsw.anonimitychat.tor.connections;
 
 import android.os.StrictMode;
 import android.util.Log;
+
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

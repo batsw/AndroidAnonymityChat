@@ -1,4 +1,4 @@
-package com.batsw.anonimitychat.tor.bundle;
+package com.batsw.anonimitychat.tor.connections;
 
 import android.content.Intent;
 import android.os.StrictMode;
@@ -8,6 +8,7 @@ import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
