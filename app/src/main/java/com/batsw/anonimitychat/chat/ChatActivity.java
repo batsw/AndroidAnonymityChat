@@ -18,11 +18,9 @@ import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
-import com.batsw.anonimitychat.tor.bundle.TorPublisher;
+import com.batsw.anonimitychat.tor.connections.TorPublisher;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -110,15 +108,12 @@ public class ChatActivity extends AppCompatActivity {
         // set image on click listener
 
         chatEditText = (EditText) findViewById(R.id.chat_edit_text1);
-//        chatEditText.setOnKeyListener(chatEditTextKeyListener);
         chatEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 return processChatEditTextKey(view, keyCode, keyEvent);
             }
         });
-
-
 
         chatEditText.addTextChangedListener(mChatEditTextWatcher);
 
@@ -136,9 +131,6 @@ public class ChatActivity extends AppCompatActivity {
 
         //Tudor: after finding the needed partner connection we are REMOVING it from the hashMap
         if (contactIndex > 0) {
-//            String partnerHostname = mContactedPartnerHostnames.get(contactIndex);
-//            TorPublisher torPublisher = (TorPublisher) getIntent().getSerializableExtra(partnerHostname);
-
             mTorPublisher = mContactedPartnerHostnames.get(contactIndex);
             mTorPublisher.setChatActivity(this);
 

@@ -1,6 +1,5 @@
 package com.batsw.anonimitychat;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,10 +10,9 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
-import com.batsw.anonimitychat.tor.bundle.TorPublisher;
+import com.batsw.anonimitychat.tor.connections.TorPublisher;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
                                                           thread.start();
                                                           mPartnersIndex++;
                                                           mContactedPartnerHostnames.put(mPartnersIndex, torPublisher);
-
-//                                                          getIntent().putExtra(partnerName, torPublisher);
 
                                                           startActivity(ChatActivity.makeIntent(MainActivity.this));
 

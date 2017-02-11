@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.tor.connections.TorReceiver;
 import com.batsw.anonimitychat.tor.listener.TorBundleListenerManager;
 import com.batsw.anonimitychat.tor.listener.TorBundleStatusListenerImpl;
 
@@ -143,8 +143,11 @@ public class TorProcessManager {
                         Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is Launching !!!");
                         new Thread(new Runnable() {
                             public void run() {
-                                TorReceiver torReceiver = new TorReceiver();
-                                torReceiver.run();
+//                                //TODO: see if it makes sense
+//                                while (true) {
+                                    TorReceiver torReceiver = new TorReceiver();
+                                    torReceiver.run();
+//                                }
                             }
                         }).start();
                         Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is waiting for messages !!!");
