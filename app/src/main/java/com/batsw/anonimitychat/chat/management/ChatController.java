@@ -5,4 +5,19 @@ package com.batsw.anonimitychat.chat.management;
  */
 
 public class ChatController {
+
+
+
+    public void sendMessage(){
+
+    }
+
+    public void getPartnerAddress(){
+
+    }
+
+    public void destroyed(){
+
+    }
+
 }

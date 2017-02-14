@@ -38,7 +38,7 @@ public class TorPublisher implements Serializable {
     public static String mDestinationAddress = "";
 
     private Socket mSocketConnection;
-    private Thread mMessageReceiverThread = null;
+//    private Thread mMessageReceiverThread = null;
 
     //TODO: remove when finished testing
     private String message = "";
@@ -71,13 +71,13 @@ public class TorPublisher implements Serializable {
 
             mDataInputStream = new DataInputStream(mSocketConnection.getInputStream());
 
-            mMessageReceiverThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    createMessageReceivingLoop();
-                }
-            });
-            mMessageReceiverThread.start();
+//            mMessageReceiverThread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    createMessageReceivingLoop();
+//                }
+//            });
+//            mMessageReceiverThread.start();
 
         } catch (UnknownHostException unknownHost) {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);
@@ -138,12 +138,12 @@ public class TorPublisher implements Serializable {
 
                     final ChatMessage receivedChatMessage = new ChatMessage(incomingMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
 
-                    mChatActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mChatActivity.addPartnerMessageToMessageList(receivedChatMessage);
-                        }
-                    });
+//                    mChatActivity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mChatActivity.addPartnerMessageToMessageList(receivedChatMessage);
+//                        }
+//                    });
 
                     // notify that a message came
                     /// i need a signature of the message to print it on the right chat .....
@@ -167,7 +167,7 @@ public class TorPublisher implements Serializable {
 
     //notific adaptorul respectiv ca a mai venit un mesaj ..... hmmmmm
     //notificarea vine prin activity .... oare e bine????
-    public void setChatActivity(ChatActivity chatActivity) {
-        mChatActivity = chatActivity;
-    }
+//    public void setChatActivity(ChatActivity chatActivity) {
+//        mChatActivity = chatActivity;
+//    }
 }

@@ -10,6 +10,11 @@ public class ChatActivityManagerImpl implements IChatActivityManager {
 
     }
 
+    //to be called in the constructor
+    private void startActivity() {
+
+    }
+
     @Override
     public void onCreate() {
 
@@ -27,6 +32,21 @@ public class ChatActivityManagerImpl implements IChatActivityManager {
 
     @Override
     public void onDestroy() {
+
+    }
+
+    @Override
+    public void sendMessage() {
+
+    }
+
+    @Override
+    public void showReceivedMessage() {
+
+    }
+
+    @Override
+    public void openHistory() {
 
     }
 }

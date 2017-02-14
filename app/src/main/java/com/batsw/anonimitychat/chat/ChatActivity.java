@@ -43,12 +43,16 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<ChatMessage> mChatMessageList;
 
     private ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
-    private TorPublisher mTorPublisher = null;
+//    private TorPublisher mTorPublisher = null;
 
     private EditText chatEditText;
 
     private ImageView mEnterChatMessage;
 
+
+    /**
+     * Sending the message when clicking on Send image
+     */
     private ImageView.OnClickListener mClickForEnterChatView = new View.OnClickListener() {
 
         @Override
@@ -58,7 +62,9 @@ public class ChatActivity extends AppCompatActivity {
                 mChatMessageList.add(message);
 
                 //TODO: I send the message HERE
-                mTorPublisher.sendMessage(message.getMessage());
+                //IChatActivityManager.sendMessage
+
+//                mTorPublisher.sendMessage(message.getMessage());
 
             }
             chatEditText.setText("");
@@ -106,8 +112,10 @@ public class ChatActivity extends AppCompatActivity {
         mEnterChatMessage.setOnClickListener(mClickForEnterChatView);
 
         // set image on click listener
-
         chatEditText = (EditText) findViewById(R.id.chat_edit_text1);
+        /**
+         * Sending the message when hitting enter on keyboard
+         */
         chatEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
@@ -117,27 +125,30 @@ public class ChatActivity extends AppCompatActivity {
 
         chatEditText.addTextChangedListener(mChatEditTextWatcher);
 
-        Integer contactIndex = 0;
-        mContactedPartnerHostnames = MainActivity.getContactedPartnerHostnames();
+        //TODO:
+        //IChatActivityManager.getPartnerAddress (16x.onion)
 
-        if (mContactedPartnerHostnames != null && !mContactedPartnerHostnames.isEmpty()) {
-
-            if (mContactedPartnerHostnames.size() > 0) {
-                Set<Integer> keys = mContactedPartnerHostnames.keySet();
-                Object[] integersArray = keys.toArray();
-                contactIndex = (Integer) integersArray[0];
-            }
-        }
-
-        //Tudor: after finding the needed partner connection we are REMOVING it from the hashMap
-        if (contactIndex > 0) {
-            mTorPublisher = mContactedPartnerHostnames.get(contactIndex);
-            mTorPublisher.setChatActivity(this);
-
-            if (mTorPublisher != null) {
-                mContactedPartnerHostnames.remove(contactIndex);
-            }
-        }
+//        Integer contactIndex = 0;
+//        mContactedPartnerHostnames = MainActivity.getContactedPartnerHostnames();
+//
+//        if (mContactedPartnerHostnames != null && !mContactedPartnerHostnames.isEmpty()) {
+//
+//            if (mContactedPartnerHostnames.size() > 0) {
+//                Set<Integer> keys = mContactedPartnerHostnames.keySet();
+//                Object[] integersArray = keys.toArray();
+//                contactIndex = (Integer) integersArray[0];
+//            }
+//        }
+//
+//        //Tudor: after finding the needed partner connection we are REMOVING it from the hashMap
+//        if (contactIndex > 0) {
+//            mTorPublisher = mContactedPartnerHostnames.get(contactIndex);
+//            mTorPublisher.setChatActivity(this);
+//
+//            if (mTorPublisher != null) {
+//                mContactedPartnerHostnames.remove(contactIndex);
+//            }
+//        }
     }
 
     public void addPartnerMessageToMessageList(ChatMessage partnerMessage) {
@@ -155,7 +166,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
         Log.i(LOG, "closeCommunication -> ENTER");
 
-        if (mTorPublisher != null) mTorPublisher.closeCommunication();
+        //TODO: fill in when ready
+
+//        if (mTorPublisher != null) mTorPublisher.closeCommunication();
         Log.i(LOG, "closeCommunication -> ENTER");
     }
 
@@ -195,14 +208,13 @@ public class ChatActivity extends AppCompatActivity {
                 mChatMessageList.add(message);
 
                 //TODO: I send the message HERE
-                mTorPublisher.sendMessage(message.getMessage());
+//                mTorPublisher.sendMessage(message.getMessage());
 
 
                 if (mChatListAdapter != null)
                     mChatListAdapter.notifyDataSetChanged();
             }
 
-            //TODO: call the send message method here ---
             editText.setText("");
 
             Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");

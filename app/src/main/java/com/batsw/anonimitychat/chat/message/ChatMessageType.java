@@ -5,5 +5,5 @@ package com.batsw.anonimitychat.chat.message;
  */
 
 public enum ChatMessageType {
-    PARTNER, USER, OTHER;
+    PARTNER, USER, SYNC, OTHER;
 }
