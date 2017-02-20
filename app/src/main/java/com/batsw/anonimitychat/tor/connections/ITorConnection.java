@@ -6,10 +6,10 @@ package com.batsw.anonimitychat.tor.connections;
 
 public interface ITorConnection {
 
-    public void sendMessage();
+    public void sendMessage(String message);
 
     public void closeConnection();
 
-    public void getConnection();
+    public ITorConnection getConnection();
 
 }
