@@ -1,13 +1,18 @@
 package com.batsw.anonimitychat;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
@@ -23,9 +28,6 @@ public class MainActivity extends AppCompatActivity {
     TextView mPatnerHostname, mTorStatusTextView;
 
     private TorProcessManager mTorProcessManager;
-
-    private static ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
-    private static Integer mPartnersIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////////
         /////////Prerequisites////////////////////////////////////
         ///////////////////////////////////////////////////////////
-        mContactedPartnerHostnames = new ConcurrentHashMap<>();
 
 
         ///////////////////////////////////////////////////////////
@@ -63,27 +64,29 @@ public class MainActivity extends AppCompatActivity {
                                                   public void onClick(View v) {
                                                       Log.i(MAIN_ACTIVITY_TAG, "Accessing TOR Publisher");
 
-                                                      final String partnerName = mPatnerHostname.getText().toString();
-                                                      Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerName);
-
-                                                      final TorPublisher torPublisher = new TorPublisher(partnerName);
+                                                      final String partnerHostName = mPatnerHostname.getText().toString();
+                                                      Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerHostName);
 
                                                       if (mTorProcessManager.isTorBundleStarted()) {
-                                                          Thread thread = new Thread(new Runnable() {
 
-                                                              @Override
-                                                              public void run() {
+                                                          ChatController.getInstance().startChatActivity(getApplicationContext(), partnerHostName);
 
-                                                                  torPublisher.run();
-                                                              }
 
-                                                          });
-
-                                                          thread.start();
-                                                          mPartnersIndex++;
-                                                          mContactedPartnerHostnames.put(mPartnersIndex, torPublisher);
-
-                                                          startActivity(ChatActivity.makeIntent(MainActivity.this));
+//                                                          Thread thread = new Thread(new Runnable() {
+//
+//                                                              @Override
+//                                                              public void run() {
+//
+//                                                                  torPublisher.run();
+//                                                              }
+//
+//                                                          });
+//
+//                                                          thread.start();
+//                                                          mPartnersIndex++;
+//                                                          mContactedPartnerHostnames.put(mPartnersIndex, torPublisher);
+//
+//                                                          startActivity(ChatActivity.makeIntent(MainActivity.this));
 
                                                       } else {
                                                           //TODO: show a message on screen TOR did not started yet
@@ -137,10 +140,49 @@ public class MainActivity extends AppCompatActivity {
 
         );
 
+        mTorStatusTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(MAIN_ACTIVITY_TAG, "mTorStatusTextView.addTextChangedListener -> ENTER");
+
+                final StringBuilder sb = new StringBuilder(charSequence.length());
+                sb.append(charSequence);
+                String textViewText = sb.toString();
+
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    ChatController.getInstance();
+
+                }
+
+                //Meaning that TOR is either starting or Stopped
+                if (!textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    // ChatController managed resources --- wht is to be set to default
+
+                }
+
+                Log.i(MAIN_ACTIVITY_TAG, "mTorStatusTextView.addTextChangedListener -> LEAVE");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
-    public static ConcurrentHashMap<Integer, TorPublisher> getContactedPartnerHostnames(){
-        return mContactedPartnerHostnames;
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, MainActivity.class);
     }
-
 }

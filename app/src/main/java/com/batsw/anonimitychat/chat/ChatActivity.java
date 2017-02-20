@@ -16,6 +16,10 @@ import android.widget.RelativeLayout;
 
 import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
+import com.batsw.anonimitychat.chat.management.ChatDetail;
+import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
+import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
@@ -34,7 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     // === VARIABLES ===
     // =================
 
-    private static final String LOG = "ChatActivity";
+    private static final String LOG = ChatActivity.class.getSimpleName();
 
     private RelativeLayout reltiveLayout;
 
@@ -42,12 +46,11 @@ public class ChatActivity extends AppCompatActivity {
     private ChatListAdapter mChatListAdapter;
     private ArrayList<ChatMessage> mChatMessageList;
 
-    private ConcurrentHashMap<Integer, TorPublisher> mContactedPartnerHostnames = null;
-//    private TorPublisher mTorPublisher = null;
-
     private EditText chatEditText;
 
     private ImageView mEnterChatMessage;
+
+    private IChatActivityManager mChatActivityManager = new ChatActivityManagerImpl();
 
 
     /**
@@ -59,13 +62,11 @@ public class ChatActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (view.equals(mEnterChatMessage)) {
                 final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
-                mChatMessageList.add(message);
 
                 //TODO: I send the message HERE
-                //IChatActivityManager.sendMessage
+                mChatActivityManager.sendMessage(message.getMessage());
 
-//                mTorPublisher.sendMessage(message.getMessage());
-
+                mChatMessageList.add(message);
             }
             chatEditText.setText("");
         }
@@ -102,6 +103,13 @@ public class ChatActivity extends AppCompatActivity {
 
         reltiveLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
+        mChatActivityManager.setChatActivity(this);
+
+        long chatSessionId = getIntent().getLongExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatModelConstants.DEFAULT_SESSION_ID);
+        if (chatSessionId != ChatModelConstants.DEFAULT_SESSION_ID) {
+            mChatActivityManager.configureChatDetail(chatSessionId);
+        }
+
         mChatMessageList = new ArrayList<>();
 
         mChatListAdapter = new ChatListAdapter(mChatMessageList, this);
@@ -127,36 +135,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //TODO:
         //IChatActivityManager.getPartnerAddress (16x.onion)
-
-//        Integer contactIndex = 0;
-//        mContactedPartnerHostnames = MainActivity.getContactedPartnerHostnames();
-//
-//        if (mContactedPartnerHostnames != null && !mContactedPartnerHostnames.isEmpty()) {
-//
-//            if (mContactedPartnerHostnames.size() > 0) {
-//                Set<Integer> keys = mContactedPartnerHostnames.keySet();
-//                Object[] integersArray = keys.toArray();
-//                contactIndex = (Integer) integersArray[0];
-//            }
-//        }
-//
-//        //Tudor: after finding the needed partner connection we are REMOVING it from the hashMap
-//        if (contactIndex > 0) {
-//            mTorPublisher = mContactedPartnerHostnames.get(contactIndex);
-//            mTorPublisher.setChatActivity(this);
-//
-//            if (mTorPublisher != null) {
-//                mContactedPartnerHostnames.remove(contactIndex);
-//            }
-//        }
     }
-
-    public void addPartnerMessageToMessageList(ChatMessage partnerMessage) {
-        mChatMessageList.add(partnerMessage);
-        if (mChatListAdapter != null)
-            mChatListAdapter.notifyDataSetChanged();
-    }
-
 
     /**
      * This method is used to clean the communication resources when the USER has finished chatting
@@ -164,29 +143,29 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(LOG, "closeCommunication -> ENTER");
+        Log.i(LOG, "onDestroy -> ENTER");
 
         //TODO: fill in when ready
+//        mChatActivityManager.onDestroy();
 
-//        if (mTorPublisher != null) mTorPublisher.closeCommunication();
-        Log.i(LOG, "closeCommunication -> ENTER");
+        Log.i(LOG, "onDestroy -> LEAVE");
     }
 
-    /**
-     * Creating Intent for the activity of this class
-     *
-     * @param context
-     * @return Intent
-     */
-    public static Intent makeIntent(Context context) {
-        return new Intent(context, ChatActivity.class);
+    public void showReceivedPartnerMessage(String partnerMessage) {
+        Log.i(LOG, "showReceivedPartnerMessage -> ENTER");
+        final ChatMessage chatMessage = new ChatMessage(partnerMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
+
+        mChatMessageList.add(chatMessage);
+        if (mChatListAdapter != null)
+            mChatListAdapter.notifyDataSetChanged();
+
+        Log.i(LOG, "showReceivedPartnerMessage -> ENTER");
     }
 
-
-    private boolean processChatEditTextKey(View view, int keyCode, KeyEvent keyEvent){
+    private boolean processChatEditTextKey(View view, int keyCode, KeyEvent keyEvent) {
         Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> ENTER");
 
-        // key-down event for "ENTER" key pressed
+        // event for "ENTER" key pressed
         if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
             Log.i(LOG, "enter key pressed");
@@ -205,11 +184,11 @@ public class ChatActivity extends AppCompatActivity {
                 // whi is PARNTER switched with USER type message ....
 //                final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
                 final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
-                mChatMessageList.add(message);
 
                 //TODO: I send the message HERE
-//                mTorPublisher.sendMessage(message.getMessage());
+                mChatActivityManager.sendMessage(message.getMessage());
 
+                mChatMessageList.add(message);
 
                 if (mChatListAdapter != null)
                     mChatListAdapter.notifyDataSetChanged();
@@ -225,6 +204,20 @@ public class ChatActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
+        Log.i(LOG, "makeIntent -> ENTER context=" + context);
+
+        Intent retVal = new Intent(context, ChatActivity.class);
+
+        Log.i(LOG, "makeIntent -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
 }
 
 
