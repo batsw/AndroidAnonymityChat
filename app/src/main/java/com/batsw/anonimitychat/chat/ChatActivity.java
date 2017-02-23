@@ -135,6 +135,8 @@ public class ChatActivity extends AppCompatActivity {
 
         //TODO:
         //IChatActivityManager.getPartnerAddress (16x.onion)
+
+        mChatActivityManager.onCreate();
     }
 
     /**
@@ -151,11 +153,11 @@ public class ChatActivity extends AppCompatActivity {
         Log.i(LOG, "onDestroy -> LEAVE");
     }
 
-    public void showReceivedPartnerMessage(String partnerMessage) {
+    public void showReceivedPartnerMessage(ChatMessage partnerMessage) {
         Log.i(LOG, "showReceivedPartnerMessage -> ENTER");
-        final ChatMessage chatMessage = new ChatMessage(partnerMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
+//        final ChatMessage chatMessage = new ChatMessage(partnerMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
 
-        mChatMessageList.add(chatMessage);
+        mChatMessageList.add(partnerMessage);
         if (mChatListAdapter != null)
             mChatListAdapter.notifyDataSetChanged();
 

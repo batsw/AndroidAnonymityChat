@@ -5,18 +5,20 @@ import android.util.Log;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.management.ChatDetail;
+import com.batsw.anonimitychat.chat.message.ChatMessage;
+import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 
 /**
  * Created by tudor on 2/11/2017.
  */
 
-public class ChatActivityManagerImpl implements IChatActivityManager {
+public class ChatActivityManagerImpl implements IChatActivityManager, IMessageReceivedListener {
 
     private static final String CHAT_ACTIVITY_MANAGER_TAG = ChatActivityManagerImpl.class.getSimpleName();
 
-    private ChatDetail mChatDetail;
-
     private ChatActivity mChatActivity = null;
+
+    private long mSessionId = 0L;
 
     public ChatActivityManagerImpl() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "ChatActivityManagerImpl -> ENTER");
@@ -24,14 +26,31 @@ public class ChatActivityManagerImpl implements IChatActivityManager {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "ChatActivityManagerImpl -> LEAVE");
     }
 
-    private void init() {
-        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> ENTER");
-        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> LEAVE");
-    }
+//    private void init() {
+//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> ENTER");
+//
+//        // establishing connection to the partner
+//        if (!mChatDetail.isAlive()){
+//            ChatController.getInstance()
+//        }
+//
+//
+//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> LEAVE");
+//    }
 
     @Override
     public void onCreate() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> ENTER");
+
+        //Preparing TorConnection with parner
+        ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
+
+        //TODO .........
+        /// when connection is established add the MessageReceivedListener to Manager
+//        ChatController.getInstance().addMessageReceivedListenerToList(this);
+
+        //If the connection could not be established means that the partner is offline
+
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> LEAVE");
     }
 
@@ -57,15 +76,25 @@ public class ChatActivityManagerImpl implements IChatActivityManager {
     @Override
     public void sendMessage(String message) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "sendMessage -> ENTER message=" + message);
-        mChatDetail.getTorConnection().sendMessage(message);
+
+        ChatController.getInstance().sendMessage(mSessionId, message);
+
+//        mChatDetail.getTorConnection().sendMessage(message);
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "sendMessage -> LEAVE");
     }
 
     @Override
-    public void showReceivedMessage(String partnerMessage) {
+    public void showReceivedMessage(ChatMessage partnerMessage) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> ENTER");
 
+
         mChatActivity.showReceivedPartnerMessage(partnerMessage);
+
+        //Through a listener something .....
+//        ChatController.getInstance().showReceivedPartnerMessage(partnerMessage);
+
+//        mChatActivity.showReceivedPartnerMessage();
+
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> LEAVE");
     }
@@ -80,7 +109,7 @@ public class ChatActivityManagerImpl implements IChatActivityManager {
     public void configureChatDetail(long sessionId) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "getChatDetail -> ENTER sessionId=" + sessionId);
 
-        mChatDetail = ChatController.getInstance().getChatDetail(sessionId);
+        mSessionId = sessionId;
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "getChatDetail -> LEAVE");
     }

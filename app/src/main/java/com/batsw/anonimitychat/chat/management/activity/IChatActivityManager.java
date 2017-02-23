@@ -18,8 +18,6 @@ public interface IChatActivityManager extends IViewModel {
 
     public void sendMessage(String message);
 
-    public void showReceivedMessage(String partnerMessage);
-
     public void loadHistory();
 
     public void setChatActivity(ChatActivity chatActivity);

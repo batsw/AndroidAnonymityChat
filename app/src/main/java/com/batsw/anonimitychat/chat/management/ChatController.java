@@ -8,6 +8,10 @@ import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
+import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
+import com.batsw.anonimitychat.chat.management.connection.IChatConnectionManager;
+import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
+import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.chat.persistence.PersistenceManager;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 
@@ -21,12 +25,15 @@ public class ChatController {
 
     private static final String CHAT_CONTROLLER_LOG = ChatController.class.getSimpleName();
 
-    private IChatActivityManager mChatActivityManager;
     private PersistenceManager mPrsistenceManager;
+
+    private IChatConnectionManager mChatConnectionManager;
 
     private static ChatController mInstance;
 
     private ChatController() {
+
+        init();
     }
 
     public static synchronized ChatController getInstance() {
@@ -40,34 +47,32 @@ public class ChatController {
      * preparing the concurrent resources
      */
     private void init() {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER");
+        Log.i(CHAT_CONTROLLER_LOG, "init -> ENTER");
 
         mPrsistenceManager = new PersistenceManager();
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE");
+
+        mChatConnectionManager = new ChatConnectionManagerImpl();
+
+        Log.i(CHAT_CONTROLLER_LOG, "init -> LEAVE");
     }
 
-    //TODO: create the ChatDetail if it not found in the PersistenceManager
-    private void createChatDetail() {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER");
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE");
+    public void establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sesssionId) {
+        ChatDetail chatDetail = this.getChatDetail(sesssionId);
+
+        ITorConnection partnerConnection = mChatConnectionManager.getConnection(chatDetail, messageReceivedListener);
+        chatDetail.setTorConnection(partnerConnection);
     }
 
-    public void sendMessage() {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER");
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE");
-    }
+    public void sendMessage(long sessionId, String message) {
+        Log.i(CHAT_CONTROLLER_LOG, "sendMessage -> ENTER sessionId=" + sessionId + " ; message=" + message);
 
-    public void getPartnerAddress() {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER");
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE");
-    }
+        ChatDetail chatDetail = this.getChatDetail(sessionId);
+        if (chatDetail.isAlive()) {
 
-    public void destroyed() {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER");
+            chatDetail.getTorConnection().sendMessage(message);
+        }
 
-        Log.i(CHAT_CONTROLLER_LOG, "Not implemented yet!");
-
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE");
+        Log.i(CHAT_CONTROLLER_LOG, "sendMessage -> LEAVE");
     }
 
     public ChatDetail getChatDetail(String partnerAddress) {
@@ -80,7 +85,8 @@ public class ChatController {
         } else {
 
             // means that the contact is new and it will be added with DEFAULT prameters in the Partners List
-            ChatDetail newChatDetail = new ChatDetail(partnerAddress, new String(), null, generateSessionId(), false);
+            // default nickName for address is the address itself
+            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, generateSessionId(), false);
 
             mPrsistenceManager.addPartnerToList(newChatDetail);
 
@@ -117,6 +123,16 @@ public class ChatController {
         return null;
     }
 
+    public void stoppedChatActivity(IMessageReceivedListener messageReceivedListener, long sessionId) {
+        Log.i(CHAT_CONTROLLER_LOG, "stoppedChatActivity -> ENTER");
+
+        ChatDetail chatDetail = this.getChatDetail(sessionId);
+        mChatConnectionManager.closeConnection(chatDetail);
+
+        Log.i(CHAT_CONTROLLER_LOG, "stoppedChatActivity -> LEAVE");
+    }
+
+
     /**
      * This method is starting a ChatActivity from whatever Activity
      *
@@ -138,7 +154,7 @@ public class ChatController {
     /**
      * This method must be used when Tor Bundle is stopping or it is commanded to stop.<br>
      */
-    public void cleanResources() {
+    public void clearResources() {
         Log.i(CHAT_CONTROLLER_LOG, "cleanResources -> ENTER");
 
         Log.i(CHAT_CONTROLLER_LOG, "Not implemented yet!");

@@ -20,7 +20,7 @@ public class PersistenceManager {
     private ConcurrentLinkedQueue<ChatDetail> mPartnerList;
 
     public PersistenceManager() {
-
+        init();
     }
 
     //TODO I must load the Partner list from DB
