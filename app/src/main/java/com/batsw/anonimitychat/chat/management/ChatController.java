@@ -13,6 +13,7 @@ import com.batsw.anonimitychat.chat.management.connection.IChatConnectionManager
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.chat.persistence.PersistenceManager;
+import com.batsw.anonimitychat.chat.util.ConnectionType;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 
 import java.util.UUID;
@@ -75,7 +76,7 @@ public class ChatController {
         Log.i(CHAT_CONTROLLER_LOG, "sendMessage -> LEAVE");
     }
 
-    public ChatDetail getChatDetail(String partnerAddress) {
+    private ChatDetail getChatDetailForChatAction(String partnerAddress) {
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER partnerAddress=" + partnerAddress);
 
         ChatDetail retVal = null;
@@ -84,9 +85,10 @@ public class ChatController {
             retVal = mPrsistenceManager.getPartnerDetail(partnerAddress);
         } else {
 
-            // means that the contact is new and it will be added with DEFAULT prameters in the Partners List
+            // means that the contact is new and it will be added with DEFAULT prameters in the Contacts List
             // default nickName for address is the address itself
-            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, generateSessionId(), false);
+            //TODO: differentiate between the two connection types
+            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.USER, generateSessionId(), false);
 
             mPrsistenceManager.addPartnerToList(newChatDetail);
 
@@ -119,10 +121,6 @@ public class ChatController {
         return retVal;
     }
 
-    public ChatDetail getChatDetail(ITorConnection torConnection) {
-        return null;
-    }
-
     public void stoppedChatActivity(IMessageReceivedListener messageReceivedListener, long sessionId) {
         Log.i(CHAT_CONTROLLER_LOG, "stoppedChatActivity -> ENTER");
 
@@ -145,7 +143,7 @@ public class ChatController {
         Intent chatActivityIntent = ChatActivity.makeIntent(currentContext);
 
         //TODO: how to manage chatDetail and session ID
-        chatActivityIntent.putExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatController.getInstance().getChatDetail(partnerHostName).getSessionId());
+        chatActivityIntent.putExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatController.getInstance().getChatDetailForChatAction(partnerHostName).getSessionId());
 
         currentContext.startActivity(chatActivityIntent);
         Log.i(CHAT_CONTROLLER_LOG, "startChatActivity -> LEAVE");

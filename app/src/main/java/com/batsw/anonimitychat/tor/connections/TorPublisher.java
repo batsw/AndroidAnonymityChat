@@ -8,6 +8,7 @@ import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.io.DataInputStream;
@@ -31,31 +32,80 @@ import socks.SocksSocket;
  * Created by tudor on 12/16/2016.
  */
 
-public class TorPublisher implements Serializable {
+public class TorPublisher implements ITorConnection, Serializable {
 
-    private static final String LOG = "TorPublisher";
+    private static final String LOG = TorPublisher.class.getSimpleName();
 
-    public static String mDestinationAddress = "";
+    public String mDestinationAddress = "";
+    public MessageReceivedListenerManager mMessageReceivedListenerManager;
+    private long mSessionId;
 
     private Socket mSocketConnection;
-//    private Thread mMessageReceiverThread = null;
-
-    //TODO: remove when finished testing
-    private String message = "";
+    private Thread mMessageReceivingThread = null;
 
     private OutputStream mOutputStream;
     private DataOutputStream mDataOutputStream;
     private DataInputStream mDataInputStream;
 
-    private ChatActivity mChatActivity = null;
+    boolean mIsConnected = false;
 
-    public TorPublisher(String partnerHostName) {
+    public TorPublisher(MessageReceivedListenerManager messageReceivedListenerManager, String partnerHostName, long sessionId) {
+        mMessageReceivedListenerManager = messageReceivedListenerManager;
         mDestinationAddress = partnerHostName;
+        mSessionId = sessionId;
     }
 
-    public void run() {
-        try {
+    @Override
+    public void createConnection() {
+        Log.i(LOG, "getConnection -> ENTER");
 
+        mIsConnected = establishConnectionToPartner();
+        if (mIsConnected == true) {
+            startMessageReceivingThread();
+        }
+
+        Log.i(LOG, "getConnection -> LEAVE");
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        Log.i(LOG, "sendMessage -> ENTER message=" + message);
+
+        String preparedMessage = message + ChatModelConstants.MESSAGE_EOL;
+
+        try {
+            mDataOutputStream.writeUTF(preparedMessage);
+            mDataOutputStream.flush();
+        } catch (IOException ioException) {
+            Log.e(LOG, "error when sending message: " + ioException.getMessage(), ioException);
+        }
+
+        Log.i(LOG, "sendMessage -> LEAVE");
+    }
+
+    @Override
+    public void closeConnection() {
+        Log.i(LOG, "closeConnection -> ENTER");
+
+        Log.i(LOG, "Not implemented yet!");
+
+        Log.i(LOG, "closeConnection -> LEAVE");
+    }
+
+    @Override
+    public boolean getIsAlive() {
+        return mIsConnected;
+    }
+
+    @Override
+    public Thread getMessageReceivingThread() {
+        return mMessageReceivingThread;
+    }
+
+    private boolean establishConnectionToPartner() {
+        Log.i(LOG, "establishConnectionToPartner -> ENTER");
+        boolean retVal = false;
+        try {
             if (android.os.Build.VERSION.SDK_INT > 9) {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
@@ -71,41 +121,39 @@ public class TorPublisher implements Serializable {
 
             mDataInputStream = new DataInputStream(mSocketConnection.getInputStream());
 
-//            mMessageReceiverThread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    createMessageReceivingLoop();
-//                }
-//            });
-//            mMessageReceiverThread.start();
-
         } catch (UnknownHostException unknownHost) {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);
+
+            retVal = false;
+
         } catch (IOException ioException) {
             Log.e(LOG, "error: " + ioException.getMessage(), ioException);
+
+            retVal = false;
         }
+
+        if ((mDataInputStream != null) && (mDataOutputStream != null)) {
+            retVal = true;
+        }
+
+        Log.i(LOG, "establishConnectionToPartner -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 
-    //TODO: use it later
-    public void sendMessage(String message) {
-        Log.i(LOG, "sendMessage -> ENTER");
-
-        String preparedMessage = message + ChatModelConstants.MESSAGE_EOL;
-
-        try {
-            mDataOutputStream.writeUTF(preparedMessage);
-            mDataOutputStream.flush();
-        } catch (IOException ioException) {
-            Log.e(LOG, "error when sending message: " + ioException.getMessage(), ioException);
-        }
-
-        Log.i(LOG, "sendMessage -> LEAVE");
+    private void startMessageReceivingThread() {
+        mMessageReceivingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                createMessageReceivingLoop();
+            }
+        });
+        mMessageReceivingThread.start();
     }
 
     /**
      *
      */
-    public void closeCommunication() {
+    private void closeCommunication() {
         Log.i(LOG, "closeCommunication -> ENTER");
 
 //        if (mMessageReceiverThread.isAlive()) mMessageReceiverThread.stop();
@@ -136,7 +184,7 @@ public class TorPublisher implements Serializable {
                     incomingMessage = mDataInputStream.readUTF();
                     Log.i(LOG, "Message Receved___" + incomingMessage);
 
-                    final ChatMessage receivedChatMessage = new ChatMessage(incomingMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
+                    mMessageReceivedListenerManager.messageReceived(incomingMessage, mSessionId);
 
 //                    mChatActivity.runOnUiThread(new Runnable() {
 //                        @Override
@@ -165,9 +213,5 @@ public class TorPublisher implements Serializable {
         }
     }
 
-    //notific adaptorul respectiv ca a mai venit un mesaj ..... hmmmmm
-    //notificarea vine prin activity .... oare e bine????
-//    public void setChatActivity(ChatActivity chatActivity) {
-//        mChatActivity = chatActivity;
-//    }
+
 }

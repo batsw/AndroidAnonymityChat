@@ -26,18 +26,6 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "ChatActivityManagerImpl -> LEAVE");
     }
 
-//    private void init() {
-//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> ENTER");
-//
-//        // establishing connection to the partner
-//        if (!mChatDetail.isAlive()){
-//            ChatController.getInstance()
-//        }
-//
-//
-//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "init -> LEAVE");
-//    }
-
     @Override
     public void onCreate() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> ENTER");
@@ -70,6 +58,9 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     @Override
     public void onDestroy() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onDestroy -> ENTER");
+
+        ChatController.getInstance().stoppedChatActivity(this, mSessionId);
+
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onDestroy -> LEAVE");
     }
 
@@ -87,14 +78,7 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     public void showReceivedMessage(ChatMessage partnerMessage) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> ENTER");
 
-
         mChatActivity.showReceivedPartnerMessage(partnerMessage);
-
-        //Through a listener something .....
-//        ChatController.getInstance().showReceivedPartnerMessage(partnerMessage);
-
-//        mChatActivity.showReceivedPartnerMessage();
-
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> LEAVE");
     }

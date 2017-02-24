@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.chat.management;
 
+import com.batsw.anonimitychat.chat.util.ConnectionType;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 
 /**
@@ -11,15 +12,17 @@ public class ChatDetail {
     private String mPartnerAddress;
     private String mPartnerName;
     private ITorConnection mTorConnection;
+    private ConnectionType mConnectionType;
     private long mSessionId;
     private boolean mIsAlive;
 
-    public ChatDetail(String mPartnerAddress, String mPartnerName, ITorConnection mTorConnection, long mSessionId, boolean mIsAlive) {
-        this.mPartnerAddress = mPartnerAddress;
-        this.mPartnerName = mPartnerName;
-        this.mTorConnection = mTorConnection;
-        this.mSessionId = mSessionId;
-        this.mIsAlive = mIsAlive;
+    public ChatDetail(String partnerAddress, String partnerName, ITorConnection torConnection, ConnectionType connectionType, long sessionId, boolean isAlive) {
+        mPartnerAddress = partnerAddress;
+        mPartnerName = partnerName;
+        mTorConnection = torConnection;
+        mConnectionType = connectionType;
+        mSessionId = sessionId;
+        mIsAlive = isAlive;
     }
 
     public boolean isAlive() {
@@ -62,12 +65,21 @@ public class ChatDetail {
         this.mPartnerName = partnerName;
     }
 
+    public ConnectionType getConnectionType() {
+        return mConnectionType;
+    }
+
+    public void setmConnectionType(ConnectionType mConnectionType) {
+        this.mConnectionType = mConnectionType;
+    }
+
     @Override
     public String toString() {
         return "ChatDetail{" +
                 "mPartnerAddress='" + mPartnerAddress + '\'' +
                 ", mPartnerName='" + mPartnerName + '\'' +
                 ", mTorConnection=" + mTorConnection +
+                ", mConnectionType=" + mConnectionType +
                 ", mSessionId=" + mSessionId +
                 ", mIsAlive=" + mIsAlive +
                 '}';

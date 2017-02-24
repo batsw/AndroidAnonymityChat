@@ -10,6 +10,10 @@ public interface ITorConnection {
 
     public void closeConnection();
 
-    public ITorConnection getConnection();
+    public void createConnection();
+
+    public boolean getIsAlive();
+    public Thread getMessageReceivingThread();
+
 
 }

@@ -19,10 +19,12 @@ public class MessageReceivedListenerManager {
         }
     }
 
-    public void messageReceived(String message) {
+    public void messageReceived(String message, long sessionId) {
         ChatMessage chatMessage = new ChatMessage(message, ChatMessageType.PARTNER, System.currentTimeMillis());
-        for (IMessageReceivedListener torStatusListener : mMessageReceivedListenerMap.values()) {
-            torStatusListener.showReceivedMessage(chatMessage);
+
+        IMessageReceivedListener messageReceivedListener = mMessageReceivedListenerMap.get(sessionId);
+        if (messageReceivedListener != null) {
+            messageReceivedListener.showReceivedMessage(chatMessage);
         }
     }
 
