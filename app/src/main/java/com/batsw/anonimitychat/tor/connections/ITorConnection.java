@@ -12,7 +12,7 @@ public interface ITorConnection {
 
     public void createConnection();
 
-    public boolean getIsAlive();
+    public boolean isAlive();
     public Thread getMessageReceivingThread();
 
 

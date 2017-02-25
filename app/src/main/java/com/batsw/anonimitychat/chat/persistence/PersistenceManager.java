@@ -83,7 +83,7 @@ public class PersistenceManager {
         Iterator<ChatDetail> iterator = mPartnerList.iterator();
         while (iterator.hasNext()) {
             ChatDetail chatDetail = iterator.next();
-            if (chatDetail.getPartnerAddress() == partnerHostname) {
+            if (chatDetail.getPartnerAddress().equals(partnerHostname)) {
                 retVal = chatDetail;
                 break;
             }

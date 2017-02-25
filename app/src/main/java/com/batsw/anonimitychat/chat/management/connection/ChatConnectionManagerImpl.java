@@ -38,7 +38,9 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
         }
 
-        mMessageReceivedListenerManager.addTorBundleListener(messageReceivedListener, chatDetail.getSessionId());
+        if (retVal.isAlive()) {
+            mMessageReceivedListenerManager.addTorBundleListener(messageReceivedListener, chatDetail.getSessionId());
+        }
 
         Log.i(CHAT_CONNECTION_MANAGER_LOG, "getConnection -> LEAVE retVal=" + retVal);
         return retVal;
@@ -47,6 +49,12 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     @Override
     public void closeConnection(ChatDetail chatDetail) {
 
+        chatDetail.setIsAlive(false);
+        if (chatDetail.getConnectionType().equals(ConnectionType.USER)) {
+            chatDetail.getTorConnection().closeConnection();
+            chatDetail.setTorConnection(null);
+            chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
+        }
 
         mMessageReceivedListenerManager.removeTorBundleListener(chatDetail.getSessionId());
     }

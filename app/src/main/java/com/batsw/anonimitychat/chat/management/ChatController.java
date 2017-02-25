@@ -57,11 +57,14 @@ public class ChatController {
         Log.i(CHAT_CONTROLLER_LOG, "init -> LEAVE");
     }
 
-    public void establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sesssionId) {
-        ChatDetail chatDetail = this.getChatDetail(sesssionId);
+    public void establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sessionId) {
+        ChatDetail chatDetail = this.getChatDetail(sessionId);
 
         ITorConnection partnerConnection = mChatConnectionManager.getConnection(chatDetail, messageReceivedListener);
-        chatDetail.setTorConnection(partnerConnection);
+        if (partnerConnection.isAlive()) {
+            chatDetail.setIsAlive(true);
+            chatDetail.setTorConnection(partnerConnection);
+        }
     }
 
     public void sendMessage(long sessionId, String message) {

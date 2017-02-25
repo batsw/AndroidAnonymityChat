@@ -8,5 +8,5 @@ package com.batsw.anonimitychat.chat.util;
  */
 
 public enum ConnectionType {
-    PARTNER, USER;
+    PARTNER, USER, NO_CONNECTION;
 }

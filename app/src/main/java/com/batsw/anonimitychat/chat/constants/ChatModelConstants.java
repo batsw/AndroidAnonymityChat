@@ -17,4 +17,10 @@ public interface ChatModelConstants {
 
     public static final long DEFAULT_SESSION_ID = 0L;
 
+    ////////////
+    //PROTOCOL//
+    ///////////
+
+    public static final String MESSAGE_END_CHAT = "->END<-";
+
 }

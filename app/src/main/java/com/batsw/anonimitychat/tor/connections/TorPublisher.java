@@ -87,13 +87,15 @@ public class TorPublisher implements ITorConnection, Serializable {
     public void closeConnection() {
         Log.i(LOG, "closeConnection -> ENTER");
 
-        Log.i(LOG, "Not implemented yet!");
+        mMessageReceivingThread.stop();
+
+        closeCommunication();
 
         Log.i(LOG, "closeConnection -> LEAVE");
     }
 
     @Override
-    public boolean getIsAlive() {
+    public boolean isAlive() {
         return mIsConnected;
     }
 
@@ -156,9 +158,10 @@ public class TorPublisher implements ITorConnection, Serializable {
     private void closeCommunication() {
         Log.i(LOG, "closeCommunication -> ENTER");
 
-//        if (mMessageReceiverThread.isAlive()) mMessageReceiverThread.stop();
-
         try {
+
+            sendMessage(ChatModelConstants.MESSAGE_END_CHAT);
+
             if (mDataInputStream != null) mDataInputStream.close();
             if (mDataOutputStream != null) mDataOutputStream.close();
             if (mOutputStream != null) mOutputStream.close();
@@ -184,20 +187,12 @@ public class TorPublisher implements ITorConnection, Serializable {
                     incomingMessage = mDataInputStream.readUTF();
                     Log.i(LOG, "Message Receved___" + incomingMessage);
 
-                    mMessageReceivedListenerManager.messageReceived(incomingMessage, mSessionId);
-
-//                    mChatActivity.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            mChatActivity.addPartnerMessageToMessageList(receivedChatMessage);
-//                        }
-//                    });
-
-                    // notify that a message came
-                    /// i need a signature of the message to print it on the right chat .....
-
-//                    if (incomingMessage.equals("something...."))
-//                        break;
+                    if (!incomingMessage.equals(ChatModelConstants.MESSAGE_END_CHAT)) {
+                        mMessageReceivedListenerManager.messageReceived(incomingMessage, mSessionId);
+                    } else {
+                        Log.i(LOG, "END CHAT Message Receved___" + incomingMessage);
+                        break;
+                    }
                 }
             } catch (IOException e) {
                 //TODO : I don't think the connection should be closed . Only when exiting the Activity
