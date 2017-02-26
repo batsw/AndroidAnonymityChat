@@ -3,4 +3,7 @@
 
     <string name="type_your_message">Type a message</string>
     <string name="NoRecent">No recent</string>
+    <string name="MainView">Main Menu</string>
+    <string name="ChatsView">Chats</string>
+    <string name="ContactsView">Contacts</string>
 </resources>
