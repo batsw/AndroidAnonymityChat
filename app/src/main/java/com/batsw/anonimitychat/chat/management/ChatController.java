@@ -105,7 +105,7 @@ public class ChatController {
     private long generateSessionId() {
         Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> ENTER");
 
-        long retVal = UUID.randomUUID().timestamp();
+        long retVal = UUID.randomUUID().getMostSignificantBits();
 
         Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> LEAVE retVal=" + retVal);
         return retVal;
@@ -147,6 +147,8 @@ public class ChatController {
 
         //TODO: how to manage chatDetail and session ID
         chatActivityIntent.putExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatController.getInstance().getChatDetailForChatAction(partnerHostName).getSessionId());
+
+        chatActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         currentContext.startActivity(chatActivityIntent);
         Log.i(CHAT_CONTROLLER_LOG, "startChatActivity -> LEAVE");

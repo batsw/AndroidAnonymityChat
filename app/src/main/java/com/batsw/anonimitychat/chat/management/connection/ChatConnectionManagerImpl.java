@@ -31,6 +31,7 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
         if (chatDetail.getConnectionType().equals(ConnectionType.USER)) {
 
             retVal = new TorPublisher(mMessageReceivedListenerManager, chatDetail.getPartnerAddress(), chatDetail.getSessionId());
+            retVal.createConnection();
 
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
 

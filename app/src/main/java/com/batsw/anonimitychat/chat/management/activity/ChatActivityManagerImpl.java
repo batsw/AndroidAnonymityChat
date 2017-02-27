@@ -75,10 +75,15 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     }
 
     @Override
-    public void showReceivedMessage(ChatMessage partnerMessage) {
+    public void showReceivedMessage(final ChatMessage partnerMessage) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> ENTER");
 
-        mChatActivity.showReceivedPartnerMessage(partnerMessage);
+        mChatActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mChatActivity.showReceivedPartnerMessage(partnerMessage);
+            }
+        });
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "showReceivedMessage -> LEAVE");
     }
