@@ -11,14 +11,15 @@ import com.batsw.anonimitychat.chat.ChatActivity;
 
 public class IncomingConnectionListenerImpl implements IIncomingConnectionListener{
 
-    private Activity mActivity;
+    public IncomingConnectionListenerImpl (){
+    }
 
-    public IncomingConnectionListenerImpl (Activity activity){
-        mActivity = activity;
+    public void triggerIncomingPartnerConnectionEvent(){
+
     }
 
     @Override
-    public void startNewCatActivity() {
-        mActivity.startActivity(ChatActivity.makeIntent(mActivity.getApplicationContext()));
+    public void triggerIncomingPartnerConnectionEvent(String partnerHostName) {
+
     }
 }

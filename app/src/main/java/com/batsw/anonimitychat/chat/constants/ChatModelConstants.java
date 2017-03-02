@@ -21,6 +21,7 @@ public interface ChatModelConstants {
     //PROTOCOL//
     ///////////
 
+    public static final String FIRST_CHAT_MESSAGE = "->START<-";
     public static final String MESSAGE_END_CHAT = "->END<-";
 
 }

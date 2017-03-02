@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
+import com.batsw.anonimitychat.chat.listener.IIncomingConnectionListener;
 import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
@@ -22,7 +23,7 @@ import java.util.UUID;
  * Created by tudor on 2/10/2017.
  */
 
-public class ChatController {
+public class ChatController implements IIncomingConnectionListener {
 
     private static final String CHAT_CONTROLLER_LOG = ChatController.class.getSimpleName();
 
@@ -31,6 +32,12 @@ public class ChatController {
     private IChatConnectionManager mChatConnectionManager;
 
     private static ChatController mInstance;
+
+    private static Context mCurrentActivityContext = null;
+
+    private static boolean isIncomingChatConnection = false;
+
+    private String mMyTorAddress = "";
 
     private ChatController() {
 
@@ -86,16 +93,27 @@ public class ChatController {
 
         if (mPrsistenceManager.isPartnerInTheList(partnerAddress)) {
             retVal = mPrsistenceManager.getPartnerDetail(partnerAddress);
+            retVal.setmConnectionType(ConnectionType.NO_CONNECTION);
         } else {
 
             // means that the contact is new and it will be added with DEFAULT prameters in the Contacts List
             // default nickName for address is the address itself
             //TODO: differentiate between the two connection types
-            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.USER, generateSessionId(), false);
+//            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.USER, generateSessionId(), false);
+
+            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.NO_CONNECTION, generateSessionId(), false);
 
             mPrsistenceManager.addPartnerToList(newChatDetail);
 
             retVal = newChatDetail;
+        }
+
+        if (!isIncomingChatConnection) {
+            retVal.setmConnectionType(ConnectionType.USER);
+        } else {
+            retVal.setmConnectionType(ConnectionType.PARTNER);
+
+            isIncomingChatConnection = false;
         }
 
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE retVal=" + retVal);
@@ -142,10 +160,8 @@ public class ChatController {
     public void startChatActivity(Context currentContext, String partnerHostName) {
         Log.i(CHAT_CONTROLLER_LOG, "startChatActivity -> ENTER currentContext=" + currentContext + " ,partnerHostName=" + partnerHostName);
 
-
         Intent chatActivityIntent = ChatActivity.makeIntent(currentContext);
 
-        //TODO: how to manage chatDetail and session ID
         chatActivityIntent.putExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatController.getInstance().getChatDetailForChatAction(partnerHostName).getSessionId());
 
         chatActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -163,5 +179,40 @@ public class ChatController {
         Log.i(CHAT_CONTROLLER_LOG, "Not implemented yet!");
 
         Log.i(CHAT_CONTROLLER_LOG, "cleanResources -> LEAVE");
+    }
+
+    @Override
+    public void triggerIncomingPartnerConnectionEvent(String partnerHostName) {
+
+        //TODO: trigger the creation of a POP-up on the screen to let the USER decide whether to continue the
+        // current Chat or to switch to the new one
+
+        // get current action
+        // creste new ChatAction intent
+        // start the chat with the Partner
+        if (partnerHostName != null || !partnerHostName.isEmpty()) {
+
+            isIncomingChatConnection = true;
+
+            ChatController.getInstance().startChatActivity(mCurrentActivityContext, partnerHostName);
+
+        }
+
+    }
+
+    public void setCurrentActivityContext(Context context) {
+        Log.i(CHAT_CONTROLLER_LOG, "setCurrentActivityContext -> ENTER context=" + context);
+
+        mCurrentActivityContext = context;
+
+        Log.i(CHAT_CONTROLLER_LOG, "setCurrentActivityContext -> LEAVE");
+    }
+
+    public void setMyAddress(String myTorAddress) {
+        mMyTorAddress = myTorAddress;
+    }
+
+    public String getMyAddress() {
+        return mMyTorAddress;
     }
 }

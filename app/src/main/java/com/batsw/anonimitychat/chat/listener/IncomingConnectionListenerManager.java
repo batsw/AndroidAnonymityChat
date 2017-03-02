@@ -12,22 +12,14 @@ import java.util.List;
 public class IncomingConnectionListenerManager {
     private List<IIncomingConnectionListener> mIncomingConnectionListenerList = null;
 
-    private int mPartnersIndex = 0;
-
-    public IncomingConnectionListenerManager(int partnersIndex) {
+    public IncomingConnectionListenerManager() {
         mIncomingConnectionListenerList = new ArrayList<>();
-        mPartnersIndex = partnersIndex;
     }
 
-    public void trigger() {
-
-// first increase the index then
-// add the connection to map
-
-        /// must change the map to accept the Sockets/Connections with a tag PARTNER/USER type
-
+    public void triggerPartnerChatRequest(String partnerHostname) {
         for (IIncomingConnectionListener torStatusListener : mIncomingConnectionListenerList) {
 
+            torStatusListener.triggerIncomingPartnerConnectionEvent(partnerHostname);
 
         }
     }

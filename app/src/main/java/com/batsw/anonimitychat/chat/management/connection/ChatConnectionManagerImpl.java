@@ -2,12 +2,15 @@ package com.batsw.anonimitychat.chat.management.connection;
 
 import android.util.Log;
 
+import com.batsw.anonimitychat.chat.listener.IncomingConnectionListenerManager;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.chat.util.ConnectionType;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
+import com.batsw.anonimitychat.tor.connections.TorReceiver;
 
 /**
  * Created by tudor on 2/11/2017.
@@ -19,8 +22,17 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
     private MessageReceivedListenerManager mMessageReceivedListenerManager = null;
 
+    private IncomingConnectionListenerManager mIncomingConnectionListenerManager = null;
+
+    private ITorConnection mCurrentTorReceiver = null;
+
     public ChatConnectionManagerImpl() {
         mMessageReceivedListenerManager = new MessageReceivedListenerManager();
+
+        mIncomingConnectionListenerManager = new IncomingConnectionListenerManager();
+        mIncomingConnectionListenerManager.addIncomingConnectionListener(ChatController.getInstance());
+
+        startTorReceiverThread();
     }
 
     @Override
@@ -35,7 +47,10 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
 
-            //TODO: create Receiver
+            ((TorReceiver) mCurrentTorReceiver).setSessionId(chatDetail.getSessionId());
+
+            retVal = mCurrentTorReceiver;
+
 
         }
 
@@ -55,8 +70,23 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
             chatDetail.getTorConnection().closeConnection();
             chatDetail.setTorConnection(null);
             chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
+        } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
+
+            //TODO: manage it ....
+
+
+            chatDetail.setTorConnection(null);
+            chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
         }
 
         mMessageReceivedListenerManager.removeTorBundleListener(chatDetail.getSessionId());
+    }
+
+    private void startTorReceiverThread(){
+        new Thread(new Runnable() {
+            public void run() {
+                mCurrentTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
+            }
+        }).start();
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
 import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
@@ -122,6 +123,9 @@ public class TorPublisher implements ITorConnection, Serializable {
             mDataOutputStream = new DataOutputStream(mOutputStream);
 
             mDataInputStream = new DataInputStream(mSocketConnection.getInputStream());
+
+            // first after connection send my address to partner
+            sendMessage(ChatModelConstants.FIRST_CHAT_MESSAGE + ChatController.getInstance().getMyAddress());
 
         } catch (UnknownHostException unknownHost) {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);

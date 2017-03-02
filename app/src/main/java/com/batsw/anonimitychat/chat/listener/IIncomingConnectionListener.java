@@ -6,6 +6,6 @@ package com.batsw.anonimitychat.chat.listener;
 
 public interface IIncomingConnectionListener {
 
-    public void startNewCatActivity();
+    public void triggerIncomingPartnerConnectionEvent(String partnerHostName);
 
 }

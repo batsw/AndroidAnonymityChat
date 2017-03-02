@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
@@ -102,6 +103,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.chat_activity);
 
         reltiveLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+
+        ChatController.getInstance().setCurrentActivityContext(this);
 
         mChatActivityManager.setChatActivity(this);
 

@@ -138,19 +138,19 @@ public class TorProcessManager {
 
                         mTorBundleStarted = true;
 
-                        //TODO: UGLYYYY must change
-                        //Starting TorReceiver  process
-                        Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is Launching !!!");
-                        new Thread(new Runnable() {
-                            public void run() {
-//                                //TODO: see if it makes sense
-//                                while (true) {
-                                    TorReceiver torReceiver = new TorReceiver();
-                                    torReceiver.run();
-//                                }
-                            }
-                        }).start();
-                        Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is waiting for messages !!!");
+//                        //TODO: UGLYYYY must change
+//                        //Starting TorReceiver  process
+//                        Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is Launching !!!");
+//                        new Thread(new Runnable() {
+//                            public void run() {
+////                                //TODO: see if it makes sense
+////                                while (true) {
+//                                    TorReceiver torReceiver = new TorReceiver();
+//                                    torReceiver.run();
+////                                }
+//                            }
+//                        }).start();
+//                        Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Receiver is waiting for messages !!!");
 
                         torReady = true;
 

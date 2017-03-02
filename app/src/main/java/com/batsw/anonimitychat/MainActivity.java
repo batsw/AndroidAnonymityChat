@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     ChatController.getInstance();
+                    ChatController.getInstance().setMyAddress(mTorProcessManager.getTorHostnamee());
 
                 }
 
