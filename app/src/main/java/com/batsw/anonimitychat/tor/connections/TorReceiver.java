@@ -89,6 +89,9 @@ public class TorReceiver implements ITorConnection {
             // assuming that at this step the mPartnerHostname is received
             //TODO: think
             //maybe a wait of 1-2 seconds to receive the hostname???
+
+            Thread.sleep(2000);
+
             if (!mPartnerHostname.isEmpty()) {
                 mIsConnected = true;
                 mIncomingConnectionListenerManager.triggerPartnerChatRequest(mPartnerHostname);
@@ -96,6 +99,8 @@ public class TorReceiver implements ITorConnection {
 
         } catch (IOException ioException) {
             Log.i(LOG, "error: " + ioException.getMessage(), ioException);
+        }  catch (InterruptedException interruptedException) {
+            Log.i(LOG, "error at thread sleep: " + interruptedException.getMessage(), interruptedException);
         }
     }
 
@@ -195,6 +200,8 @@ public class TorReceiver implements ITorConnection {
         try {
 
             sendMessage(ChatModelConstants.MESSAGE_END_CHAT);
+
+            mMessageReceivingThread.stop();
 
             if (mDataInputStream != null) mDataInputStream.close();
             if (mDataOutputStream != null) mDataOutputStream.close();

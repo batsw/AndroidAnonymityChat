@@ -157,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     ChatController.getInstance();
                     ChatController.getInstance().setMyAddress(mTorProcessManager.getTorHostnamee());
-
+                    ChatController.getInstance().setCurrentActivityContext(getApplicationContext());
+                    ChatController.getInstance().initializeChatConnectionManagement();
                 }
 
                 //Meaning that TOR is either starting or Stopped

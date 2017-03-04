@@ -13,4 +13,6 @@ public interface IChatConnectionManager {
     public ITorConnection getConnection(ChatDetail chatDetail, IMessageReceivedListener messageReceivedListener);
 
     public void closeConnection(ChatDetail chatDetail);
+
+    public void initializeConnectionManagement();
 }

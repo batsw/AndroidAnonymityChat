@@ -124,7 +124,7 @@ public class TorPublisher implements ITorConnection, Serializable {
 
             mDataInputStream = new DataInputStream(mSocketConnection.getInputStream());
 
-            // first after connection send my address to partner
+            // first after connecting, send my address to partner
             sendMessage(ChatModelConstants.FIRST_CHAT_MESSAGE + ChatController.getInstance().getMyAddress());
 
         } catch (UnknownHostException unknownHost) {

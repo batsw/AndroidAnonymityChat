@@ -25,14 +25,27 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     private IncomingConnectionListenerManager mIncomingConnectionListenerManager = null;
 
     private ITorConnection mCurrentTorReceiver = null;
+    private boolean mCurrentThreadWasAlive = false;
+
+    private ITorConnection mKeepAliveTorReceiver = null;
 
     public ChatConnectionManagerImpl() {
         mMessageReceivedListenerManager = new MessageReceivedListenerManager();
 
         mIncomingConnectionListenerManager = new IncomingConnectionListenerManager();
+
+    }
+
+    @Override
+    public void initializeConnectionManagement() {
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "initializeConnectionManagement -> ENTER ");
         mIncomingConnectionListenerManager.addIncomingConnectionListener(ChatController.getInstance());
 
         startTorReceiverThread();
+
+        keepAliveTorReceiverThread();
+
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "initializeConnectionManagement -> LEAVE");
     }
 
     @Override
@@ -49,9 +62,8 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
             ((TorReceiver) mCurrentTorReceiver).setSessionId(chatDetail.getSessionId());
 
+
             retVal = mCurrentTorReceiver;
-
-
         }
 
         if (retVal.isAlive()) {
@@ -73,7 +85,7 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
 
             //TODO: manage it ....
-
+            chatDetail.getTorConnection().closeConnection();
 
             chatDetail.setTorConnection(null);
             chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
@@ -82,7 +94,30 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
         mMessageReceivedListenerManager.removeTorBundleListener(chatDetail.getSessionId());
     }
 
-    private void startTorReceiverThread(){
+    private void keepAliveTorReceiverThread() {
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    if (mCurrentTorReceiver != null && mCurrentTorReceiver.isAlive() && mKeepAliveTorReceiver == null) {
+//                        mCurrentTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
+                        mCurrentThreadWasAlive = true;
+
+                        mKeepAliveTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
+
+                        // if a partner contacted the user and they finished chatting (meaning the messageReceiver thread is stopped)
+                    } else if (mCurrentThreadWasAlive && !mCurrentTorReceiver.getMessageReceivingThread().isAlive()) {
+
+                        mCurrentTorReceiver = mKeepAliveTorReceiver;
+                        mKeepAliveTorReceiver = null;
+                        mCurrentThreadWasAlive = false;
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private void startTorReceiverThread() {
         new Thread(new Runnable() {
             public void run() {
                 mCurrentTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);

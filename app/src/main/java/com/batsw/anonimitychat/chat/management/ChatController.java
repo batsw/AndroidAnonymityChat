@@ -64,6 +64,14 @@ public class ChatController implements IIncomingConnectionListener {
         Log.i(CHAT_CONTROLLER_LOG, "init -> LEAVE");
     }
 
+    public void initializeChatConnectionManagement() {
+        Log.i(CHAT_CONTROLLER_LOG, "initializeChatConnectionManagement -> ENTER");
+
+        mChatConnectionManager.initializeConnectionManagement();
+
+        Log.i(CHAT_CONTROLLER_LOG, "initializeChatConnectionManagement -> LEAVE");
+    }
+
     public void establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sessionId) {
         ChatDetail chatDetail = this.getChatDetail(sessionId);
 
