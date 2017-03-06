@@ -30,13 +30,10 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     public void onCreate() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> ENTER");
 
-        //Preparing TorConnection with parner
+        //Preparing TorConnection with partner
         ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
 
         //TODO .........
-        /// when connection is established add the MessageReceivedListener to Manager
-//        ChatController.getInstance().addMessageReceivedListenerToList(this);
-
         //If the connection could not be established means that the partner is offline
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> LEAVE");
@@ -70,7 +67,6 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
 
         ChatController.getInstance().sendMessage(mSessionId, message);
 
-//        mChatDetail.getTorConnection().sendMessage(message);
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "sendMessage -> LEAVE");
     }
 

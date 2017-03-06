@@ -49,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
         mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
 
         ///////////////////////////////////////////////////////////
-        /////////Prerequisites////////////////////////////////////
-        ///////////////////////////////////////////////////////////
-
-
-        ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
         ///////////////////////////////////////////////////////////
 
@@ -70,23 +65,6 @@ public class MainActivity extends AppCompatActivity {
                                                       if (mTorProcessManager.isTorBundleStarted()) {
 
                                                           ChatController.getInstance().startChatActivity(getApplicationContext(), partnerHostName);
-
-
-//                                                          Thread thread = new Thread(new Runnable() {
-//
-//                                                              @Override
-//                                                              public void run() {
-//
-//                                                                  torPublisher.run();
-//                                                              }
-//
-//                                                          });
-//
-//                                                          thread.start();
-//                                                          mPartnersIndex++;
-//                                                          mContactedPartnerHostnames.put(mPartnersIndex, torPublisher);
-//
-//                                                          startActivity(ChatActivity.makeIntent(MainActivity.this));
 
                                                       } else {
                                                           //TODO: show a message on screen TOR did not started yet

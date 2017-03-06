@@ -25,6 +25,9 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import socks.Socks5Proxy;
 import socks.SocksSocket;
@@ -41,8 +44,9 @@ public class TorPublisher implements ITorConnection, Serializable {
     public MessageReceivedListenerManager mMessageReceivedListenerManager;
     private long mSessionId;
 
+    private ExecutorService mMessageReceivingExecutor;
+
     private Socket mSocketConnection;
-    private Thread mMessageReceivingThread = null;
 
     private OutputStream mOutputStream;
     private DataOutputStream mDataOutputStream;
@@ -54,6 +58,7 @@ public class TorPublisher implements ITorConnection, Serializable {
         mMessageReceivedListenerManager = messageReceivedListenerManager;
         mDestinationAddress = partnerHostName;
         mSessionId = sessionId;
+
     }
 
     @Override
@@ -88,7 +93,9 @@ public class TorPublisher implements ITorConnection, Serializable {
     public void closeConnection() {
         Log.i(LOG, "closeConnection -> ENTER");
 
-        mMessageReceivingThread.stop();
+        mMessageReceivingExecutor.shutdown();
+        mMessageReceivingExecutor.shutdownNow();
+        mMessageReceivingExecutor = null;
 
         closeCommunication();
 
@@ -101,8 +108,8 @@ public class TorPublisher implements ITorConnection, Serializable {
     }
 
     @Override
-    public Thread getMessageReceivingThread() {
-        return mMessageReceivingThread;
+    public ExecutorService getMessageReceivingThread() {
+        return mMessageReceivingExecutor;
     }
 
     private boolean establishConnectionToPartner() {
@@ -147,13 +154,15 @@ public class TorPublisher implements ITorConnection, Serializable {
     }
 
     private void startMessageReceivingThread() {
-        mMessageReceivingThread = new Thread(new Runnable() {
+
+        mMessageReceivingExecutor = Executors.newSingleThreadScheduledExecutor();
+        mMessageReceivingExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 createMessageReceivingLoop();
             }
         });
-        mMessageReceivingThread.start();
+
     }
 
     /**
@@ -211,6 +220,4 @@ public class TorPublisher implements ITorConnection, Serializable {
             }
         }
     }
-
-
 }

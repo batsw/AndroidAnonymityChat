@@ -106,7 +106,8 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
                         mKeepAliveTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
 
                         // if a partner contacted the user and they finished chatting (meaning the messageReceiver thread is stopped)
-                    } else if (mCurrentThreadWasAlive && !mCurrentTorReceiver.getMessageReceivingThread().isAlive()) {
+//                    } else if (mCurrentThreadWasAlive && !mCurrentTorReceiver.getMessageReceivingThread().isAlive()) {
+                    } else if (mCurrentThreadWasAlive && mCurrentTorReceiver.getMessageReceivingThread() == null) {
 
                         mCurrentTorReceiver = mKeepAliveTorReceiver;
                         mKeepAliveTorReceiver = null;

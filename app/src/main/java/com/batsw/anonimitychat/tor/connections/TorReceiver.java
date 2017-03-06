@@ -15,6 +15,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by tudor on 12/16/2016.
@@ -30,7 +32,7 @@ public class TorReceiver implements ITorConnection {
     private DataOutputStream mDataOutputStream;
     private OutputStream mOutputStream;
 
-    private Thread mMessageReceivingThread = null;
+    private ExecutorService mMessageReceivingExecutor;
 
     private Thread mWaitingForPartnerThread = null;
 
@@ -40,7 +42,7 @@ public class TorReceiver implements ITorConnection {
     private long mSessionId = 0L;
     private boolean mIsConnected = false;
 
-    private String mPartnerHostname = "";
+    private String mPartnerAddress = "";
 
     public TorReceiver(IncomingConnectionListenerManager incomingConnectionListenerManager, MessageReceivedListenerManager messageReceivedListenerManager) {
         mIncomingConnectionListenerManager = incomingConnectionListenerManager;
@@ -86,20 +88,18 @@ public class TorReceiver implements ITorConnection {
 
             startMessageReceivingThread();
 
-            // assuming that at this step the mPartnerHostname is received
-            //TODO: think
-            //maybe a wait of 1-2 seconds to receive the hostname???
-
+            //TODO: ...reevaluate
+            //maybe a wait of 1-2 seconds to receive the address
             Thread.sleep(2000);
 
-            if (!mPartnerHostname.isEmpty()) {
+            if (!mPartnerAddress.isEmpty()) {
                 mIsConnected = true;
-                mIncomingConnectionListenerManager.triggerPartnerChatRequest(mPartnerHostname);
+                mIncomingConnectionListenerManager.triggerPartnerChatRequest(mPartnerAddress);
             }
 
         } catch (IOException ioException) {
             Log.i(LOG, "error: " + ioException.getMessage(), ioException);
-        }  catch (InterruptedException interruptedException) {
+        } catch (InterruptedException interruptedException) {
             Log.i(LOG, "error at thread sleep: " + interruptedException.getMessage(), interruptedException);
         }
     }
@@ -122,7 +122,15 @@ public class TorReceiver implements ITorConnection {
 
     @Override
     public void closeConnection() {
+        Log.i(LOG, "closeConnection -> ENTER");
+
+        mMessageReceivingExecutor.shutdown();
+        mMessageReceivingExecutor.shutdownNow();
+
+        mWaitingForPartnerThread = null;
+
         closeCommunication();
+        Log.i(LOG, "closeConnection -> LEAVE");
     }
 
     @Override
@@ -136,18 +144,19 @@ public class TorReceiver implements ITorConnection {
     }
 
     @Override
-    public Thread getMessageReceivingThread() {
-        return mMessageReceivingThread;
+    public ExecutorService getMessageReceivingThread() {
+        return mMessageReceivingExecutor;
     }
 
     private void startMessageReceivingThread() {
-        mMessageReceivingThread = new Thread(new Runnable() {
+
+        mMessageReceivingExecutor = Executors.newSingleThreadScheduledExecutor();
+        mMessageReceivingExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 createMessageReceivingLoop();
             }
         });
-        mMessageReceivingThread.start();
     }
 
     /**
@@ -165,8 +174,9 @@ public class TorReceiver implements ITorConnection {
 
                     if (incomingMessage.contains(ChatModelConstants.FIRST_CHAT_MESSAGE)) {
 
-                        String partnerHostname = incomingMessage.substring(ChatModelConstants.FIRST_CHAT_MESSAGE.length());
-                        mPartnerHostname = partnerHostname;
+                        String partnerAddress = incomingMessage.substring(ChatModelConstants.FIRST_CHAT_MESSAGE.length());
+                        String sanitizedPartnerAddress = partnerAddress.trim();
+                        mPartnerAddress = sanitizedPartnerAddress;
 
                     }
 
@@ -200,8 +210,6 @@ public class TorReceiver implements ITorConnection {
         try {
 
             sendMessage(ChatModelConstants.MESSAGE_END_CHAT);
-
-            mMessageReceivingThread.stop();
 
             if (mDataInputStream != null) mDataInputStream.close();
             if (mDataOutputStream != null) mDataOutputStream.close();

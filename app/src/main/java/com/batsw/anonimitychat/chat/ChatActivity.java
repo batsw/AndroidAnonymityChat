@@ -150,15 +150,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
         Log.i(LOG, "onDestroy -> ENTER");
 
-        //TODO: fill in when ready
-//        mChatActivityManager.onDestroy();
+        mChatActivityManager.onDestroy();
 
         Log.i(LOG, "onDestroy -> LEAVE");
     }
 
     public void showReceivedPartnerMessage(ChatMessage partnerMessage) {
         Log.i(LOG, "showReceivedPartnerMessage -> ENTER");
-//        final ChatMessage chatMessage = new ChatMessage(partnerMessage, ChatMessageType.PARTNER, System.currentTimeMillis());
 
         mChatMessageList.add(partnerMessage);
         if (mChatListAdapter != null)
@@ -186,7 +184,7 @@ public class ChatActivity extends AppCompatActivity {
 //                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
 //                    mChatMessageList.add(message);
 
-                // whi is PARNTER switched with USER type message ....
+                // why is PARNTER switched with USER type message ....
 //                final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.PARTNER, System.currentTimeMillis());
                 final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
 
