@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
+import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button torStopButton, connectToTorClient, mOpenPortButton, mStartTorButton;
 
-    TextView mPatnerHostname, mTorStatusTextView;
+    TextView mPatnerHostname, mTorStatusTextView, mMyTorAddressLabel;
 
     private TorProcessManager mTorProcessManager;
 
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         connectToTorClient = (Button) findViewById(R.id.btn_tor_connect);
         mOpenPortButton = (Button) findViewById(R.id.open_port);
 
+        mMyTorAddressLabel = (TextView) findViewById(R.id.tor_address);
+        mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
+        mMyTorAddressLabel.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
+
         mPatnerHostname = (TextView) findViewById(R.id.partner_hostname);
 
         mTorStatusTextView = (TextView) findViewById(R.id.tor_status);
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
 
         mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
+
 
         ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
@@ -137,12 +143,18 @@ public class MainActivity extends AppCompatActivity {
                     ChatController.getInstance().setMyAddress(mTorProcessManager.getTorHostnamee());
                     ChatController.getInstance().setCurrentActivityContext(getApplicationContext());
                     ChatController.getInstance().initializeChatConnectionManagement();
+
+                    mMyTorAddressLabel.setText(ChatController.getInstance().getMyAddress());
+                    mMyTorAddressLabel.setTextColor(getResources().getColor(R.color.colorStartedTorStatus));
+
                 }
 
                 //Meaning that TOR is either starting or Stopped
                 if (!textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    // ChatController managed resources --- wht is to be set to default
+                    // ChatController managed resources --- what is to be set to default
 
+                    mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
+                    mMyTorAddressLabel.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
                 }
 
                 Log.i(MAIN_ACTIVITY_TAG, "mTorStatusTextView.addTextChangedListener -> LEAVE");

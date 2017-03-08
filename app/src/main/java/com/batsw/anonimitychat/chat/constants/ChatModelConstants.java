@@ -17,6 +17,8 @@ public interface ChatModelConstants {
 
     public static final long DEFAULT_SESSION_ID = 0L;
 
+    public static final String MY_TOR_ADDRESS_NA_YET = "Not available yet !";
+
     ////////////
     //PROTOCOL//
     ///////////
