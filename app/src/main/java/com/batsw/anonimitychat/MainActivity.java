@@ -26,13 +26,15 @@ public class MainActivity extends AppCompatActivity {
 
     Button torStopButton, connectToTorClient, mOpenPortButton, mStartTorButton;
 
-    TextView mPatnerHostname, mTorStatusTextView, mMyTorAddressLabel;
+    TextView mPartnerHostname, mTorStatusTextView, mMyTorAddressLabel;
 
     private TorProcessManager mTorProcessManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(MAIN_ACTIVITY_TAG, "onCreate -> ENTER");
 
         setContentView(R.layout.activity_main);
 
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
         mMyTorAddressLabel.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
 
-        mPatnerHostname = (TextView) findViewById(R.id.partner_hostname);
+        mPartnerHostname = (TextView) findViewById(R.id.partner_hostname);
 
         mTorStatusTextView = (TextView) findViewById(R.id.tor_status);
         mTorStatusTextView.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                                   public void onClick(View v) {
                                                       Log.i(MAIN_ACTIVITY_TAG, "Accessing TOR Publisher");
 
-                                                      final String partnerHostName = mPatnerHostname.getText().toString();
+                                                      final String partnerHostName = mPartnerHostname.getText().toString();
                                                       Log.i(MAIN_ACTIVITY_TAG, "entered partner host name: " + partnerHostName);
 
                                                       if (mTorProcessManager.isTorBundleStarted()) {
@@ -166,6 +168,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (mTorStatusTextView.getText().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+
+            ChatController.getInstance().setCurrentActivityContext(getApplicationContext());
+        }
+
+        Log.i(MAIN_ACTIVITY_TAG, "onCreate -> LEAVE");
     }
 
     /**

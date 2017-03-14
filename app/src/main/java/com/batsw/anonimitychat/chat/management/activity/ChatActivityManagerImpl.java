@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.management.ChatController;
-import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 
