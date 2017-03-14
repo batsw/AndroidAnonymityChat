@@ -162,7 +162,6 @@ public class TorPublisher implements ITorConnection, Serializable {
                 createMessageReceivingLoop();
             }
         });
-
     }
 
     /**

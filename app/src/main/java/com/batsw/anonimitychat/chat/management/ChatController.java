@@ -107,8 +107,6 @@ public class ChatController implements IIncomingConnectionListener {
             // means that the contact is new and it will be added with DEFAULT prameters in the Contacts List
             // default nickName for address is the address itself
             //TODO: differentiate between the two connection types
-//            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.USER, generateSessionId(), false);
-
             ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.NO_CONNECTION, generateSessionId(), false);
 
             mPrsistenceManager.addPartnerToList(newChatDetail);
@@ -178,36 +176,21 @@ public class ChatController implements IIncomingConnectionListener {
         Log.i(CHAT_CONTROLLER_LOG, "startChatActivity -> LEAVE");
     }
 
-    /**
-     * This method must be used when Tor Bundle is stopping or it is commanded to stop.<br>
-     */
-    public void clearResources() {
-        Log.i(CHAT_CONTROLLER_LOG, "cleanResources -> ENTER");
-
-        Log.i(CHAT_CONTROLLER_LOG, "Not implemented yet!");
-
-        Log.i(CHAT_CONTROLLER_LOG, "cleanResources -> LEAVE");
-    }
-
     @Override
     public void triggerIncomingPartnerConnectionEvent(String partnerHostName) {
+        Log.i(CHAT_CONTROLLER_LOG, "triggerIncomingPartnerConnectionEvent -> ENTER partnerHostName=" + partnerHostName);
 
         //TODO: trigger the creation of a POP-up on the screen to let the USER decide whether to continue the
-        // current Chat or to switch to the new one
-
-        // get current action
-        // creste new ChatAction intent
-        // start the chat with the Partner
         if (partnerHostName != null || !partnerHostName.isEmpty()) {
 
             isIncomingChatConnection = true;
 
             ChatController.getInstance().startChatActivity(mCurrentActivityContext, partnerHostName);
-
         }
-
+        Log.i(CHAT_CONTROLLER_LOG, "triggerIncomingPartnerConnectionEvent -> LEAVE");
     }
 
+    //TODO: check this ...
     public void setCurrentActivityContext(Context context) {
         Log.i(CHAT_CONTROLLER_LOG, "setCurrentActivityContext -> ENTER context=" + context);
 

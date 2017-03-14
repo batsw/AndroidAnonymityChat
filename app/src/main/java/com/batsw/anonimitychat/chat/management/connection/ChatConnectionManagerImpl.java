@@ -9,8 +9,12 @@ import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.chat.util.ConnectionType;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
+import com.batsw.anonimitychat.tor.connections.TorConnectionReceiver;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
-import com.batsw.anonimitychat.tor.connections.TorReceiver;
+import com.batsw.anonimitychat.tor.connections.TorReceiverDelegator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tudor on 2/11/2017.
@@ -21,29 +25,25 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     private static final String CHAT_CONNECTION_MANAGER_LOG = ChatConnectionManagerImpl.class.getSimpleName();
 
     private MessageReceivedListenerManager mMessageReceivedListenerManager = null;
-
     private IncomingConnectionListenerManager mIncomingConnectionListenerManager = null;
 
-    private ITorConnection mCurrentTorReceiver = null;
-    private boolean mCurrentThreadWasAlive = false;
+    //TODO:manage it... it is never stopped
+    private TorConnectionReceiver mTorConnectionReceiver = null;
 
-    private ITorConnection mKeepAliveTorReceiver = null;
+    private static Map<String, ITorConnection> mActiveConnections = new HashMap<>();
 
     public ChatConnectionManagerImpl() {
         mMessageReceivedListenerManager = new MessageReceivedListenerManager();
-
         mIncomingConnectionListenerManager = new IncomingConnectionListenerManager();
-
     }
 
     @Override
     public void initializeConnectionManagement() {
         Log.i(CHAT_CONNECTION_MANAGER_LOG, "initializeConnectionManagement -> ENTER ");
+
         mIncomingConnectionListenerManager.addIncomingConnectionListener(ChatController.getInstance());
 
-        startTorReceiverThread();
-
-        keepAliveTorReceiverThread();
+        mTorConnectionReceiver = new TorConnectionReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
 
         Log.i(CHAT_CONNECTION_MANAGER_LOG, "initializeConnectionManagement -> LEAVE");
     }
@@ -60,12 +60,15 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
 
-            ((TorReceiver) mCurrentTorReceiver).setSessionId(chatDetail.getSessionId());
+            ITorConnection torConnection = mActiveConnections.get(chatDetail.getPartnerAddress());
 
+            ((TorReceiverDelegator) torConnection).setSessionId(chatDetail.getSessionId());
 
-            retVal = mCurrentTorReceiver;
+            retVal = torConnection;
         }
 
+        ///TODO: what if is not alive?  ---
+        //what if is NULL ---- waiting to crash
         if (retVal.isAlive()) {
             mMessageReceivedListenerManager.addTorBundleListener(messageReceivedListener, chatDetail.getSessionId());
         }
@@ -76,6 +79,7 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
     @Override
     public void closeConnection(ChatDetail chatDetail) {
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "closeConnection -> ENTER chatDetail=" + chatDetail);
 
         chatDetail.setIsAlive(false);
         if (chatDetail.getConnectionType().equals(ConnectionType.USER)) {
@@ -89,40 +93,18 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
             chatDetail.setTorConnection(null);
             chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
+
+            mActiveConnections.remove(chatDetail.getPartnerAddress());
         }
 
         mMessageReceivedListenerManager.removeTorBundleListener(chatDetail.getSessionId());
+
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "closeConnection -> LEAVE");
     }
 
-    private void keepAliveTorReceiverThread() {
-
-        new Thread(new Runnable() {
-            public void run() {
-                while (true) {
-                    if (mCurrentTorReceiver != null && mCurrentTorReceiver.isAlive() && mKeepAliveTorReceiver == null) {
-//                        mCurrentTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
-                        mCurrentThreadWasAlive = true;
-
-                        mKeepAliveTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
-
-                        // if a partner contacted the user and they finished chatting (meaning the messageReceiver thread is stopped)
-//                    } else if (mCurrentThreadWasAlive && !mCurrentTorReceiver.getMessageReceivingThread().isAlive()) {
-                    } else if (mCurrentThreadWasAlive && mCurrentTorReceiver.getMessageReceivingThread() == null) {
-
-                        mCurrentTorReceiver = mKeepAliveTorReceiver;
-                        mKeepAliveTorReceiver = null;
-                        mCurrentThreadWasAlive = false;
-                    }
-                }
-            }
-        }).start();
-    }
-
-    private void startTorReceiverThread() {
-        new Thread(new Runnable() {
-            public void run() {
-                mCurrentTorReceiver = new TorReceiver(mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
-            }
-        }).start();
+    public static void addReceivedConnection(String partnerAddress, ITorConnection torConnection) {
+        if (torConnection instanceof TorReceiverDelegator) {
+            mActiveConnections.put(partnerAddress, torConnection);
+        }
     }
 }
