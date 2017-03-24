@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by tudor on 1/21/2017.
@@ -23,11 +25,16 @@ public class TorProcessManager {
     protected static final String TOR_PROCESS_MANAGER_TAG = TorProcessManager.class.getSimpleName();
 
     private TorProcess mTorProcessCommander = null;
+    private ExecutorService mTorProcessCommanderThread = null;
+
+    private ExecutorService mTorStatusThread = null;
+
     private TorBundleListenerManager mTorBundleListenerManager;
     private TorBundleStatusListenerImpl mTorBundleStatusListener;
 
     private int mProcessId = 0;
     private String mTorResourceLocation;
+    private String mTorStartCommand;
 
     private AppCompatActivity mMainActivity;
     private AssetManager mAssetManager;
@@ -45,24 +52,37 @@ public class TorProcessManager {
         mTorBundleListenerManager = new TorBundleListenerManager();
 
         mTorStatusTextView = torStatusTextView;
+
+        init();
+    }
+
+    private void init() {
+        Log.i(TOR_PROCESS_MANAGER_TAG, "ENTER -> init");
+
+        mTorStartCommand = createTorProcessStartingPrerequisites();
+
+        mTorProcessCommander = new TorProcess(mTorStartCommand, mTorBundleListenerManager);
+
+        Log.i(TOR_PROCESS_MANAGER_TAG, "LEAVE -> init");
     }
 
     public void startTorBundle() {
-
         Log.i(TOR_PROCESS_MANAGER_TAG, "ENTER -> startTorBundle");
 
-        mTorStatusTextView.setTextColor(mMainActivity.getResources().getColor(R.color.colorLightBlue));
-        mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_IS_STARTING);
+        mTorBundleStatusListener = new TorBundleStatusListenerImpl();
+        mTorBundleListenerManager.addTorBundleListener(mTorBundleStatusListener);
 
-        if (mProcessId == 0 && mTorProcessCommander == null) {
-            String torStartCommand = createTorProcessStartingPrerequisites();
+        if (mProcessId == 0 && !mTorBundleStarted) {
+            if (!mTorStartCommand.isEmpty()) {
 
-            if (!torStartCommand.isEmpty()) {
-                mTorBundleStatusListener = new TorBundleStatusListenerImpl();
-                mTorBundleListenerManager.addTorBundleListener(mTorBundleStatusListener);
+                mTorStatusTextView.setTextColor(mMainActivity.getResources().getColor(R.color.colorLightBlue));
+                mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_IS_STARTING);
 
-                mTorProcessCommander = new TorProcess(torStartCommand, mTorBundleListenerManager);
-                new Thread(mTorProcessCommander).start();
+                mTorProcessCommanderThread = Executors.newSingleThreadScheduledExecutor();
+                mTorProcessCommanderThread.submit(mTorProcessCommander);
+
+//                mTorProcessCommanderThread = new Thread(mTorProcessCommander);
+//                mTorProcessCommanderThread.start();
 
                 updateTorBundleStatus();
             }
@@ -70,6 +90,10 @@ public class TorProcessManager {
         } else {
             //TODO: Show a message that TOR Bundle is already running
             //Do nothing for now
+            /*
+             if (mTorBundleStatusListener.getStatusMessage().equals(TorConstants.TOR_READY_STATUS_MESSAGE)) {
+             ..... which is, then show the needed pop-up
+             */
 
             Log.i(TOR_PROCESS_MANAGER_TAG, "TOR Bundle already started");
         }
@@ -114,7 +138,8 @@ public class TorProcessManager {
     private void updateTorBundleStatus() {
         Log.i(TOR_PROCESS_MANAGER_TAG, "ENTER -> updateTorBundleStatus");
 
-        new Thread(new Runnable() {
+        mTorStatusThread = Executors.newSingleThreadScheduledExecutor();
+        mTorStatusThread.submit(new Runnable() {
             @Override
             public void run() {
                 boolean torReady = false;
@@ -143,7 +168,9 @@ public class TorProcessManager {
                     }
                 }
             }
-        }).start();
+        });
+
+//        mTorStatusThread.start();
 
         Log.i(TOR_PROCESS_MANAGER_TAG, "LEAVE -> updateTorBundleStatus");
     }
@@ -152,11 +179,17 @@ public class TorProcessManager {
 
         Log.i(TOR_PROCESS_MANAGER_TAG, "ENTER -> stopTorBundle");
 
-        if (mProcessId != 0 && mTorProcessCommander != null && mProcessId == mTorProcessCommander.getPID()) {
+//        if (mProcessId != 0 && mProcessId == mTorProcessCommander.getPID()) {
+        if (mTorProcessCommander.getPID() > 0) {
 
             mTorProcessCommander.stopTorProcess();
 
             mTorBundleListenerManager.removeTorBundleListener(mTorBundleStatusListener);
+            mTorBundleStatusListener = null;
+
+            // cleaning the TorStatus Thread
+            mTorStatusThread.shutdownNow();
+            mTorStatusThread = null;
 
             cleanTorProcessParameters();
 
@@ -176,13 +209,12 @@ public class TorProcessManager {
     private void cleanTorProcessParameters() {
         Log.i(TOR_PROCESS_MANAGER_TAG, "ENTER -> cleanTorProcessParameters");
 
-        mTorProcessCommander = null;
-        mTorBundleStatusListener = null;
+        // cleaning torProcessThread Thread
+        mTorProcessCommanderThread.shutdownNow();
+        mTorProcessCommanderThread = null;
 
         mProcessId = 0;
-        mTorResourceLocation = "";
         mTorHostnamee = "";
-
         mTorBundleStarted = false;
 
         Log.i(TOR_PROCESS_MANAGER_TAG, "LEAVE -> cleanTorProcessParameters");

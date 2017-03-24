@@ -102,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i(MAIN_ACTIVITY_TAG, "Starting TOR from GUI command:");
 
-                if (!mTorProcessManager.isTorBundleStarted() && !mTorStatusTextView.getText().equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
+                CharSequence torStatusText = mTorStatusTextView.getText().toString().trim();
+
+                if (!mTorProcessManager.isTorBundleStarted() && torStatusText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
                     mTorProcessManager.startTorBundle();
                 } else {
                     //TODO: show a message on screen TOR Bundle is already stopped
@@ -157,6 +159,9 @@ public class MainActivity extends AppCompatActivity {
 
                     mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
                     mMyTorAddressLabel.setTextColor(getResources().getColor(R.color.colorStoppedTorStatus));
+
+                    //TODO: Must clear out the resources held by ChatController .....
+                    // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
                 }
 
                 Log.i(MAIN_ACTIVITY_TAG, "mTorStatusTextView.addTextChangedListener -> LEAVE");
@@ -174,6 +179,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Log.i(MAIN_ACTIVITY_TAG, "onCreate -> LEAVE");
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(MAIN_ACTIVITY_TAG, "onStart -> ENTER");
+        super.onStart();
+        Log.i(MAIN_ACTIVITY_TAG, "do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "onStart -> LEAVE");
     }
 
     /**

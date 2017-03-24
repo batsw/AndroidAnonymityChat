@@ -45,8 +45,6 @@ public class TorProcess implements Runnable {
 
             torLogMessages = new Scanner(torProcess.getInputStream());
 
-            Log.i(LOG, "TOR process scanner has something: " + torLogMessages.hasNextLine());
-
             while (torLogMessages.hasNextLine()) {
                 String torData = torLogMessages.nextLine();
 
@@ -74,9 +72,14 @@ public class TorProcess implements Runnable {
     }
 
     public void stopTorProcess() {
+        Log.i(LOG, "stopTorProcess -> ENTER");
+
+        torLogMessages = null;
+
         torProcess.destroy();
         mPID = 0;
-        torLogMessages.close();
+
+        Log.i(LOG, "stopTorProcess -> LEAVE");
     }
 
     public Process getTorProcess() {
