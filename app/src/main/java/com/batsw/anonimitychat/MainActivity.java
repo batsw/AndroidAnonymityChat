@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mPartnerHostname, mTorStatusTextView, mMyTorAddressLabel;
 
     private TorProcessManager mTorProcessManager;
+
+    private boolean mOnPause = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
         mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
 
         mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
-
+        if (!mTorProcessManager.isTorBundleStarted() && (mTorStatusTextView.getText()).equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+            mTorProcessManager.startTorBundle();
+        }
 
         ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
@@ -125,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                                                  Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is stopped");
                                              }
                                          }
-
         );
 
         mTorStatusTextView.addTextChangedListener(new TextWatcher() {
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //Meaning that TOR is either starting or Stopped
-                if (!textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
                     // ChatController managed resources --- what is to be set to default
 
                     mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
@@ -162,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //TODO: Must clear out the resources held by ChatController .....
                     // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
+
+                    ChatController.cleanUp();
                 }
 
                 Log.i(MAIN_ACTIVITY_TAG, "mTorStatusTextView.addTextChangedListener -> LEAVE");
@@ -197,5 +203,74 @@ public class MainActivity extends AppCompatActivity {
      */
     public static Intent makeIntent(Context context) {
         return new Intent(context, MainActivity.class);
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(MAIN_ACTIVITY_TAG, "onStop -> ENTER");
+
+        if (mOnPause) {
+            Log.i(MAIN_ACTIVITY_TAG, "HOME button detected");
+
+            //means that HOME was pressed
+            mTorProcessManager.stopTorBundle();
+
+            mOnPause = false;
+        } else {
+            mOnPause = false;
+        }
+
+        super.onStop();
+        Log.i(MAIN_ACTIVITY_TAG, "after super.onStop() --- do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "onStop -> LEAVE");
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(MAIN_ACTIVITY_TAG, "onDestroy -> ENTER");
+
+        mTorProcessManager.stopTorBundle();
+        Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is stopped");
+
+        super.onDestroy();
+
+        Log.i(MAIN_ACTIVITY_TAG, "onDestroy -> LEAVE");
+    }
+
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        Log.i(MAIN_ACTIVITY_TAG, "onActionModeFinished -> ENTER");
+        super.onActionModeFinished(mode);
+        Log.i(MAIN_ACTIVITY_TAG, "do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "onActionModeFinished -> LEAVE");
+    }
+
+    @Override
+    protected void onPause() {
+        //TODO: this is called when HOME button is pressed
+        Log.i(MAIN_ACTIVITY_TAG, "onPause -> ENTER");
+
+        mOnPause = true;
+
+        super.onPause();
+        Log.i(MAIN_ACTIVITY_TAG, "after super.onPause() --- do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "onPause -> LEAVE");
+    }
+
+    @Override
+    public void finish() {
+        //TODO: this is called when Back button is called (closing the app)
+        Log.i(MAIN_ACTIVITY_TAG, "finish -> ENTER");
+        super.finish();
+        Log.i(MAIN_ACTIVITY_TAG, "do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "finish -> LEAVE");
+    }
+
+    @Override
+    public void finishActivity(int requestCode) {
+        Log.i(MAIN_ACTIVITY_TAG, "finishActivity -> ENTER");
+        super.finishActivity(requestCode);
+        Log.i(MAIN_ACTIVITY_TAG, "do nothing");
+        Log.i(MAIN_ACTIVITY_TAG, "finishActivity -> LEAVE");
     }
 }

@@ -7,12 +7,9 @@ import android.util.Log;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.listener.IIncomingConnectionListener;
-import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
-import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
 import com.batsw.anonimitychat.chat.management.connection.IChatConnectionManager;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
-import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
 import com.batsw.anonimitychat.chat.persistence.PersistenceManager;
 import com.batsw.anonimitychat.chat.util.ConnectionType;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
@@ -27,7 +24,7 @@ public class ChatController implements IIncomingConnectionListener {
 
     private static final String CHAT_CONTROLLER_LOG = ChatController.class.getSimpleName();
 
-    private PersistenceManager mPrsistenceManager;
+    private PersistenceManager mPersistenceManager;
 
     private IChatConnectionManager mChatConnectionManager;
 
@@ -57,7 +54,7 @@ public class ChatController implements IIncomingConnectionListener {
     private void init() {
         Log.i(CHAT_CONTROLLER_LOG, "init -> ENTER");
 
-        mPrsistenceManager = new PersistenceManager();
+        mPersistenceManager = new PersistenceManager();
 
         mChatConnectionManager = new ChatConnectionManagerImpl();
 
@@ -99,8 +96,8 @@ public class ChatController implements IIncomingConnectionListener {
 
         ChatDetail retVal = null;
 
-        if (mPrsistenceManager.isPartnerInTheList(partnerAddress)) {
-            retVal = mPrsistenceManager.getPartnerDetail(partnerAddress);
+        if (mPersistenceManager.isPartnerInTheList(partnerAddress)) {
+            retVal = mPersistenceManager.getPartnerDetail(partnerAddress);
             retVal.setmConnectionType(ConnectionType.NO_CONNECTION);
         } else {
 
@@ -109,7 +106,7 @@ public class ChatController implements IIncomingConnectionListener {
             //TODO: differentiate between the two connection types
             ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.NO_CONNECTION, generateSessionId(), false);
 
-            mPrsistenceManager.addPartnerToList(newChatDetail);
+            mPersistenceManager.addPartnerToList(newChatDetail);
 
             retVal = newChatDetail;
         }
@@ -140,8 +137,8 @@ public class ChatController implements IIncomingConnectionListener {
 
         ChatDetail retVal = null;
 
-        if (mPrsistenceManager.isPartnerInTheList(sessionId)) {
-            retVal = mPrsistenceManager.getPartnerDetail(sessionId);
+        if (mPersistenceManager.isPartnerInTheList(sessionId)) {
+            retVal = mPersistenceManager.getPartnerDetail(sessionId);
         }
 
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE retVal=" + retVal);
@@ -205,5 +202,17 @@ public class ChatController implements IIncomingConnectionListener {
 
     public String getMyAddress() {
         return mMyTorAddress;
+    }
+
+    public static void cleanUp() {
+        if (mInstance != null) {
+            mInstance.destroy();
+            mInstance = null;
+        }
+    }
+
+    private void destroy() {
+        mPersistenceManager = null;
+        mChatConnectionManager = null;
     }
 }
