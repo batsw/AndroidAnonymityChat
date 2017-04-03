@@ -5,7 +5,8 @@ android {
     buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.batsw.anonimitychat"
-        minSdkVersion 10
+//        minSdkVersion 21
+        minSdkVersion 17
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -25,7 +26,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'eu.chainfire:libsuperuser:1.0.0.+'
+    compile 'com.android.support:design:24.0.0'
+//    compile 'eu.chainfire:libsuperuser:1.0.0.+'
     compile 'org.igniterealtime.smack:smack-android-extensions:4.1.4'
     compile 'org.igniterealtime.smack:smack-tcp:4.1.4'
     testCompile 'junit:junit:4.12'

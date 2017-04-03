@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
+import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final String MAIN_ACTIVITY_TAG = MainActivity.class.getSimpleName();
 
-    Button torStopButton, connectToTorClient, mOpenPortButton, mStartTorButton;
+    Button torStopButton, connectToTorClient, mPreviewButton, mStartTorButton;
 
     TextView mPartnerHostname, mTorStatusTextView, mMyTorAddressLabel;
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         torStopButton = (Button) findViewById(R.id.btn_tor_stop);
         mStartTorButton = (Button) findViewById(R.id.btn_tor_start);
         connectToTorClient = (Button) findViewById(R.id.btn_tor_connect);
-        mOpenPortButton = (Button) findViewById(R.id.open_port);
+        mPreviewButton = (Button) findViewById(R.id.preview);
 
         mMyTorAddressLabel = (TextView) findViewById(R.id.tor_address);
         mMyTorAddressLabel.setText(ChatModelConstants.MY_TOR_ADDRESS_NA_YET);
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
         mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
 
         mTorProcessManager = new TorProcessManager(this, mTorStatusTextView);
-        if (!mTorProcessManager.isTorBundleStarted() && (mTorStatusTextView.getText()).equals(TorConstants.TOR_BUNDLE_STOPPED)) {
-            mTorProcessManager.startTorBundle();
-        }
+//        if (!mTorProcessManager.isTorBundleStarted() && (mTorStatusTextView.getText()).equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+//            mTorProcessManager.startTorBundle();
+//        }
 
         ///////////////////////////////////////////////////////////
         /////////Buttons//////////////////////////////////////////
@@ -89,15 +90,17 @@ public class MainActivity extends AppCompatActivity {
 
         );
 
-        mOpenPortButton.setOnClickListener(new View.OnClickListener()
+        mPreviewButton.setOnClickListener(new View.OnClickListener()
 
-                                           {
-                                               @Override
-                                               public void onClick(View v) {
-                                                   Log.i(MAIN_ACTIVITY_TAG, "It does nothing now");
+                                          {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  Log.i(MAIN_ACTIVITY_TAG, "Loading MainScreen - Preview");
 
-                                               }
-                                           }
+                                                  startActivity(new Intent(getApplicationContext(), MainScreenActivity.class));
+
+                                              }
+                                          }
 
         );
 

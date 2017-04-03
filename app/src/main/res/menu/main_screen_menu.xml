@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android2="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/menu_item_share"
+        android2:title="@string/action_settings"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="always"
+        android:actionProviderClass="android.widget.ShareActionProvider"/>
+
+    <item
+        android:id="@+id/empty"
+        android2:title="@string/action_settings"
+        android:orderInCategory="101"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/input_emoji"
+        >
+
+        <menu>
+
+            <item android:id="@+id/action_settings"
+                android:icon="@android:drawable/ic_menu_month"
+                android:showAsAction="ifRoom"
+                android2:title="@string/action_settings" />
+
+            <item android:id="@+id/action_help"
+                android:icon="@android:drawable/ic_menu_help"
+                android:showAsAction="ifRoom"
+                android2:title="@string/action_settings" />
+
+        </menu>
+
+    </item>
+</menu>

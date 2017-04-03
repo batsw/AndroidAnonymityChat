@@ -44,6 +44,16 @@
                 <!--&lt;!&ndash;android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
                 <!--&lt;!&ndash;android:value="com.batsw.anonimitychat.chat.ChatActivity" />&ndash;&gt;-->
         </activity>
+        <activity android:name=".mainScreen.MainScreenActivity" android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+            <!--&lt;!&ndash;android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
+            <!--&lt;!&ndash;<meta-data&ndash;&gt;-->
+            <!--&lt;!&ndash;android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:value="com.batsw.anonimitychat.chat.ChatActivity" />&ndash;&gt;-->
+        </activity>
     </application>
 
 </manifest>
