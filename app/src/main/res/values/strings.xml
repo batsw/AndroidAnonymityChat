@@ -7,6 +7,12 @@
     <string name="ChatsView">Chats</string>
     <string name="ContactsView">Contacts</string>
 
+    <!--User status-->
+    <string name="user_status_online">Online</string>
+    <string name="user_status_away">Away</string>
+    <string name="user_status_busy">Busy</string>
+    <string name="user_status_invisible">Invisible</string>
+
     <!--This is used at the Tabbed Menu of the MainScreen-->
     <string name="action_settings">Settings</string>
 
