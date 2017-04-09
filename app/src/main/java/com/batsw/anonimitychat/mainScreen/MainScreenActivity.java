@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.mainScreen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +15,7 @@ import android.widget.TabHost;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
-import com.batsw.anonimitychat.mainScreen.tabs.TabContats;
+import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
 public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
 
     private ViewPager mViewPager;
-    //main menu tabbed
+
     private TabHost mTabHost;
 
     @Override
@@ -46,7 +47,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         mTabHost.setup();
 
         List<Fragment> listFragments = new ArrayList<>();
-        listFragments.add(new TabContats());
+        listFragments.add(new TabContacts());
         listFragments.add(new TabChats());
 
         MainScreenAdapter mainScreenAdapter = new MainScreenAdapter(getSupportFragmentManager(), listFragments);
@@ -60,11 +61,10 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         String[] tabNames = {"Contacts", "Chat List"};
 
         for (int i = 0; i < tabNames.length; i++) {
-
             TabHost.TabSpec tabSpec;
             tabSpec = mTabHost.newTabSpec(tabNames[i]);
             tabSpec.setIndicator(tabNames[i]);
-            tabSpec.setContent(new FakeContent(getApplicationContext()));
+            tabSpec.setContent(new TabContent(getApplicationContext()));
             mTabHost.addTab(tabSpec);
         }
 
@@ -115,10 +115,10 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         horizontalScrollView.smoothScrollBy(scrollPosition, 0);
     }
 
-    private class FakeContent implements TabHost.TabContentFactory {
+    private class TabContent implements TabHost.TabContentFactory {
         Context context;
 
-        public FakeContent(Context context) {
+        public TabContent(Context context) {
             this.context = context;
         }
 

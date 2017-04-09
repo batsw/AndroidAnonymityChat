@@ -2,27 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    android:visibility="invisible"
+    android:layout_height="wrap_content"
     tools:visibility="visible">
-
     <!--android:theme="@style/AppTheme.Dark"-->
 
     <LinearLayout
         android:id="@+id/user_info_container"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
         android:elevation="2dp"
-        android:foreground="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/margin_8"
+        android:paddingBottom="@dimen/margin_20"
         android:paddingLeft="@dimen/margin_16"
         android:paddingRight="@dimen/margin_16"
-        android:paddingTop="@dimen/margin_8">
+        android:paddingTop="@dimen/margin_20">
 
         <ImageView
             android:id="@+id/current_user_avatar"
@@ -48,4 +44,12 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_info_outline_white" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:layout_below="@+id/user_info_container"
+        android:layout_marginLeft="60dp"
+        android:background="@color/colorInfoText"></View>
+
 </RelativeLayout>
