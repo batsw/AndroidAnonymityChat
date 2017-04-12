@@ -1,22 +1,16 @@
 package com.batsw.anonimitychat.mainScreen.tabs;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.batsw.anonimitychat.R;
-import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
-import com.batsw.anonimitychat.mainScreen.adapters.ContactHolder;
 import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 
@@ -34,6 +28,8 @@ public class TabContacts extends Fragment {
 
     private List<ContactEntity> mContactsTestList;
     private String[] mContactsTestNamesList = {"Bob", "Snack", "Jessie", "John", "Doe", "Drill", "Bet"};
+
+    private LinearLayoutManager mLinearLayoutManager;
 
     private ContactsAdapter mContactsAdapter;
     private RecyclerView mContactsRecyclerView;
@@ -60,15 +56,24 @@ public class TabContacts extends Fragment {
         Log.i(LOG, "onCreateView -> ENTER");
         View rootView = inflater.inflate(R.layout.contacts_tab, container, false);
 
-        mContactsRecyclerView = (RecyclerView) rootView.findViewById(R.id.contacts_list);
-
-        mContactsAdapter = new ContactsAdapter(mContactsTestList, getActivity());
-        mContactsRecyclerView.setAdapter(mContactsAdapter);
-
-        mContactsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-
         Log.i(LOG, "onCreateView -> LEAVE");
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.i(LOG, "onViewCreated -> ENTER");
+        super.onViewCreated(view, savedInstanceState);
+
+        mContactsRecyclerView = (RecyclerView) view.findViewById(R.id.contacts_list);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mContactsRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mContactsAdapter = new ContactsAdapter(mContactsTestList);
+        mContactsRecyclerView.setAdapter(mContactsAdapter);
+
+        Log.i(LOG, "onViewCreated -> LEAVE");
     }
 
     @Override

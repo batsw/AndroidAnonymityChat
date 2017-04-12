@@ -21,13 +21,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactHolder> {
 
     private static final String LOG = ContactsAdapter.class.getSimpleName();
 
-    private Activity mActivity;
     private List<ContactEntity> mContactsList;
 
-    public ContactsAdapter(List<ContactEntity> contactsList, Activity activity) {
+    public ContactsAdapter(List<ContactEntity> contactsList) {
 
         mContactsList = contactsList;
-        mActivity = activity;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.batsw.anonimitychat.chat.management.activity;
+package com.batsw.anonimitychat.util.activities;
 
 /**
  * Created by tudor on 2/11/2017.

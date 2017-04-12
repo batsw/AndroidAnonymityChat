@@ -1,6 +1,5 @@
 package com.batsw.anonimitychat.mainScreen.adapters;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
     private ContactEntity mContactEntity;
     private ImageView mImageView;
     private TextView mNameTextView;
-    private Activity mActivity;
     private List<ContactEntity> mContactEntitiesList;
 
     public ContactHolder(View itemView, List<ContactEntity> contactsList) {
@@ -31,8 +29,8 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
 
         mContactEntitiesList = contactsList;
 
-        mImageView = (ImageView) itemView.findViewById(R.id.current_user_avatar);
-        mNameTextView = (TextView) itemView.findViewById(R.id.current_user_name);
+        mImageView = (ImageView) itemView.findViewById(R.id.contact_avatar);
+        mNameTextView = (TextView) itemView.findViewById(R.id.contact_name);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +48,9 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
         });
     }
 
+    /**
+     * Todo: This is not working as expected .... the above onClickListener is useful ....
+     */
     @Override
     public void onClick(View view) {
         Log.i(LOG, "OnClickListener.onClick -> ENTER view=" + view);
