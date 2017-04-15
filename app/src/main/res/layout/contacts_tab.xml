@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/margin_16"
-        android:src="@drawable/ic_add_circle_outline_black"
+        android:layout_margin="@dimen/margin_8"
+        android:src="@drawable/ic_add_black"
         android:background="@color/colorInfoText"/>
 
 </android.support.design.widget.CoordinatorLayout>
