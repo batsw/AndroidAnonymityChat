@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingPrefix">
-
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -50,6 +48,23 @@
                 android:text="@string/edit"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/contact_save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:drawablePadding="10dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:text="Save"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
         </android.support.v7.widget.Toolbar>
@@ -114,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="NAME"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/colorInfoText"
                         android:textSize="17sp" />
 
                     <View
@@ -130,8 +145,8 @@
                         android:hint="Name"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#424242"
+                        android:textColor="@color/colorInfoText"
+                        android:textColorHint="@color/colorInfoText"
                         android:textSize="15sp" />
 
                     <EditText
@@ -141,11 +156,10 @@
                         android:hint="Nickame"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#424242"
+                        android:textColor="@color/colorInfoText"
+                        android:textColorHint="@color/colorInfoText"
                         android:textSize="15sp" />
                 </LinearLayout>
-
 
             </LinearLayout>
 
@@ -157,7 +171,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="INFORMATION"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/colorInfoText"
                 android:textSize="17sp" />
 
             <View
@@ -168,7 +182,6 @@
                 android:layout_marginStart="20dp"
                 android:background="@color/colorAccent" />
 
-
             <LinearLayout
                 android:id="@+id/date_layout"
                 android:layout_width="match_parent"
@@ -177,14 +190,12 @@
                 android:layout_marginTop="10dip"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dip"
-                    android:layout_height="30dip"
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
                     android:layout_weight="0.1"
-                    android:alpha="0.25"
                     android:gravity="center_vertical"
-                    android:text="De adaugat o img cu ceapa"
-                    android:textSize="15sp" />
+                    android:src="@drawable/tor_onion" />
 
                 <TextView
                     android:id="@+id/address_contact"
@@ -192,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dip"
                     android:layout_weight="1"
-                    android:hint="xxxxxxxxxxxxxxxx"
+                    android:hint="xxxxxxxxxxxxxxxx without .onion"
                     android:onClick="showDatePickerDialog"
                     android:padding="10dip"
                     android:textColor="@color/colorInfoText"
@@ -218,13 +229,13 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/profile_email"
+                    android:id="@+id/contact_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="23dip"
                     android:layout_marginTop="5dip"
                     android:hint="email@hostname.com"
-                    android:textColor="#D3D3D3"
+                    android:textColor="@color/colorInfoText"
                     android:textColorHint="@color/colorInfoText"
                     android:textSize="20dip" />
             </LinearLayout>
@@ -235,13 +246,13 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/delete_account"
+                android:id="@+id/contact_delete_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dip"
                 android:alpha="0.7"
                 android:background="@color/colorAccent"
-                android:text="delete contact"
+                android:text="DELETE CONTACT"
                 android:textColor="@color/colorInfoText" />
 
         </LinearLayout>

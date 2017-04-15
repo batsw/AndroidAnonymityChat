@@ -17,4 +17,12 @@
     <string name="action_settings">Settings</string>
 
     <string name="vertical_ellipsis">&#8942;</string>
+
+
+    <!--This is for Edit Contact Tab-->
+    <string name="edit">Edit</string>
+    <string name="left_arrow">&#xf060;</string>
+    <string name="camera">&#xf030;</string>
+    <string name="email">&#xf003;</string>
+
 </resources>
