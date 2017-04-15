@@ -26,7 +26,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
 //    compile 'eu.chainfire:libsuperuser:1.0.0.+'
     compile 'org.igniterealtime.smack:smack-android-extensions:4.1.4'
     compile 'org.igniterealtime.smack:smack-tcp:4.1.4'
