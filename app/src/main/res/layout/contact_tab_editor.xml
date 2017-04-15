@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingPrefix">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/contact_edit_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:drawablePadding="10dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/left_arrow"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/edit"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appBar"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dip"
+                android:layout_marginTop="60dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="150dip"
+                    android:layout_height="150dip">
+
+                    <ImageView
+                        android:id="@+id/image_user_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:onClick="selectPhoto" />
+
+                    <!--This is used for adding a camera image to right down side of the Avatar image-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="123dp"
+                        android:layout_marginStart="123dp"
+                        android:alpha="0.5"
+                        android:text="@string/camera"
+                        android:textSize="10sp">
+
+                    </TextView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="NAME"
+                        android:textColor="#9E9E9E"
+                        android:textSize="17sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/name_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black"
+                        android:textColorHint="#424242"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/nickname_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nickame"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black"
+                        android:textColorHint="#424242"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/info_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="INFORMATION"
+                android:textColor="#9E9E9E"
+                android:textSize="17sp" />
+
+            <View
+                android:id="@+id/info_separator"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:background="@color/colorAccent" />
+
+
+            <LinearLayout
+                android:id="@+id/date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="30dip"
+                    android:layout_weight="0.1"
+                    android:alpha="0.25"
+                    android:gravity="center_vertical"
+                    android:text="De adaugat o img cu ceapa"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/address_contact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dip"
+                    android:layout_weight="1"
+                    android:hint="xxxxxxxxxxxxxxxx"
+                    android:onClick="showDatePickerDialog"
+                    android:padding="10dip"
+                    android:textColor="@color/colorInfoText"
+                    android:textColorHint="@color/colorInfoText"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="30dip"
+                    android:layout_weight="0.1"
+                    android:alpha="0.25"
+                    android:gravity="center_vertical"
+                    android:text="@string/email"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/profile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dip"
+                    android:layout_marginTop="5dip"
+                    android:hint="email@hostname.com"
+                    android:textColor="#D3D3D3"
+                    android:textColorHint="@color/colorInfoText"
+                    android:textSize="20dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/delete_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dip"
+                android:alpha="0.7"
+                android:background="@color/colorAccent"
+                android:text="delete contact"
+                android:textColor="@color/colorInfoText" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
