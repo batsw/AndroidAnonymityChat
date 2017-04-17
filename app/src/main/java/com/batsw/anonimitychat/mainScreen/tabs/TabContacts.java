@@ -1,7 +1,11 @@
 package com.batsw.anonimitychat.mainScreen.tabs;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
+import com.batsw.anonimitychat.mainScreen.addContact.ContactAddActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 
 import java.util.ArrayList;
@@ -36,6 +42,9 @@ public class TabContacts extends Fragment {
 
     private static int DEFAULT_CONTACT_IMAGE;
 //    private int[] image = {R.drawable.....};
+
+
+    private FloatingActionButton mFloatingAddButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +79,27 @@ public class TabContacts extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mContactsRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mContactsAdapter = new ContactsAdapter(mContactsTestList);
+        mContactsAdapter = new ContactsAdapter(mContactsTestList, this);
         mContactsRecyclerView.setAdapter(mContactsAdapter);
+
+        //TODO: java.lang.ClassCastException: android.support.design.widget.FloatingActionButton cannot be cast to android.widget.Button
+        mFloatingAddButton = (FloatingActionButton) view.findViewById(R.id.contacts_tab_floating_add_button);
+        mFloatingAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mFloatingAddButton.onClick -> ENTER");
+
+                Intent addContactActivityIntent = ContactAddActivity.makeIntent(getActivity());
+
+//                addContactActivityIntent.putExtra(,);
+
+                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                getActivity().startActivity(addContactActivityIntent);
+
+                Log.i(LOG, "mFloatingAddButton.onClick  -> LEAVE");
+            }
+        });
 
         Log.i(LOG, "onViewCreated -> LEAVE");
     }
@@ -106,6 +134,5 @@ public class TabContacts extends Fragment {
 //        });
 
     }
-
 }
 

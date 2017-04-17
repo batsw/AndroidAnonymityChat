@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
+import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 
 import java.util.List;
 
@@ -21,10 +22,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactHolder> {
 
     private static final String LOG = ContactsAdapter.class.getSimpleName();
 
+    private TabContacts mTabContActivity;
     private List<ContactEntity> mContactsList;
 
-    public ContactsAdapter(List<ContactEntity> contactsList) {
-
+    public ContactsAdapter(List<ContactEntity> contactsList, TabContacts tcActivity) {
+        mTabContActivity = tcActivity;
         mContactsList = contactsList;
     }
 
@@ -36,7 +38,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactHolder> {
         View view = layoutInflater.inflate(R.layout.contact_tab_item, parent, false);
 
         Log.i(LOG, "onCreateViewHolder -> LEAVE");
-        return new ContactHolder(view, mContactsList);
+        return new ContactHolder(view, mContactsList, mTabContActivity);
     }
 
     @Override

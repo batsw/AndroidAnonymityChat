@@ -21,6 +21,7 @@
 
     <!--This is for Edit Contact Tab-->
     <string name="edit">Edit</string>
+    <string name="add">Add</string>
     <string name="left_arrow">&#xf060;</string>
     <string name="camera">&#xf030;</string>
     <string name="email">&#xf003;</string>

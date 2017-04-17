@@ -54,6 +54,10 @@
             <!--&lt;!&ndash;android:name="android.support.PARENT_ACTIVITY"&ndash;&gt;-->
             <!--&lt;!&ndash;android:value="com.batsw.anonimitychat.chat.ChatActivity" />&ndash;&gt;-->
         </activity>
+        <activity android:name=".mainScreen.contactEditor.ContactEditorActivity" android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".mainScreen.addContact.ContactAddActivity" android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
