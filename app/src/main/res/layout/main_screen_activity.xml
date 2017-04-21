@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_screen_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
 
+    android:orientation="vertical"
     tools:context="com.batsw.anonimitychat.mainScreen.MainScreenActivity">
 
     <TabHost
@@ -50,4 +52,15 @@
 
     </TabHost>
 
-</RelativeLayout>
+    <fragment
+        android:id="@+id/main_screen_fragment_navigation_drawer"
+        android:name="com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/main_screen_navigation_drawer_menu"
+        tools:layout="@layout/main_screen_navigation_drawer_menu">
+
+    </fragment>
+
+</android.support.v4.widget.DrawerLayout>

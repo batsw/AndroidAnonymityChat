@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/main_screen_navigation_toogle_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:fontFamily="sans-serif"
+        android:text="Connect to network"
+        android:textColor="@color/colorInfoText"
+        android:textSize="16sp" />
+
+    <Switch
+        android:id="@+id/main_screen_navigation_toogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:shadowColor="@color/colorInfoText"
+        android:textColorHighlight="@color/colorAccent" />
+
+</RelativeLayout>

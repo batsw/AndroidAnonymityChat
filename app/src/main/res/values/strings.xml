@@ -17,6 +17,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="vertical_ellipsis">&#8942;</string>
+    <string name="main_screen_drawer_open">open</string>
+    <string name="main_screen_drawer_close">close</string>
 
 
     <!--This is for Edit Contact Tab-->
