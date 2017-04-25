@@ -28,4 +28,10 @@
     <string name="camera">&#xf030;</string>
     <string name="email">&#xf003;</string>
 
+    <!--Settings-->
+    <string name="settings_storage">Storage</string>
+    <string name="settings_network">Network</string>
+    <string name="settings_profile">My Profile</string>
+    <string name="settings_about">About</string>
+
 </resources>
