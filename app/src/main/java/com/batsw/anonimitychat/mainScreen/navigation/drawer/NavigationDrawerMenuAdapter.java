@@ -2,6 +2,7 @@ package com.batsw.anonimitychat.mainScreen.navigation.drawer;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItem;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
+import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
  */
 
 public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String LOG = NavigationDrawerMenuAdapter.class.getSimpleName();
 
     private List<NavigationDrawerEntry> data;
     private LayoutInflater inflater;
@@ -63,21 +66,116 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
         final NavigationDrawerEntry item = data.get(position);
 
         if (item instanceof NavigationDrawerItemAndImg) {
-            ItemAndImgViewHolder viewHolder = (ItemAndImgViewHolder) holder;
+            final ItemAndImgViewHolder viewHolder = (ItemAndImgViewHolder) holder;
             viewHolder.mTitle.setText(((NavigationDrawerItemAndImg) item).getTitle());
             viewHolder.mImageView.setImageResource(((NavigationDrawerItemAndImg) item).getIconId());
+
+            viewHolder.mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    msniiOnClickHandling(viewHolder.mTitle.getText().toString());
+                }
+            });
         }
 
         if (item instanceof NavigationDrawerItem) {
-            ItemViewHolder viewHolder = (ItemViewHolder) holder;
+            final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             viewHolder.mTitle.setText(((NavigationDrawerItem) item).getTitle());
+
+            viewHolder.mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    msniOnClickHandling(viewHolder.mTitle.getText().toString());
+                }
+            });
         }
 
         if (item instanceof NavigationDrawerToogle) {
-            ToggleViewHolder viewHolder = (ToggleViewHolder) holder;
+            final ToggleViewHolder viewHolder = (ToggleViewHolder) holder;
+
+            //TODO: if title MainScreenConstants.NAVIGATION_TOOGLE then
+            // I must load the Network connection status and if connected
+            // then toogle is Checked else is not checked
+
             viewHolder.mTitle.setText(((NavigationDrawerToogle) item).getTitle());
             viewHolder.mSwitch.setChecked(((NavigationDrawerToogle) item).isChecked());
+            viewHolder.mSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    msntOnClickHandling(viewHolder.mTitle.getText().toString(), viewHolder.mSwitch);
+                }
+            });
         }
+    }
+
+    //main_screen_navigation_drawer_item_and_img
+    public void msniiOnClickHandling(String title) {
+        Log.i(LOG, "msniiOnClickHandling -> ENTER");
+
+        switch (title) {
+            case MainScreenConstants.NAVIGATION_PROFILE:
+                Log.i(LOG, "-> start my profile");
+                //TODO: start the Profile activity
+                break;
+            case MainScreenConstants.NAVIGATION_NETWORK:
+                Log.i(LOG, "-> start network");
+                //TODO: start the Network activity
+                break;
+            case MainScreenConstants.NAVIGATION_STORAGE:
+                Log.i(LOG, "-> start storage");
+                //TODO: start the Storage activity
+                break;
+            default:
+                Log.i(LOG, "main_screen_navigation_drawer_item_and_img.msniiOnClickHandling -> DEFAULT - do nothing");
+        }
+        Log.i(LOG, "msniiOnClickHandling -> LEAVE");
+    }
+
+    //main_screen_navigation_drawer_item
+    private void msniOnClickHandling(String title) {
+        Log.i(LOG, "msniOnClickHandling -> ENTER");
+
+        switch (title) {
+            case MainScreenConstants.NAVIGATION_ABOUT:
+                Log.i(LOG, "main_screen_navigation_drawer_item.msniOnClickHandling -> start About");
+                //TODO: start the About activity
+//                Intent addContactActivityIntent = ContactAddActivity.makeIntent(getActivity());
+//
+////                addContactActivityIntent.putExtra(,);
+//
+//                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                getActivity().startActivity(addContactActivityIntent);
+                break;
+            default:
+                Log.i(LOG, "main_screen_navigation_drawer_item.msniOnClickHandling -> DEFAULT - do nothing");
+        }
+        Log.i(LOG, "msniOnClickHandling -> LEAVE");
+    }
+
+    //main_screen_navigation_drawer_toogle
+    public void msntOnClickHandling(String title, Switch toogle) {
+        Log.i(LOG, "msntOnClickHandling -> ENTER");
+
+        switch (title) {
+            case MainScreenConstants.NAVIGATION_TOOGLE:
+                Log.i(LOG, "network connection tootgle used");
+
+                if (toogle.isChecked()) {
+                    Log.i(LOG, "toogle ON");
+                } else if (!toogle.isChecked()) {
+                    Log.i(LOG, "toogle OFF");
+                } else {
+                    Log.i(LOG, "toogle UNKNOWN");
+                }
+
+                //TODO: handle the connect/disconnect from tor command
+
+                break;
+            default:
+                Log.i(LOG, "main_screen_navigation_drawer_toogle.msntOnClickHandling -> DEFAULT - do nothing");
+        }
+        Log.i(LOG, "msntOnClickHandling -> LEAVE");
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.batsw.anonimitychat.mainScreen;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,11 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.Switch;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment;
@@ -24,6 +26,7 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
+import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,8 @@ import java.util.List;
 
 public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
 
+    private static final String LOG = MainScreenActivity.class.getSimpleName();
+
     private ViewPager mViewPager;
 
     private TabHost mTabHost;
@@ -42,9 +47,13 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        Log.i(LOG, "onCreate -> ENTER");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen_activity);
 
+        //TODO: what for?
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
@@ -53,9 +62,13 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         initTabs();
 
         initNavigationDrawerMenu();
+
+        Log.i(LOG, "onCreate -> LEAVE");
     }
 
     private void init() {
+        Log.i(LOG, "init -> ENTER");
+
         mViewPager = (ViewPager) findViewById(R.id.main_screen_view_pager);
 
         mTabHost = (TabHost) findViewById(R.id.main_screen_tab_host);
@@ -69,9 +82,12 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         mViewPager.setAdapter(mainScreenAdapter);
 
         mViewPager.setOnPageChangeListener(this);
+
+        Log.i(LOG, "init -> LEAVE");
     }
 
     private void initTabs() {
+        Log.i(LOG, "initTabs -> ENTER");
 
         String[] tabNames = {"Contacts", "Chat List"};
 
@@ -84,22 +100,27 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         }
 
         mTabHost.setOnTabChangedListener(this);
+
+        Log.i(LOG, "initTabs -> LEAVE");
     }
 
     private void initNavigationDrawerMenu() {
+        Log.i(LOG, "initNavigationDrawerMenu -> ENTER");
 
         List<NavigationDrawerEntry> drawerEntries = new ArrayList<>();
-        drawerEntries.add(new NavigationDrawerToogle("Connection"));
+        drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
         drawerEntries.add(new NavigationDrawerDivider());
-        drawerEntries.add(new NavigationDrawerItemAndImg("My Profile", R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerItemAndImg("Network", R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerItemAndImg("Storage", R.drawable.ic_info_outline_white));
+        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_PROFILE, R.drawable.ic_info_outline_white));
+        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
+        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_STORAGE, R.drawable.ic_info_outline_white));
         drawerEntries.add(new NavigationDrawerDivider());
-        drawerEntries.add(new NavigationDrawerItem("About"));
+        drawerEntries.add(new NavigationDrawerItem(MainScreenConstants.NAVIGATION_ABOUT));
 
         NavigationDrawerMenuFragment drawerFragment = (NavigationDrawerMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_screen_fragment_navigation_drawer);
         drawerFragment.init((android.support.v4.widget.DrawerLayout) findViewById(R.id.main_screen_layout),
                 null, drawerEntries);
+
+        Log.i(LOG, "initNavigationDrawerMenu -> LEAVE");
     }
 
     @Override

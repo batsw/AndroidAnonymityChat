@@ -25,6 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="16dp"
         android:shadowColor="@color/colorInfoText"
-        android:textColorHighlight="@color/colorAccent" />
+        android:textColorHighlight="@color/colorAccent"
+        />
 
 </RelativeLayout>
