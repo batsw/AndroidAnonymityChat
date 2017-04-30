@@ -1,6 +1,7 @@
 package com.batsw.anonimitychat.mainScreen.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 
 import java.util.List;
 
@@ -19,14 +21,16 @@ import java.util.List;
 public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final String LOG = ChatsHolder.class.getSimpleName();
 
+    private TabChats mTabChatsActivity;
     private ChatEntity mChatEntity;
     private ImageView mAvatarImageView, mAvailabilityImageView;
     private TextView mNameTextView;
     private List<ChatEntity> mChatEntitiesList;
 
-    public ChatsHolder(View itemView, List<ChatEntity> chatsList) {
+    public ChatsHolder(View itemView, List<ChatEntity> chatsList, TabChats tabChatsActivity) {
         super(itemView);
 
+        mTabChatsActivity = tabChatsActivity;
         mChatEntitiesList = chatsList;
 
         mAvatarImageView = (ImageView) itemView.findViewById(R.id.current_user_avatar);
@@ -47,6 +51,22 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
                 Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
             }
 
+        });
+
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+//                Intent chatsDetailsActivityIntent = ContactEditorActivity.makeIntent(mTabChatsActivity.getActivity());
+
+//                editContactActivityIntent.putExtra(,);
+
+//                chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
+
+                return false;
+            }
         });
     }
 

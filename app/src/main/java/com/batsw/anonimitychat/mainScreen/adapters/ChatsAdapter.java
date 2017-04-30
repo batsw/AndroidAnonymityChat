@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
+import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 
 import java.util.List;
 
@@ -20,13 +22,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsHolder> {
 
     private static final String LOG = ChatsAdapter.class.getSimpleName();
 
-    private Activity mActivity;
+    private TabChats mTabChatsActivity;
     private List<ChatEntity> mChatsList;
 
-    public ChatsAdapter(List<ChatEntity> chatsList, Activity activity) {
+    public ChatsAdapter(List<ChatEntity> chatsList, TabChats tcActivity) {
 
+        mTabChatsActivity = tcActivity;
         mChatsList = chatsList;
-        mActivity = activity;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsHolder> {
         View view = layoutInflater.inflate(R.layout.chats_tab_item, parent, false);
 
         Log.i(LOG, "onCreateViewHolder -> LEAVE");
-        return new ChatsHolder(view, mChatsList);
+        return new ChatsHolder(view, mChatsList, mTabChatsActivity);
     }
 
     @Override

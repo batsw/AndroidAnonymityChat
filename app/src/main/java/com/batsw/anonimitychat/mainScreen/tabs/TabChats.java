@@ -64,7 +64,7 @@ public class TabChats extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mChatsRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mChatsAdapter = new ChatsAdapter(mChatsTestList, getActivity());
+        mChatsAdapter = new ChatsAdapter(mChatsTestList, this);
         mChatsRecyclerView.setAdapter(mChatsAdapter);
 
         Log.i(LOG, "onViewCreated -> LEAVE");
