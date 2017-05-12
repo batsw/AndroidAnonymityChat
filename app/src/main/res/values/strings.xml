@@ -15,6 +15,7 @@
 
     <!--This is used at the Tabbed Menu of the MainScreen-->
     <string name="action_settings">Settings</string>
+    <string name="action_network">Network</string>
 
     <string name="vertical_ellipsis">&#8942;</string>
     <string name="main_screen_drawer_open">open</string>

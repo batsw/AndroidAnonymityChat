@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -53,20 +54,24 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen_activity);
 
-        //TODO: what for?
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
-        init();
-
+        initLayout();
         initTabs();
-
         initNavigationDrawerMenu();
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
 
-    private void init() {
+    //    TODO: migrate all init procedures from MainActivity
+    private void initBackend() {
+        Log.i(LOG, "initBackend -> ENTER");
+
+        Log.i(LOG, "initBackend -> LEAVE");
+    }
+
+    private void initLayout() {
         Log.i(LOG, "init -> ENTER");
 
         mViewPager = (ViewPager) findViewById(R.id.main_screen_view_pager);
@@ -126,19 +131,55 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.main_screen_menu, menu);
+        MenuInflater actionBarMenuInflater = getMenuInflater();
+        actionBarMenuInflater.inflate(R.menu.main_screen_menu, menu);
+
 
         return true;
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+//        tb.inflateMenu(R.menu.main_screen_menu);
+//        tb.setOnMenuItemClickListener(
+//                new Toolbar.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        return onOptionsItemSelected(item);
+//                    }
+//                });
+//
+//        return true;
+//    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(LOG, "onOptionsItemSelected -> ENTER item=" + item);
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_network:
+                Log.i(LOG, "action_network");
+                break;
+
+            case R.id.action_search:
+                Log.i(LOG, "action_search");
+                break;
+
+            default:
+                Log.i(LOG, "default toolbar ... never here");
+                break;
         }
-        return super.onOptionsItemSelected(item);
+
+//        if (id == R.id.action_search) {
+//            return true;
+//        }
+
+//        return super.onOptionsItemSelected(item);
+
+        Log.i(LOG, "onOptionsItemSelected -> LEAVE");
+        return true;
     }
 
     @Override
