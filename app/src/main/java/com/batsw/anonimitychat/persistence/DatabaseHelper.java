@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
+import com.batsw.anonimitychat.persistence.operations.DbChatMessagesOperations;
+import com.batsw.anonimitychat.persistence.operations.DbChatsOperations;
 import com.batsw.anonimitychat.persistence.operations.DbContactsOperations;
 import com.batsw.anonimitychat.persistence.operations.DbMyProfileOperations;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
@@ -49,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CHATS_MESSAGES = "create table " + PersistenceConstants.TABLE_CHATS_MESSAGES + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
             PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null,\n" +
+            PersistenceConstants.COLUMN_MESSAGE + " text not null,\n" +
             PersistenceConstants.COLUMN_TIMESTAMP + " integer not null,\n" +
             " FOREIGN KEY (" + PersistenceConstants.COLUMN_CONTACT_SESSION_ID + ") REFERENCES " +
             PersistenceConstants.TABLE_CONTACTS + "(" + PersistenceConstants.COLUMN_SESSION_ID + "));";
@@ -56,6 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // all entities operations members
     DbMyProfileOperations mMyProfileOperations;
     DbContactsOperations mContactsOperations;
+    DbChatMessagesOperations mChatMessagesOperations;
+    DbChatsOperations mChatsOperations;
 
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -64,6 +69,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         mMyProfileOperations = new DbMyProfileOperations(this.getWritableDatabase());
         mContactsOperations = new DbContactsOperations(this.getWritableDatabase());
+        mChatsOperations = new DbChatsOperations(this.getWritableDatabase());
+        mChatMessagesOperations = new DbChatMessagesOperations(this.getWritableDatabase());
 
         Log.i(LOG, "constructor -> LEAVE");
     }
@@ -115,6 +122,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
 
         Log.i(LOG, "onUpgrade -> LEAVE");
+    }
+
+    public DbMyProfileOperations getMyProfileOperations() {
+        return mMyProfileOperations;
+    }
+
+    public DbContactsOperations getContactsOperations() {
+        return mContactsOperations;
+    }
+
+    public DbChatMessagesOperations getChatMessagesOperations() {
+        return mChatMessagesOperations;
+    }
+
+    public DbChatsOperations getChatsOperations() {
+        return mChatsOperations;
     }
 
 }

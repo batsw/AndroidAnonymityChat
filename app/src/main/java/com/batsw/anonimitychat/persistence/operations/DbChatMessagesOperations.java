@@ -153,4 +153,14 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
         Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);
         return retVal;
     }
+
+    //    TODO: the right implementation methods for the messages TABLE
+    public List<IDbEntity> getAllMessagesForSessionId(long contactSessionId) {
+        return null;
+    }
+
+    public boolean deleteAllMessagesForSessionId(long contactSessionId) {
+        return false;
+    }
 }
+

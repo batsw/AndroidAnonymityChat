@@ -28,6 +28,8 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
+import com.batsw.anonimitychat.persistence.DatabaseHelper;
+import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     private TabHost mTabHost;
 
-    private Toolbar mToolbar;
+    private DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     //    TODO: migrate all init procedures from MainActivity
     private void initBackend() {
         Log.i(LOG, "initBackend -> ENTER");
+
+//        Database init
+//        mDatabaseHelper = new DatabaseHelper(this, PersistenceConstants.DATABASE_ANONYMITY_CHAT, null, PersistenceConstants.DATABASE_VERSION);
 
         Log.i(LOG, "initBackend -> LEAVE");
     }

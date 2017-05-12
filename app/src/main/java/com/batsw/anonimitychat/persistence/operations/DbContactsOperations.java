@@ -134,7 +134,7 @@ public class DbContactsOperations implements IEntityDbOperations {
                 values.put(PersistenceConstants.COLUMN_EMAIL, contactEntity.getEmail());
 
                 retVal = mSQLiteDatabase.update(PersistenceConstants.TABLE_CONTACTS, values, PersistenceConstants.COLUMN_ID +
-                        " = ? and " + PersistenceConstants.COLUMN_SESSION_ID + " = ?",
+                                " = ? and " + PersistenceConstants.COLUMN_SESSION_ID + " = ?",
                         new String[]{String.valueOf(contactEntity.getId()),
                                 String.valueOf(contactEntity.getSessionId())
                         });
