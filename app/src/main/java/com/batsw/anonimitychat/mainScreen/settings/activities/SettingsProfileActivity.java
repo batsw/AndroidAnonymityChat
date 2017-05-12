@@ -1,5 +1,7 @@
 package com.batsw.anonimitychat.mainScreen.settings.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,5 +24,20 @@ public class SettingsProfileActivity extends AppCompatActivity {
         setContentView(R.layout.settings_profile_activity);
 
         Log.i(LOG, "onCreate -> ENTER");
+    }
+
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
+        Log.i(LOG, "makeIntent -> ENTER context=" + context);
+
+        Intent retVal = new Intent(context, SettingsProfileActivity.class);
+
+        Log.i(LOG, "makeIntent -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 }

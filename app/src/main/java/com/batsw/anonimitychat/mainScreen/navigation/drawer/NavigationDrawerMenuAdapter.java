@@ -1,6 +1,7 @@
 package com.batsw.anonimitychat.mainScreen.navigation.drawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItem;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
 
 import java.util.List;
@@ -27,6 +29,8 @@ import java.util.List;
 public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String LOG = NavigationDrawerMenuAdapter.class.getSimpleName();
 
+    private Context mContext;
+
     private List<NavigationDrawerEntry> data;
     private LayoutInflater inflater;
 
@@ -34,6 +38,8 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
     public NavigationDrawerMenuAdapter(Context context, List<NavigationDrawerEntry> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
+
+        mContext = context;
     }
 
     @Override
@@ -124,6 +130,10 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
             case MainScreenConstants.NAVIGATION_STORAGE:
                 Log.i(LOG, "-> start storage");
                 //TODO: start the Storage activity
+//                Intent addContactActivityIntent = SettingsAboutActivity.makeIntent(mContext);
+////                addContactActivityIntent.putExtra(,);
+//                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                mContext.startActivity(addContactActivityIntent);
                 break;
             default:
                 Log.i(LOG, "main_screen_navigation_drawer_item_and_img.msniiOnClickHandling -> DEFAULT - do nothing");
@@ -139,13 +149,10 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
             case MainScreenConstants.NAVIGATION_ABOUT:
                 Log.i(LOG, "main_screen_navigation_drawer_item.msniOnClickHandling -> start About");
                 //TODO: start the About activity
-//                Intent addContactActivityIntent = ContactAddActivity.makeIntent(getActivity());
-//
-////                addContactActivityIntent.putExtra(,);
-//
-//                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                getActivity().startActivity(addContactActivityIntent);
+                Intent addContactActivityIntent = SettingsAboutActivity.makeIntent(mContext);
+                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(addContactActivityIntent);
+
                 break;
             default:
                 Log.i(LOG, "main_screen_navigation_drawer_item.msniOnClickHandling -> DEFAULT - do nothing");

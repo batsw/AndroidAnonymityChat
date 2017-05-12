@@ -1,5 +1,7 @@
 package com.batsw.anonimitychat.mainScreen.settings.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,14 +15,18 @@ import com.batsw.anonimitychat.R;
 public class SettingsStorageActivity extends AppCompatActivity {
     private static final String LOG = SettingsStorageActivity.class.getSimpleName();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(LOG, "onCreate -> ENTER");
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
+        Log.i(LOG, "makeIntent -> ENTER context=" + context);
 
-        super.onCreate(savedInstanceState);
+        Intent retVal = new Intent(context, SettingsStorageActivity.class);
 
-        setContentView(R.layout.settings_storage_activity);
-
-        Log.i(LOG, "onCreate -> ENTER");
+        Log.i(LOG, "makeIntent -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 }

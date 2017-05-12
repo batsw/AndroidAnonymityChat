@@ -121,7 +121,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
         drawerEntries.add(new NavigationDrawerDivider());
         drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_PROFILE, R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
+//        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
         drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_STORAGE, R.drawable.ic_info_outline_white));
         drawerEntries.add(new NavigationDrawerDivider());
         drawerEntries.add(new NavigationDrawerItem(MainScreenConstants.NAVIGATION_ABOUT));
