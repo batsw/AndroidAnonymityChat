@@ -25,6 +25,7 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItem;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
+import com.batsw.anonimitychat.mainScreen.popup.NetworkPopupActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
@@ -166,6 +167,10 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         switch (id) {
             case R.id.action_network:
                 Log.i(LOG, "action_network");
+
+                NetworkPopupActivity networkPopupActivity = new NetworkPopupActivity(this);
+                networkPopupActivity.show();
+
                 break;
 
             case R.id.action_search:

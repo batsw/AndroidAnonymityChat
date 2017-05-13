@@ -28,6 +28,7 @@
     <string name="left_arrow">&#xf060;</string>
     <string name="camera">&#xf030;</string>
     <string name="email">&#xf003;</string>
+    <string name="check">&#xf00c;</string>
 
     <!--Settings-->
     <string name="settings_storage">Storage</string>
