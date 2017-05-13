@@ -47,8 +47,6 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     private TabHost mTabHost;
 
-    private DatabaseHelper mDatabaseHelper;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -65,16 +63,6 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         initNavigationDrawerMenu();
 
         Log.i(LOG, "onCreate -> LEAVE");
-    }
-
-    //    TODO: migrate all init procedures from MainActivity
-    private void initBackend() {
-        Log.i(LOG, "initBackend -> ENTER");
-
-//        Database init
-//        mDatabaseHelper = new DatabaseHelper(this, PersistenceConstants.DATABASE_ANONYMITY_CHAT, null, PersistenceConstants.DATABASE_VERSION);
-
-        Log.i(LOG, "initBackend -> LEAVE");
     }
 
     private void initLayout() {
@@ -143,21 +131,6 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
         return true;
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-//        tb.inflateMenu(R.menu.main_screen_menu);
-//        tb.setOnMenuItemClickListener(
-//                new Toolbar.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        return onOptionsItemSelected(item);
-//                    }
-//                });
-//
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
