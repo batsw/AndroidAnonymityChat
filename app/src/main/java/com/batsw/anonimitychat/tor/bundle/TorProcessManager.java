@@ -269,7 +269,7 @@ public class TorProcessManager {
         }
     }
 
-    public String getTorHostnamee() {
+    public String getTorAddress() {
         return mTorHostnamee;
     }
 

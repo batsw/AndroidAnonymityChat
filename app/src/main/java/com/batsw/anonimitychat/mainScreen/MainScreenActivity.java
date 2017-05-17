@@ -1,6 +1,7 @@
 package com.batsw.anonimitychat.mainScreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerDivider;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerEntry;
@@ -47,6 +50,8 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     private TabHost mTabHost;
 
+    private boolean isHomeButtonPressed = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -61,6 +66,8 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         initLayout();
         initTabs();
         initNavigationDrawerMenu();
+
+        initBackend();
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
@@ -122,6 +129,14 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         Log.i(LOG, "initNavigationDrawerMenu -> LEAVE");
     }
 
+    private void initBackend() {
+        Log.i(LOG, "initBackend -> ENTER");
+
+        AppController.getInstanceParameterized(this);
+
+        Log.i(LOG, "initBackend -> LEAVE");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -154,12 +169,6 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
                 Log.i(LOG, "default toolbar ... never here");
                 break;
         }
-
-//        if (id == R.id.action_search) {
-//            return true;
-//        }
-
-//        return super.onOptionsItemSelected(item);
 
         Log.i(LOG, "onOptionsItemSelected -> LEAVE");
         return true;
@@ -205,5 +214,92 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
             fakeView.setMinimumWidth(0);
             return fakeView;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(LOG, "onStart -> ENTER");
+        super.onStart();
+        Log.i(LOG, "do nothing");
+        Log.i(LOG, "onStart -> LEAVE");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(LOG, "onStop -> ENTER");
+
+        if (isHomeButtonPressed) {
+            Log.i(LOG, "HOME button detected");
+
+            //means that HOME was pressed
+            AppController.getInstanceParameterized(null).stopNetworkConnection();
+
+            isHomeButtonPressed = false;
+        } else {
+            isHomeButtonPressed = false;
+        }
+
+        super.onStop();
+        Log.i(LOG, "after super.onStop() --- do nothing");
+        Log.i(LOG, "onStop -> LEAVE");
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(LOG, "onDestroy -> ENTER");
+
+        AppController.getInstanceParameterized(null).stopNetworkConnection();
+        Log.i(LOG, "TOR Bundle is stopped");
+
+        super.onDestroy();
+
+        Log.i(LOG, "onDestroy -> LEAVE");
+    }
+
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        Log.i(LOG, "onActionModeFinished -> ENTER");
+        super.onActionModeFinished(mode);
+        Log.i(LOG, "do nothing");
+        Log.i(LOG, "onActionModeFinished -> LEAVE");
+    }
+
+    @Override
+    protected void onPause() {
+        //TODO: this is called when HOME button is pressed
+        Log.i(LOG, "onPause -> ENTER");
+
+        isHomeButtonPressed = true;
+
+        super.onPause();
+        Log.i(LOG, "after super.onPause() --- do nothing");
+        Log.i(LOG, "onPause -> LEAVE");
+    }
+
+    @Override
+    public void finish() {
+        //TODO: this is called when Back button is called (closing the app)
+        Log.i(LOG, "finish -> ENTER");
+        super.finish();
+        Log.i(LOG, "do nothing");
+        Log.i(LOG, "finish -> LEAVE");
+    }
+
+    @Override
+    public void finishActivity(int requestCode) {
+        Log.i(LOG, "finishActivity -> ENTER");
+        super.finishActivity(requestCode);
+        Log.i(LOG, "do nothing");
+        Log.i(LOG, "finishActivity -> LEAVE");
+    }
+
+    /**
+     * Creating Intent for the activity of this class
+     *
+     * @param context
+     * @return Intent
+     */
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, MainScreenActivity.class);
     }
 }

@@ -14,6 +14,7 @@ import com.batsw.anonimitychat.persistence.operations.DbChatsOperations;
 import com.batsw.anonimitychat.persistence.operations.DbContactsOperations;
 import com.batsw.anonimitychat.persistence.operations.DbMyProfileOperations;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +106,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.i(LOG, "Database Created !!!");
 
+        insertDefaultMyProfile();
+
+        Log.i(LOG, "My Default Profile Created !!!");
+
         Log.i(LOG, "onCreate -> LEAVE");
+    }
+
+    /**
+     * This is called inside onCreate, immediately after the DB is created
+     */
+    private void insertDefaultMyProfile() {
+        Log.i(LOG, "insertDefaultMyProfile -> ENTER");
+
+        DBMyProfileEntity dbMyProfileEntity = new DBMyProfileEntity();
+        dbMyProfileEntity.setMyAddress(AppConstants.MY_DEFAULT_ADDRESS);
+        dbMyProfileEntity.setMyName(AppConstants.MY_DEFAULT_NAME);
+        dbMyProfileEntity.setMyNickName(AppConstants.MY_DEFAULT_NICKNAME);
+
+        final SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PersistenceConstants.COLUMN_MY_ADDRESS, dbMyProfileEntity.getMyAddress());
+        values.put(PersistenceConstants.COLUMN_MY_NAME, dbMyProfileEntity.getMyName());
+        values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
+
+        sqLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
+        sqLiteDatabase.close();
+
+        Log.i(LOG, "insertDefaultMyProfile -> LEAVE");
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.IEntityDbOperations;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,27 +79,91 @@ public class DbMyProfileOperations implements IEntityDbOperations {
         return null;
     }
 
+    public void updateAddressOnFirstNetworkConnection(String myAddress) {
+        Log.i(LOG, "updateAddressOnFirstNetworkConnection -> ENTER myAddress=" + myAddress);
+
+        if (!myAddress.isEmpty() && myAddress.length() == AppConstants.ADDRESS_SIZE && getMyAddress(1).equals(AppConstants.MY_DEFAULT_ADDRESS)) {
+            Log.i(LOG, "vaild address and first time connection. updating My address allowed");
+
+            ContentValues values = new ContentValues();
+            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress);
+
+            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
+            mSQLiteDatabase.close();
+        }
+
+        Log.i(LOG, "updateAddressOnFirstNetworkConnection -> LEAVE retVal=" + null);
+    }
+
+    /**
+     * @param
+     * @return String
+     */
+    public String getMyAddress(long id) {
+        Log.i(LOG, "getMyAddress -> ENTER id=" + id);
+        String retVal = "";
+
+//        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
+//                        PersistenceConstants.COLUMN_MY_ADDRESS,
+//                        PersistenceConstants.COLUMN_MY_NAME,
+//                        PersistenceConstants.COLUMN_MY_NICKNAME,
+//                        PersistenceConstants.COLUMN_MY_EMAIL,
+//                }, PersistenceConstants.COLUMN_SESSION_ID + " = ?",
+//                new String[]{String.valueOf(id)}, null, null, null, null);
+//        if (cursor != null)
+//            cursor.moveToFirst();
+//
+//        DBMyProfileEntity myProfile = new DBMyProfileEntity();
+//        myProfile.setId(Long.parseLong(cursor.getString(0)));
+//        myProfile.setMyAddress(cursor.getString(1));
+//        myProfile.setMyName(cursor.getString(2));
+//        myProfile.setMyNickName(cursor.getString(3));
+//        myProfile.setMyEmail(cursor.getString(4));
+
+        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
+                        PersistenceConstants.COLUMN_MY_ADDRESS,
+                }, PersistenceConstants.COLUMN_SESSION_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        retVal = cursor.getString(0);
+
+        Log.i(LOG, "getMyAddress -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    /**
+     * TODO: this should never be exposed ... move to private inside DatabaseHelper
+     * <p>
+     * This MUST never be used --- NEVER Implement
+     *
+     * @param dbEntity
+     * @return
+     */
     @Override
     public boolean addDbEntity(IDbEntity dbEntity) {
         Log.i(LOG, "addDbEntity -> ENTER dbEntity=" + dbEntity);
 
         boolean retVal = false;
 
-        if (dbEntity instanceof DBMyProfileEntity) {
+//        if (dbEntity instanceof DBMyProfileEntity) {
+//
+//            DBMyProfileEntity dbMyProfileEntity = (DBMyProfileEntity) dbEntity;
+//
+//            ContentValues values = new ContentValues();
+//            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, dbMyProfileEntity.getMyAddress());
+//            values.put(PersistenceConstants.COLUMN_MY_NAME, dbMyProfileEntity.getMyName());
+//            values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
+//            values.put(PersistenceConstants.COLUMN_MY_EMAIL, dbMyProfileEntity.getMyEmail());
+//
+//            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
+//            mSQLiteDatabase.close();
+//
+//            retVal = true;
+//        }
 
-            DBMyProfileEntity dbMyProfileEntity = (DBMyProfileEntity) dbEntity;
-
-            ContentValues values = new ContentValues();
-            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, dbMyProfileEntity.getMyAddress());
-            values.put(PersistenceConstants.COLUMN_MY_NAME, dbMyProfileEntity.getMyName());
-            values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
-            values.put(PersistenceConstants.COLUMN_MY_EMAIL, dbMyProfileEntity.getMyEmail());
-
-            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
-            mSQLiteDatabase.close();
-
-            retVal = true;
-        }
+        Log.i(LOG, "Not implemented");
 
         Log.i(LOG, "addDbEntity -> LEAVE retVal=" + retVal);
         return retVal;

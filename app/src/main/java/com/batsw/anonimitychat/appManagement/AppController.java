@@ -7,9 +7,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
+import com.batsw.anonimitychat.util.AppConstants;
 
 /**
  * Created by tudor on 5/13/2017.
@@ -18,10 +23,10 @@ import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 public class AppController {
     private static final String LOG = AppController.class.getSimpleName();
 
-
     private static AppController mInstance;
 
     private AppCompatActivity mMainScreenActivity = null;
+    private static Context mCurrentActivityContext = null;
 
     private static boolean isIncomingChatConnection = false;
 
@@ -31,12 +36,14 @@ public class AppController {
 
     private String mMyTorAddress = "";
 
+    private boolean isFirstRun = true;
+
     private AppController(AppCompatActivity mainActivity) {
         mMainScreenActivity = mainActivity;
 //        binding the textView to the MainScreen
         mTorStatusCarrier = new TextView(mMainScreenActivity.getApplicationContext());
-        
-        init();
+
+        initBackend();
     }
 
     /**
@@ -51,17 +58,6 @@ public class AppController {
     }
 
     /**
-     * preparing the concurrent resources
-     */
-    private void init() {
-        Log.i(LOG, "init -> ENTER");
-
-        initBackend();
-
-        Log.i(LOG, "init -> LEAVE");
-    }
-
-    /**
      * binding the backend functionality to MainScreen context
      */
     private void initBackend() {
@@ -72,35 +68,142 @@ public class AppController {
                 null, PersistenceConstants.DATABASE_VERSION);
 //mDatabaseHelper.onOpen();
 
-//Network connection init
+//Network Manager init
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
+
+        handleChatController();
 
         Log.i(LOG, "initBackend -> LEAVE");
     }
 
-    private boolean firstRun() {
-        return false;
+    public void connectToNetwork() {
+        Log.i(LOG, "connectToNetwork -> ENTER");
+
+        if (!mTorProcessManager.isTorBundleStarted()) {
+            mTorProcessManager.startTorBundle();
+
+            //        TODO: call this here?
+            detectFirstRun();
+        }
+
+        Log.i(LOG, "connectToNetwork -> LEAVE");
     }
 
+    public void stopNetworkConnection() {
+        Log.i(LOG, "stopNetworkConnection -> ENTER");
 
-//    Network connection commands interfaced with TorProcessManager HERE
-    // start , stop connection ... here
+        if (mTorProcessManager.isTorBundleStarted()) {
+            mTorProcessManager.stopTorBundle();
+        }
 
+        Log.i(LOG, "stopNetworkConnection -> LEAVE");
+    }
 
-    // DB operations interfaced in this section
+    private void detectFirstRun() {
+        Log.i(LOG, "detectFirstRun -> LEAVE");
 
-    // create my profile first run
-    // update my profile (only name, nickname and email)
+        mTorStatusCarrier.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-//    .... etc
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(LOG, "detectFirstRun.onTextChanged -> LEAVE charSequence=" + charSequence);
 
-    //    public void updateContext(Context context) {
-//        Log.i(LOG, "updateContext -> ENTER context=" + context);
-//
-//
-//        Log.i(LOG, "updateContext -> LEAVE");
-//    }
+                if (isFirstRun) {
+                    final StringBuilder sb = new StringBuilder(charSequence.length());
+                    sb.append(charSequence);
+                    String textViewText = sb.toString();
+
+                    if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                        handleFirstRun();
+                        isFirstRun = false;
+                    }
+                }
+                Log.i(LOG, "detectFirstRun.onTextChanged -> LEAVE");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        Log.i(LOG, "detectFirstRun -> LEAVE");
+    }
+
+    private boolean handleFirstRun() {
+        Log.i(LOG, "firstRunCheck -> ENTER");
+        boolean retVal = false;
+
+        if (mTorProcessManager.isTorBundleStarted()) {
+
+            String myAddress = mTorProcessManager.getTorAddress().substring(0, 16);
+
+            if (myAddress.length() == AppConstants.ADDRESS_SIZE) {
+
+                mDatabaseHelper.getMyProfileOperations().updateAddressOnFirstNetworkConnection(myAddress);
+
+                retVal = true;
+            }
+        }
+
+        Log.i(LOG, "firstRunCheck -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    private void handleChatController() {
+        Log.i(LOG, "initChatController -> ENTER");
+        mTorStatusCarrier.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(LOG, "mTorStatusCarrier.addTextChangedListener -> ENTER");
+
+                final StringBuilder sb = new StringBuilder(charSequence.length());
+                sb.append(charSequence);
+                String textViewText = sb.toString();
+
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    Log.i(LOG, "tor bundle has started ... initializing Chat Controller");
+                    ChatController.getInstance();
+                    ChatController.getInstance().setMyAddress(mTorProcessManager.getTorAddress());
+                    ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
+                    ChatController.getInstance().initializeChatConnectionManagement();
+                }
+
+                //Meaning that TOR is either starting or Stopped
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+                    Log.i(LOG, "tor bundle has stopped ... clearing Chat Controller resources");
+                    // ChatController managed resources --- what is to be set to default
+
+                    //TODO: Must clear out the resources held by ChatController .....
+                    // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
+
+                    ChatController.cleanUp();
+                }
+
+                Log.i(LOG, "mTorStatusCarrier.addTextChangedListener -> LEAVE");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        if (mTorStatusCarrier.getText().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
+        }
+
+        Log.i(LOG, "initChatController -> LEAVE");
+    }
 
 
     // see if it works to remotely update contents of network connection status textViews
@@ -136,4 +239,12 @@ public class AppController {
         return retVal;
     }
 
+    //TODO: check this ...
+    public void setCurrentActivityContext(Context context) {
+        Log.i(LOG, "setCurrentActivityContext -> ENTER context=" + context);
+
+        mCurrentActivityContext = context;
+
+        Log.i(LOG, "setCurrentActivityContext -> LEAVE");
+    }
 }
