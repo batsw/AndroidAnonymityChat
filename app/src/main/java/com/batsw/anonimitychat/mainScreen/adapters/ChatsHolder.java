@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.ChatsDetailsActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 
 import java.util.List;
@@ -57,13 +58,10 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
             @Override
             public boolean onLongClick(View view) {
 
-//                Intent chatsDetailsActivityIntent = ContactEditorActivity.makeIntent(mTabChatsActivity.getActivity());
-
+                Intent chatsDetailsActivityIntent = ChatsDetailsActivity.makeIntent(mTabChatsActivity.getActivity());
 //                editContactActivityIntent.putExtra(,);
-
-//                chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
+                chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
 
                 return false;
             }

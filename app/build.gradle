@@ -33,4 +33,5 @@ dependencies {
     compile 'org.igniterealtime.smack:smack-tcp:4.1.4'
     testCompile 'junit:junit:4.12'
     compile files('libs/jsocks.jar')
+    compile 'me.grantland:autofittextview:0.2.+'
 }

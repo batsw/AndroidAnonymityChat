@@ -67,6 +67,8 @@
         <!--</activity>-->
         <activity android:name=".mainScreen.settings.activities.SettingsStorageActivity" android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".mainScreen.settings.activities.ChatsDetailsActivity" android:screenOrientation="portrait">
+        </activity>
 
     </application>
 
