@@ -6,13 +6,13 @@
     tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
+        android:id="@+id/contact_add_appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--android:theme="@style/AppTheme.AppBarOverlay"-->
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/contact_edit_toolbar"
+            android:id="@+id/contact_add_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary">
@@ -58,7 +58,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/appBar"
+        android:layout_below="@+id/contact_add_appBar"
         android:fillViewport="true">
 
         <LinearLayout

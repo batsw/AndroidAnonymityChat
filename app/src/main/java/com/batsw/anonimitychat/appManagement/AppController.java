@@ -11,11 +11,15 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
+import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.util.AppConstants;
+
+import java.util.UUID;
 
 /**
  * Created by tudor on 5/13/2017.
@@ -266,6 +270,35 @@ public class AppController {
         Log.i(LOG, "updateMyProfile -> ENTER");
         mDatabaseHelper.getMyProfileOperations().updateDbEntity(myProfileEntity);
         Log.i(LOG, "updateMyProfile -> LEAVE");
+    }
+
+    public boolean addNewContact(DBContactEntity contactEntity) {
+        Log.i(LOG, "addNewContact -> ENTER contactEntity=" + contactEntity);
+        boolean retVal;
+
+        final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactEntity.getAddress());
+
+        if (contact == null) {
+            contact.setSessionId(generateSessionId());
+            mDatabaseHelper.getContactsOperations().addDbEntity(contactEntity);
+
+            retVal = true;
+
+        } else {
+            retVal = false;
+        }
+
+        Log.i(LOG, "addNewContact -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    private long generateSessionId() {
+        Log.i(LOG, "generateSessionId -> ENTER");
+
+        long retVal = UUID.randomUUID().getMostSignificantBits();
+
+        Log.i(LOG, "generateSessionId -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 
 //    TODO create fontAwesome loading method here

@@ -87,6 +87,38 @@ public class DbContactsOperations implements IEntityDbOperations {
         return contact;
     }
 
+    public IDbEntity getIDbEntityByAddress(String address) {
+        Log.i(LOG, "getIDbEntityByAddress -> LEAVE address=" + address);
+
+        DBContactEntity retVal = null;
+
+        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_CONTACTS, new String[]{
+                        PersistenceConstants.COLUMN_ID,
+                        PersistenceConstants.COLUMN_SESSION_ID,
+                        PersistenceConstants.COLUMN_ADDRESS,
+                        PersistenceConstants.COLUMN_NAME,
+                        PersistenceConstants.COLUMN_NICKNAME,
+                        PersistenceConstants.COLUMN_EMAIL
+                }, PersistenceConstants.COLUMN_ADDRESS + " = ?",
+                new String[]{String.valueOf(address)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        if (cursor.getCount() > 0) {
+
+            retVal = new DBContactEntity();
+            retVal.setId(Long.parseLong(cursor.getString(0)));
+            retVal.setSessionId(Long.parseLong(cursor.getString(1)));
+            retVal.setAddress(cursor.getString(2));
+            retVal.setName(cursor.getString(3));
+            retVal.setNickName(cursor.getString(4));
+            retVal.setEmail(cursor.getString(5));
+        }
+
+        Log.i(LOG, "getIDbEntityByAddress -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
     @Override
     public boolean addDbEntity(IDbEntity dbEntity) {
         Log.i(LOG, "addDbEntity -> ENTER dbEntity=" + dbEntity);

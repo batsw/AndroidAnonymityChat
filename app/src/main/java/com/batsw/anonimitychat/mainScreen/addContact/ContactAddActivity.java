@@ -1,18 +1,19 @@
 package com.batsw.anonimitychat.mainScreen.addContact;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 
 /**
  * Created by tudor on 4/15/2017.
@@ -42,19 +43,70 @@ public class ContactAddActivity extends AppCompatActivity {
         mContactAddress = (EditText) findViewById(R.id.address_contact_add);
         mContactEmail = (EditText) findViewById(R.id.email_contact_add);
 
+        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_add);
+        mEmailIcon.setTypeface(fontAwesome);
+
         mAdd = (Button) findViewById(R.id.contact_add_button);
+        mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mAdd.onClick -> ENTER");
+
+                DBContactEntity contact = new DBContactEntity();
+                contact.setAddress(mContactAddress.getText().toString());
+                contact.setAddress(mContactName.getText().toString());
+                contact.setAddress(mContactNickname.getText().toString());
+                contact.setEmail(mContactEmail.getText().toString());
+
+                if (validateNewContact(contact)) {
+
+                    boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
+
+                    if (!insertSuccessfull) {
+//                        TODO: contact address already exist
+                    }
+                }
+
+                Log.i(LOG, "mAdd.onClick -> LEAVE");
+            }
+        });
 
         mBackIcon = (TextView) findViewById(R.id.contact_back_icon_add);
         mBackIcon.setTypeface(fontAwesome);
-
-        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_add);
-        mEmailIcon.setTypeface(fontAwesome);
+        mBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mBackIcon.setOnClickListener -> ENTER");
+                finish();
+                Log.i(LOG, "mBackIcon.setOnClickListener -> LEAVE");
+            }
+        });
 
         //TODO: to add a listener that allows loading pictures for avatars
         mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_add);
         mChangeContactAvatar.setTypeface(fontAwesome);
 
         Log.i(LOG, "onCreate -> LEAVE");
+    }
+
+    private boolean validateNewContact(DBContactEntity contactEntity) {
+        Log.i(LOG, "validateNewContact -> ENTER contactEntity=" + contactEntity);
+        boolean retVal = false;
+
+        if (!(contactEntity.getAddress().length() == 16)) {
+            retVal = false;
+//            TODO: address is incorrect popup
+        } else if (contactEntity.getName() == null) {
+            retVal = false;
+//            TODO: name cannot be empty popup
+        } else if (contactEntity.getNickName() == null) {
+            contactEntity.setNickName(contactEntity.getName());
+        } else {
+            retVal = true;
+        }
+
+        Log.i(LOG, "validateNewContact -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 
     @Override
