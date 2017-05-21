@@ -52,6 +52,7 @@ public class TorProcessManager {
         mTorBundleListenerManager = new TorBundleListenerManager();
 
         mTorStatusTextView = torStatusTextView;
+        mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
 
         init();
     }
@@ -75,7 +76,7 @@ public class TorProcessManager {
         if (mProcessId == 0 && !mTorBundleStarted) {
             if (!mTorStartCommand.isEmpty()) {
 
-                mTorStatusTextView.setTextColor(mMainActivity.getResources().getColor(R.color.colorLightBlue));
+                mTorStatusTextView.setTextColor(mMainActivity.getResources().getColor(R.color.colorStartingTorStatus));
                 mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_IS_STARTING);
 
                 mTorProcessCommanderThread = Executors.newSingleThreadScheduledExecutor();

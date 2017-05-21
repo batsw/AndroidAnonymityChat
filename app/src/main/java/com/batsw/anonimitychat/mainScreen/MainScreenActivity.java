@@ -8,7 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
-import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -32,8 +32,7 @@ import com.batsw.anonimitychat.mainScreen.popup.NetworkPopupActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
-import com.batsw.anonimitychat.persistence.DatabaseHelper;
-import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +46,12 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     private static final String LOG = MainScreenActivity.class.getSimpleName();
 
     private ViewPager mViewPager;
-
     private TabHost mTabHost;
 
     private boolean isHomeButtonPressed = false;
+
+    private NetworkPopupActivity mNetworkPopupActivity;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +69,11 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         initNavigationDrawerMenu();
 
         initBackend();
+
+        mTextView = new TextView(this);
+        AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mTextView);
+
+        mNetworkPopupActivity = new NetworkPopupActivity(this);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
@@ -139,11 +145,49 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(LOG, "onCreateOptionsMenu -> ENTER");
 
         MenuInflater actionBarMenuInflater = getMenuInflater();
-        actionBarMenuInflater.inflate(R.menu.main_screen_menu, menu);
+        actionBarMenuInflater.inflate(R.menu.main_screen_toolbar, menu);
+
+        final MenuItem networkItem = menu.getItem(0);
+
+        mTextView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(LOG, "onCreateOptionsMenu.mTextView.onTextChanged -> ENTER charSequence=" + charSequence);
+
+                final StringBuilder sb = new StringBuilder(charSequence.length());
+                sb.append(charSequence);
+                String textViewText = sb.toString();
+
+//                MenuItem networkMenuItem = (MenuItem) findViewById(R.id.action_network);
+
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    networkItem.setIcon(R.drawable.simple_onion_green);
+                } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
+                    networkItem.setIcon(R.drawable.simple_onion_blue);
+                } else {
+                    networkItem.setIcon(R.drawable.simple_onion_white);
+                }
+
+                Log.i(LOG, "onCreateOptionsMenu.mTextView.onTextChanged -> LEAVE");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
+        Log.i(LOG, "onCreateOptionsMenu -> LEAVE");
         return true;
     }
 
@@ -156,8 +200,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
             case R.id.action_network:
                 Log.i(LOG, "action_network");
 
-                NetworkPopupActivity networkPopupActivity = new NetworkPopupActivity(this);
-                networkPopupActivity.show();
+                mNetworkPopupActivity.show();
 
                 break;
 

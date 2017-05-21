@@ -37,7 +37,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/network_popup_tor_status"
+            android:id="@+id/network_popup_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:checked="false"
             android:textColor="@color/colorAccent"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="15dp" />
@@ -108,7 +109,7 @@
             android:drawablePadding="10dp"
             android:paddingBottom="5dp"
             android:paddingEnd="15dp"
-            android:paddingLeft="15dp"
+            android:paddingLeft="0dp"
             android:paddingRight="15dp"
             android:paddingStart="15dp"
             android:paddingTop="5dp"
@@ -119,7 +120,6 @@
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>

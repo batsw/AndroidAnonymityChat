@@ -52,7 +52,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/settings_profile_save"
+                android:id="@+id/settings_my_profile_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -75,9 +75,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/settings_profile_appBar"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,8 +103,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/darker_gray"
-                        android:src="@drawable/ic_perm_identity_white"
-                        android:onClick="selectPhoto" />
+                        android:onClick="selectPhoto"
+                        android:src="@drawable/ic_perm_identity_white" />
 
                     <!--This is used for adding a camera image to right down side of the Avatar image-->
                     <TextView
@@ -143,7 +144,7 @@
                         android:background="@color/colorAccent" />
 
                     <EditText
-                        android:id="@+id/name_contact_edit"
+                        android:id="@+id/my_name_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Name"
@@ -154,7 +155,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:id="@+id/nickname_contact_edit"
+                        android:id="@+id/my_nickname_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Nickame"
@@ -202,7 +203,7 @@
                     android:src="@drawable/tor_onion" />
 
                 <TextView
-                    android:id="@+id/address_contact_edit"
+                    android:id="@+id/my_address_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dip"

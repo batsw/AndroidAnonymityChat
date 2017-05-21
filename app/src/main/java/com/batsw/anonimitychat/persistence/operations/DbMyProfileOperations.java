@@ -122,12 +122,15 @@ public class DbMyProfileOperations implements IEntityDbOperations {
 
         Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
                         PersistenceConstants.COLUMN_MY_ADDRESS,
-                }, PersistenceConstants.COLUMN_SESSION_ID + " = ?",
+                }, PersistenceConstants.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        retVal = cursor.getString(0);
+        if (cursor.getCount() > 0) {
+
+            retVal = cursor.getString(0);
+        }
 
         Log.i(LOG, "getMyAddress -> LEAVE retVal=" + retVal);
         return retVal;

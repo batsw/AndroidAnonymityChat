@@ -106,11 +106,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.i(LOG, "Database Created !!!");
 
-        insertDefaultMyProfile();
-
-        Log.i(LOG, "My Default Profile Created !!!");
+//        insertDefaultMyProfile();
+//
+//        Log.i(LOG, "My Default Profile Created !!!");
 
         Log.i(LOG, "onCreate -> LEAVE");
+    }
+
+    public void triggerInsertDefaultMyProfile() {
+        Log.i(LOG, "triggerInsertDefaultMyProfile -> ENTER");
+
+        final String myAddress = mMyProfileOperations.getMyAddress(1);
+        if (myAddress == null || myAddress.isEmpty()) {
+            insertDefaultMyProfile();
+        }
+
+        Log.i(LOG, "triggerInsertDefaultMyProfile -> LEAVE");
     }
 
     /**

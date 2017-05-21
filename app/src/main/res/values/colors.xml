@@ -23,7 +23,7 @@
     <color name="colorStartedTorStatus">#32CD32</color>
     <color name="colorStoppedTorStatus">#cc0000</color>
     <color name="colorGray">#878787</color>
-    <color name="colorLightBlue">#0A32FA</color>
+    <color name="colorStartingTorStatus">#0A32FA</color>
 
     <color name="white">@android:color/white</color>
     <color name="chat_user_reply_background_color">#c8f0ff</color>

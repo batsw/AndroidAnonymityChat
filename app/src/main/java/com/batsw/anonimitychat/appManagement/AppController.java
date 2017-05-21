@@ -11,6 +11,7 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
+import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
@@ -66,6 +67,8 @@ public class AppController {
 //        Database init
         mDatabaseHelper = new DatabaseHelper(mMainScreenActivity.getApplicationContext(), PersistenceConstants.DATABASE_ANONYMITY_CHAT,
                 null, PersistenceConstants.DATABASE_VERSION);
+        mDatabaseHelper.triggerInsertDefaultMyProfile();
+
 //mDatabaseHelper.onOpen();
 
 //Network Manager init
@@ -76,25 +79,25 @@ public class AppController {
         Log.i(LOG, "initBackend -> LEAVE");
     }
 
-    public void connectToNetwork() {
-        Log.i(LOG, "connectToNetwork -> ENTER");
+    public void startNetworkConnection() {
+        Log.i(LOG, "startNetworkConnection -> ENTER");
 
-        if (!mTorProcessManager.isTorBundleStarted()) {
+        final String networkStatus = mTorStatusCarrier.getText().toString().trim();
+
+        if (!mTorProcessManager.isTorBundleStarted() && (networkStatus.equals(TorConstants.TOR_BUNDLE_STOPPED))) {
             mTorProcessManager.startTorBundle();
 
             //        TODO: call this here?
             detectFirstRun();
         }
 
-        Log.i(LOG, "connectToNetwork -> LEAVE");
+        Log.i(LOG, "startNetworkConnection -> LEAVE");
     }
 
     public void stopNetworkConnection() {
         Log.i(LOG, "stopNetworkConnection -> ENTER");
 
-        if (mTorProcessManager.isTorBundleStarted()) {
-            mTorProcessManager.stopTorBundle();
-        }
+        mTorProcessManager.stopTorBundle();
 
         Log.i(LOG, "stopNetworkConnection -> LEAVE");
     }
@@ -247,4 +250,23 @@ public class AppController {
 
         Log.i(LOG, "setCurrentActivityContext -> LEAVE");
     }
+
+    //    TODO: all DB interaction
+    public DBMyProfileEntity getMyProfile() {
+        Log.i(LOG, "getMyProfile -> ENTER");
+        DBMyProfileEntity retVal = null;
+
+        retVal = mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().isEmpty() ?
+                null : (DBMyProfileEntity) mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().get(0);
+        Log.i(LOG, "getMyProfile -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public void updateMyProfile(DBMyProfileEntity myProfileEntity) {
+        Log.i(LOG, "updateMyProfile -> ENTER");
+        mDatabaseHelper.getMyProfileOperations().updateDbEntity(myProfileEntity);
+        Log.i(LOG, "updateMyProfile -> LEAVE");
+    }
+
+//    TODO create fontAwesome loading method here
 }

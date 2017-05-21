@@ -12,13 +12,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerDivider;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerEntry;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItem;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsProfileActivity;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.util.List;
 
@@ -122,6 +125,10 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
             case MainScreenConstants.NAVIGATION_PROFILE:
                 Log.i(LOG, "-> start my profile");
                 //TODO: start the Profile activity
+                Intent settingsProfileActivityIntent = SettingsProfileActivity.makeIntent(mContext);
+//                addContactActivityIntent.putExtra(,);
+                settingsProfileActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(settingsProfileActivityIntent);
                 break;
             case MainScreenConstants.NAVIGATION_NETWORK:
                 Log.i(LOG, "-> start network");
@@ -149,9 +156,9 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
             case MainScreenConstants.NAVIGATION_ABOUT:
                 Log.i(LOG, "main_screen_navigation_drawer_item.msniOnClickHandling -> start About");
                 //TODO: start the About activity
-                Intent addContactActivityIntent = SettingsAboutActivity.makeIntent(mContext);
-                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(addContactActivityIntent);
+                Intent settingsAboutActivityIntent = SettingsAboutActivity.makeIntent(mContext);
+                settingsAboutActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(settingsAboutActivityIntent);
 
                 break;
             default:
@@ -170,13 +177,15 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 if (toogle.isChecked()) {
                     Log.i(LOG, "toogle ON");
+
+                    AppController.getInstanceParameterized(null).startNetworkConnection();
                 } else if (!toogle.isChecked()) {
                     Log.i(LOG, "toogle OFF");
+
+                    AppController.getInstanceParameterized(null).stopNetworkConnection();
                 } else {
                     Log.i(LOG, "toogle UNKNOWN");
                 }
-
-                //TODO: handle the connect/disconnect from tor command
 
                 break;
             default:
