@@ -154,13 +154,22 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
         return retVal;
     }
 
-    //    TODO: the right implementation methods for the messages TABLE
     public List<IDbEntity> getAllMessagesForSessionId(long contactSessionId) {
         return null;
     }
 
     public boolean deleteAllMessagesForSessionId(long contactSessionId) {
-        return false;
+        Log.i(LOG, "deleteDbEntity -> ENTER contactSessionId=" + contactSessionId);
+        boolean retVal = false;
+
+        mSQLiteDatabase.delete(PersistenceConstants.TABLE_CHATS_MESSAGES, PersistenceConstants.COLUMN_SESSION_ID,
+                new String[]{String.valueOf(contactSessionId)
+                });
+
+        mSQLiteDatabase.close();
+
+        Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 }
 

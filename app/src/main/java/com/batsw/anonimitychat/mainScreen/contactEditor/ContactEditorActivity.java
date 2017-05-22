@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.system.Os;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 
 /**
  * Created by tudor on 4/9/2017.
@@ -47,10 +51,54 @@ public class ContactEditorActivity extends AppCompatActivity {
         mContactAvatar = (ImageView) findViewById(R.id.contact_avatar_edit);
 
         mSave = (TextView) findViewById(R.id.save_contact_edit_button);
+        mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mAdd.onClick -> ENTER");
+
+                DBContactEntity contact = new DBContactEntity();
+                contact.setAddress(mContactAddress.getText().toString());
+                contact.setAddress(mContactName.getText().toString());
+                contact.setAddress(mContactNickname.getText().toString());
+                contact.setEmail(mContactEmail.getText().toString());
+
+                final boolean updateSuccessfull = AppController.getInstanceParameterized(null).updateContact(contact);
+
+                if (updateSuccessfull) {
+//                    TODO: is this ok?
+                    finish();
+                }
+
+                Log.i(LOG, "mAdd.onClick -> LEAVE");
+            }
+        });
+
         mDelete = (Button) findViewById(R.id.contact_delete_edit_button);
+        mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mDelete.onClick -> ENTER");
+                final String contactAddress = mContactAddress.getText().toString();
+                final boolean deletedContact = AppController.getInstanceParameterized(null).deleteContact(contactAddress);
+                if (deletedContact) {
+                    Log.i(LOG, "contact deleted successfully");
+                    finish();
+                }
+
+                Log.i(LOG, "mDelete.onClick -> LEAVE");
+            }
+        });
 
         mBackIcon = (TextView) findViewById(R.id.contact_back_icon_edit);
         mBackIcon.setTypeface(fontAwesome);
+        mBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mBackIcon.setOnClickListener -> ENTER");
+                finish();
+                Log.i(LOG, "mBackIcon.setOnClickListener -> LEAVE");
+            }
+        });
 
         mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_edit);
         mEmailIcon.setTypeface(fontAwesome);

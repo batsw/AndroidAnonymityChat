@@ -11,6 +11,7 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
+import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
@@ -289,6 +290,75 @@ public class AppController {
         }
 
         Log.i(LOG, "addNewContact -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public boolean updateContact(DBContactEntity contactEntity) {
+        Log.i(LOG, "addNewContact -> ENTER contactEntity=" + contactEntity);
+        boolean retVal;
+
+        final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactEntity.getAddress());
+
+        // if the contact to be updated is found
+        if (contact != null) {
+
+            contact.setName(contactEntity.getName());
+            contact.setNickName(contactEntity.getNickName());
+            contact.setEmail(contactEntity.getEmail());
+
+            mDatabaseHelper.getContactsOperations().updateDbEntity(contact);
+
+            retVal = true;
+        } else {
+            retVal = false;
+        }
+
+        Log.i(LOG, "addNewContact -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public boolean deleteContact(String contactAddress) {
+        Log.i(LOG, "deleteContact -> ENTER contactAddress=" + contactAddress);
+        boolean retVal = false;
+
+        final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactAddress);
+
+        // if the contact to be updated is found
+        if (contact != null) {
+            final boolean deletedAllMessages = mDatabaseHelper.getChatMessagesOperations().deleteAllMessagesForSessionId(contact.getSessionId());
+            Log.i(LOG, "all messages deleted -> " + deletedAllMessages);
+
+            if (deletedAllMessages) {
+                DBChatEntity chatEntity = new DBChatEntity();
+                chatEntity.setSessionId(contact.getSessionId());
+                final boolean deletedAllChats = mDatabaseHelper.getChatsOperations().deleteDbEntity(chatEntity);
+                Log.i(LOG, "all chats deleted -> " + deletedAllChats);
+
+                if (deletedAllChats) {
+                    final boolean deletedContact = mDatabaseHelper.getContactsOperations().deleteDbEntity(contact);
+                    Log.i(LOG, "contact deleted -> " + deletedContact);
+
+                    if (deletedContact) {
+                        retVal = true;
+                    } else {
+                        //TODO: popup with ccould not delete the contact
+                        Log.i(LOG, "TODO: popup with ccould not delete the contact");
+                    }
+                } else {
+                    //TODO: popup with ccould not delete all chats with contact
+                    Log.i(LOG, "TODO: popup with ccould not delete all chats with contact");
+                }
+            } else {
+//TODO: popup with ccould not delete all messages from contact
+                Log.i(LOG, "TODO: popup with ccould not delete all messages from contact");
+            }
+        } else {
+            //TODO: popup with contact not found
+            Log.i(LOG, "TODO: popup with contact not found");
+            retVal = false;
+        }
+
+        Log.i(LOG, "deleteContact -> LEAVE retVal=" + retVal);
         return retVal;
     }
 
