@@ -75,7 +75,7 @@
             android:textSize="15dp" />
 
         <TextView
-            android:id="@+id/tor_address"
+            android:id="@+id/network_my_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"

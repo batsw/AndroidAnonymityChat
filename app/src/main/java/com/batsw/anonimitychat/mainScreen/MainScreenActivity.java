@@ -48,10 +48,10 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     private ViewPager mViewPager;
     private TabHost mTabHost;
 
-    private boolean isHomeButtonPressed = false;
-
     private NetworkPopupActivity mNetworkPopupActivity;
     private TextView mTextView;
+
+    private boolean mReceivedIntent = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +74,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mTextView);
 
         mNetworkPopupActivity = new NetworkPopupActivity(this);
+
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
@@ -204,9 +205,9 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
                 break;
 
-            case R.id.action_search:
-                Log.i(LOG, "action_search");
-                break;
+//            case R.id.action_search:
+//                Log.i(LOG, "action_search");
+//                break;
 
             default:
                 Log.i(LOG, "default toolbar ... never here");
@@ -260,6 +261,16 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        Log.i(LOG, "onNewIntent -> LEAVE");
+        super.onNewIntent(intent);
+
+        mReceivedIntent = true;
+
+        Log.i(LOG, "onNewIntent -> LEAVE");
+    }
+
+    @Override
     protected void onStart() {
         Log.i(LOG, "onStart -> ENTER");
         super.onStart();
@@ -268,19 +279,28 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     }
 
     @Override
+    protected void onResume() {
+        Log.i(LOG, "onResume -> ENTER");
+        super.onResume();
+
+        Log.i(LOG, "do nothing");
+        Log.i(LOG, "onResume -> LEAVE");
+    }
+
+    @Override
     protected void onStop() {
         Log.i(LOG, "onStop -> ENTER");
 
-        if (isHomeButtonPressed) {
-            Log.i(LOG, "HOME button detected");
-
-            //means that HOME was pressed
-            AppController.getInstanceParameterized(null).stopNetworkConnection();
-
-            isHomeButtonPressed = false;
-        } else {
-            isHomeButtonPressed = false;
-        }
+//        if (isHomeButtonPressed) {
+//            Log.i(LOG, "HOME button detected");
+//
+//            //means that HOME was pressed
+//            AppController.getInstanceParameterized(null).stopNetworkConnection();
+//
+//            isHomeButtonPressed = false;
+//        } else {
+//            isHomeButtonPressed = false;
+//        }
 
         super.onStop();
         Log.i(LOG, "after super.onStop() --- do nothing");
@@ -312,7 +332,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         //TODO: this is called when HOME button is pressed
         Log.i(LOG, "onPause -> ENTER");
 
-        isHomeButtonPressed = true;
+//        isHomeButtonPressed = true;
 
         super.onPause();
         Log.i(LOG, "after super.onPause() --- do nothing");

@@ -11,28 +11,28 @@
         android:title="@string/action_network"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/search_white"
-        android:orderInCategory="101"
-        android:title="@string/action_settings"
-        app:showAsAction="always">
+    <!--<item-->
+        <!--android:id="@+id/action_search"-->
+        <!--android:icon="@drawable/search_white"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="always" />-->
 
-        <!--<menu>-->
+    <!--<menu>-->
 
-            <!--<item-->
-                <!--android:id="@+id/action_settings"-->
-                <!--android:icon="@android:drawable/ic_menu_month"-->
-                <!--android:title="@string/action_settings"-->
-                <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+    <!--android:id="@+id/action_settings"-->
+    <!--android:icon="@android:drawable/ic_menu_month"-->
+    <!--android:title="@string/action_settings"-->
+    <!--app:showAsAction="ifRoom" />-->
 
-            <!--<item-->
-                <!--android:id="@+id/action_help"-->
-                <!--android:icon="@android:drawable/ic_menu_help"-->
-                <!--android:title="@string/action_settings"-->
-                <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+    <!--android:id="@+id/action_help"-->
+    <!--android:icon="@android:drawable/ic_menu_help"-->
+    <!--android:title="@string/action_settings"-->
+    <!--app:showAsAction="ifRoom" />-->
 
-        <!--</menu>-->
+    <!--</menu>-->
 
-    </item>
+
 </menu>

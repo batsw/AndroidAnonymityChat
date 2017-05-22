@@ -33,7 +33,7 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
 
     private Context mContext;
 
-    private TextView mCheckIcon;
+    private TextView mCheckIcon, mMyAddress;
     private TextView mNetworkConnectionStatusLabel;
     private Switch mNetworkConnectionSwitch;
 
@@ -54,12 +54,12 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(mContext.getAssets(), "font_awesome/fontawesome.ttf");
 
-//        text view : network_popup_status label
-
-//         switch : network_popup_toogle
-
         mCheckIcon = (TextView) findViewById(R.id.network_popup_check);
         mCheckIcon.setTypeface(fontAwesome);
+
+        mMyAddress = (TextView) findViewById(R.id.network_my_address);
+
+        mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress());
 
         mNetworkConnectionStatusLabel = (TextView) findViewById(R.id.network_popup_status);
         AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mNetworkConnectionStatusLabel);
@@ -75,13 +75,12 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
                 final StringBuilder sb = new StringBuilder(charSequence.length());
                 sb.append(charSequence);
                 String textViewText = sb.toString();
-//TODO: see first what is happening
+
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartedTorStatus));
                     mNetworkConnectionSwitch.setChecked(true);
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartingTorStatus));
-                    mNetworkConnectionSwitch.setChecked(false);
                 } else {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStoppedTorStatus));
                     mNetworkConnectionSwitch.setChecked(false);

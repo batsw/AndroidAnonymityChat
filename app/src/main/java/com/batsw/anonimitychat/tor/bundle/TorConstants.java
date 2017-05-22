@@ -11,6 +11,8 @@ public interface TorConstants {
     public static final String TOR_READY_STATUS_MESSAGE = "Bootstrapped 100%: Done";
     public static final String TOR_HIDDEN_SERVICE_NAME = "hostname";
 
+    public static final String TOR_ADDRESS_SUFFIX = ".onion";
+
     //Port related constants
     public static final int TOR_BUNDLE_EXTERNAL_PORT = 80;
     public static final int TOR_BUNDLE_INTERNAL_SOCKS_PORT = 11158;

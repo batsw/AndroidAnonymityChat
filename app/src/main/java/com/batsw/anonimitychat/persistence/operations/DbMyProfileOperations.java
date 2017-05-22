@@ -92,7 +92,7 @@ public class DbMyProfileOperations implements IEntityDbOperations {
             mSQLiteDatabase.close();
         }
 
-        Log.i(LOG, "updateAddressOnFirstNetworkConnection -> LEAVE retVal=" + null);
+        Log.i(LOG, "updateAddressOnFirstNetworkConnection -> LEAVE");
     }
 
     /**
