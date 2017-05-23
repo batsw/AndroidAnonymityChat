@@ -27,7 +27,7 @@
             android:src="@drawable/ic_earth_white" />
 
         <TextView
-            android:id="@+id/current_user_name"
+            android:id="@+id/current_chat_name"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

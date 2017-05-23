@@ -38,7 +38,7 @@
 
     <!--Main screen -->
     <string name="settings_chat_details">Chat Details</string>
-    <string name="settings_chat_advanced_options">Advanced Options</string>
+    <string name="settings_chat_details_options">Options</string>
     <string name="trash">&#xf014;</string>
     <string name="settings_history_cleanup">History Cleanup:</string>
     <string name="spinner_arrow">never</string>

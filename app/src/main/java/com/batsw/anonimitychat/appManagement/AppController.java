@@ -362,6 +362,42 @@ public class AppController {
         return retVal;
     }
 
+    public DBContactEntity getContactEntity(long sessionId) {
+        Log.i(LOG, "getContactEntity -> ENTER sessionId=" + sessionId);
+        DBContactEntity retVal = null;
+
+        retVal = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityById(sessionId);
+
+        Log.i(LOG, "getContactEntity -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public DBChatEntity getChatEntity(long sessionId) {
+        Log.i(LOG, "getChatEntity -> ENTER sessionId=" + sessionId);
+        DBChatEntity retVal = null;
+
+        retVal = (DBChatEntity) mDatabaseHelper.getChatsOperations().getIDbEntityById(sessionId);
+
+        Log.i(LOG, "getChatEntity -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public boolean updateChat(DBChatEntity chatEntity) {
+        Log.i(LOG, "updateChat -> ENTER chatEntity=" + chatEntity);
+        boolean retVal = false;
+
+        // if the contact to be updated is found
+        if (chatEntity != null) {
+
+            mDatabaseHelper.getChatsOperations().updateDbEntity(chatEntity);
+
+            retVal = true;
+        }
+
+        Log.i(LOG, "updateChat -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
     private long generateSessionId() {
         Log.i(LOG, "generateSessionId -> ENTER");
 

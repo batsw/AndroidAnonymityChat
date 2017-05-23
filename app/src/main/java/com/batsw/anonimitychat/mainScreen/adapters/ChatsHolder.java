@@ -1,6 +1,5 @@
 package com.batsw.anonimitychat.mainScreen.adapters;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +11,7 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.ChatsDetailsActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
+import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.List;
 
@@ -37,18 +37,17 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
         mAvatarImageView = (ImageView) itemView.findViewById(R.id.current_user_avatar);
         mAvailabilityImageView = (ImageView) itemView.findViewById(R.id.current_user_availability);
 
-        mNameTextView = (TextView) itemView.findViewById(R.id.current_user_name);
+        mNameTextView = (TextView) itemView.findViewById(R.id.current_chat_name);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(LOG, "OnClickListener.onClick -> ENTER");
                 int position = getLayoutPosition();
-                //TODO: go to user's ChatList
+                //TODO: go to user' CHAT
                 ChatEntity chatEntity = mChatEntitiesList.get(position);
                 //From hete go to ChatList
 
-                //todo log the clicked item
                 Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
             }
 
@@ -58,8 +57,12 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
             @Override
             public boolean onLongClick(View view) {
 
+                int position = getLayoutPosition();
+                ChatEntity chatEntity = mChatEntitiesList.get(position);
+
                 Intent chatsDetailsActivityIntent = ChatsDetailsActivity.makeIntent(mTabChatsActivity.getActivity());
-//                editContactActivityIntent.putExtra(,);
+                chatsDetailsActivityIntent.putExtra(AppConstants.CHAT_ITEM_PUT_EXTRA, chatEntity.getSessionId());
+
                 chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
 
