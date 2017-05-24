@@ -16,9 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
 import com.batsw.anonimitychat.mainScreen.addContact.ContactAddActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.persistence.util.IDbEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ public class TabContacts extends Fragment {
 
     private static final String LOG = TabContacts.class.getSimpleName();
 
-    private List<ContactEntity> mContactsTestList;
+    private List<ContactEntity> mContactsList;
     private String[] mContactsTestNamesList = {"Bob", "Snack", "Jessie", "John", "Doe", "Drill", "Bet"};
 
     private LinearLayoutManager mLinearLayoutManager;
@@ -50,10 +53,17 @@ public class TabContacts extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i(LOG, "onCreate -> ENTER");
 
-        mContactsTestList = new ArrayList<>();
-        for (int i = 0; i < mContactsTestNamesList.length; i++) {
-            ContactEntity contactEntity = new ContactEntity(mContactsTestNamesList[i], UUID.randomUUID().getMostSignificantBits());
-            mContactsTestList.add(contactEntity);
+        //        TODO: Load contact list from DB
+
+
+        final List<IDbEntity> contactList = AppController.getInstanceParameterized(null).getChatList();
+        mContactsList = new ArrayList<>();
+
+        for (IDbEntity dbEntity : contactList) {
+            DBContactEntity dbContactEntity = (DBContactEntity) dbEntity;
+
+            ContactEntity contactEntity = new ContactEntity(dbContactEntity.getName(), dbContactEntity.getSessionId());
+            mContactsList.add(contactEntity);
         }
 
         Log.i(LOG, "onCreate -> LEAVE");
@@ -79,10 +89,9 @@ public class TabContacts extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mContactsRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mContactsAdapter = new ContactsAdapter(mContactsTestList, this);
+        mContactsAdapter = new ContactsAdapter(mContactsList, this);
         mContactsRecyclerView.setAdapter(mContactsAdapter);
 
-        //TODO: java.lang.ClassCastException: android.support.design.widget.FloatingActionButton cannot be cast to android.widget.Button
         mFloatingAddButton = (FloatingActionButton) view.findViewById(R.id.contacts_tab_floating_add_button);
         mFloatingAddButton.setOnClickListener(new View.OnClickListener() {
             @Override

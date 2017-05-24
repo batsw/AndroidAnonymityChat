@@ -20,6 +20,8 @@ import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.util.AppConstants;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -297,17 +299,11 @@ public class AppController {
         Log.i(LOG, "addNewContact -> ENTER contactEntity=" + contactEntity);
         boolean retVal;
 
-        final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactEntity.getAddress());
+//        final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactEntity.getAddress());
 
-        // if the contact to be updated is found
-        if (contact != null) {
+        final int updateSuccesfull = mDatabaseHelper.getContactsOperations().updateDbEntity(contactEntity);
 
-            contact.setName(contactEntity.getName());
-            contact.setNickName(contactEntity.getNickName());
-            contact.setEmail(contactEntity.getEmail());
-
-            mDatabaseHelper.getContactsOperations().updateDbEntity(contact);
-
+        if (updateSuccesfull > 0) {
             retVal = true;
         } else {
             retVal = false;
@@ -395,6 +391,26 @@ public class AppController {
         }
 
         Log.i(LOG, "updateChat -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public List<IDbEntity> getChatList() {
+        Log.i(LOG, "getChatList -> ENTER");
+        List<IDbEntity> retVal = new ArrayList();
+
+        retVal = mDatabaseHelper.getChatsOperations().getAllIDbEntity();
+
+        Log.i(LOG, "getChatList -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public List<IDbEntity> getContactList() {
+        Log.i(LOG, "getContactList -> ENTER");
+        List<IDbEntity> retVal = new ArrayList();
+
+        retVal = mDatabaseHelper.getContactsOperations().getAllIDbEntity();
+
+        Log.i(LOG, "getContactList -> LEAVE retVal=" + retVal);
         return retVal;
     }
 

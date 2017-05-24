@@ -43,17 +43,19 @@ public class DbContactsOperations implements IEntityDbOperations {
         Cursor cursor = mSQLiteDatabase.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            do {
-                DBContactEntity contact = new DBContactEntity();
-                contact.setId(Long.parseLong(cursor.getString(0)));
-                contact.setSessionId(Long.parseLong(cursor.getString(1)));
-                contact.setAddress(cursor.getString(2));
-                contact.setName(cursor.getString(3));
-                contact.setNickName(cursor.getString(4));
-                contact.setEmail(cursor.getString(5));
+            if (cursor.getCount() > 0) {
+                do {
+                    DBContactEntity contact = new DBContactEntity();
+                    contact.setId(Long.parseLong(cursor.getString(0)));
+                    contact.setSessionId(Long.parseLong(cursor.getString(1)));
+                    contact.setAddress(cursor.getString(2));
+                    contact.setName(cursor.getString(3));
+                    contact.setNickName(cursor.getString(4));
+                    contact.setEmail(cursor.getString(5));
 
-                retVal.add(contact);
-            } while (cursor.moveToNext());
+                    retVal.add(contact);
+                } while (cursor.moveToNext());
+            }
         }
 
         Log.i(LOG, "getAllIDbEntity -> LEAVE retVal=" + retVal);
@@ -72,16 +74,19 @@ public class DbContactsOperations implements IEntityDbOperations {
                         PersistenceConstants.COLUMN_EMAIL
                 }, PersistenceConstants.COLUMN_SESSION_ID + " = ?",
                 new String[]{String.valueOf(sessionId)}, null, null, null, null);
+
         if (cursor != null)
             cursor.moveToFirst();
 
         DBContactEntity contact = new DBContactEntity();
-        contact.setId(Long.parseLong(cursor.getString(0)));
-        contact.setSessionId(sessionId);
-        contact.setAddress(cursor.getString(1));
-        contact.setName(cursor.getString(2));
-        contact.setNickName(cursor.getString(3));
-        contact.setEmail(cursor.getString(4));
+        if (cursor.getCount() > 0) {
+            contact.setId(Long.parseLong(cursor.getString(0)));
+            contact.setSessionId(sessionId);
+            contact.setAddress(cursor.getString(1));
+            contact.setName(cursor.getString(2));
+            contact.setNickName(cursor.getString(3));
+            contact.setEmail(cursor.getString(4));
+        }
 
         Log.i(LOG, "getIDbEntityById -> LEAVE contact=" + contact);
         return contact;

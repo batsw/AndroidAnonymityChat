@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.util.AppConstants;
 
 /**
  * Created by tudor on 4/9/2017.
@@ -24,6 +25,8 @@ import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 public class ContactEditorActivity extends AppCompatActivity {
 
     private static final String LOG = ContactEditorActivity.class.getSimpleName();
+
+    private DBContactEntity mContactEntity;
 
     private EditText mContactName, mContactNickname;
     private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon;
@@ -42,11 +45,22 @@ public class ContactEditorActivity extends AppCompatActivity {
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
+        Long contactSessionId = getIntent().getLongExtra(AppConstants.CONTACT_ITEM_PUT_EXTRA, 0l);
+        if (contactSessionId != 0l) {
+            mContactEntity = AppController.getInstanceParameterized(null).getContactEntity(contactSessionId);
+        }
+
         mContactName = (EditText) findViewById(R.id.name_contact_edit);
+        mContactName.setText(mContactEntity.getName());
+
         mContactNickname = (EditText) findViewById(R.id.nickname_contact_edit);
+        mContactNickname.setText(mContactEntity.getNickName());
 
         mContactAddress = (TextView) findViewById(R.id.address_contact_edit);
+        mContactAddress.setText(mContactEntity.getAddress());
+
         mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
+        mContactEmail.setText(mContactEntity.getEmail());
 
         mContactAvatar = (ImageView) findViewById(R.id.contact_avatar_edit);
 
@@ -56,13 +70,12 @@ public class ContactEditorActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(LOG, "mAdd.onClick -> ENTER");
 
-                DBContactEntity contact = new DBContactEntity();
-                contact.setAddress(mContactAddress.getText().toString());
-                contact.setAddress(mContactName.getText().toString());
-                contact.setAddress(mContactNickname.getText().toString());
-                contact.setEmail(mContactEmail.getText().toString());
+                mContactEntity.setAddress(mContactAddress.getText().toString());
+                mContactEntity.setAddress(mContactName.getText().toString());
+                mContactEntity.setAddress(mContactNickname.getText().toString());
+                mContactEntity.setEmail(mContactEmail.getText().toString());
 
-                final boolean updateSuccessfull = AppController.getInstanceParameterized(null).updateContact(contact);
+                final boolean updateSuccessfull = AppController.getInstanceParameterized(null).updateContact(mContactEntity);
 
                 if (updateSuccessfull) {
 //                    TODO: is this ok?

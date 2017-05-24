@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.adapters.ChatsAdapter;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
+import com.batsw.anonimitychat.persistence.util.IDbEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by tudor on 3/29/2017.
@@ -25,8 +27,7 @@ import java.util.UUID;
 public class TabChats extends Fragment {
     private static final String LOG = TabChats.class.getSimpleName();
 
-    private List<ChatEntity> mChatsTestList;
-    private String[] mContactsTestNamesList = {"Bob", "Snack", "Jessie", "John", "Doe", "Drill", "Bet"};
+    private List<ChatEntity> mChatsList;
 
     private ChatsAdapter mChatsAdapter;
     private RecyclerView mChatsRecyclerView;
@@ -35,10 +36,14 @@ public class TabChats extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i(LOG, "onCreate -> ENTER");
 
-        mChatsTestList = new ArrayList<>();
-        for (int i = 0; i < mContactsTestNamesList.length; i++) {
-            ChatEntity contactEntity = new ChatEntity(UUID.randomUUID().getMostSignificantBits(), mContactsTestNamesList[i], false);
-            mChatsTestList.add(contactEntity);
+        final List<IDbEntity> chatList = AppController.getInstanceParameterized(null).getChatList();
+
+        mChatsList = new ArrayList<>();
+        for (IDbEntity dbEntity : chatList) {
+            DBChatEntity chatEntity = (DBChatEntity) dbEntity;
+
+            ChatEntity contactEntity = new ChatEntity(chatEntity.getSessionId(), chatEntity.getChatName(), false);
+            mChatsList.add(contactEntity);
         }
 
         Log.i(LOG, "onCreate -> LEAVE");
@@ -64,7 +69,7 @@ public class TabChats extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mChatsRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mChatsAdapter = new ChatsAdapter(mChatsTestList, this);
+        mChatsAdapter = new ChatsAdapter(mChatsList, this);
         mChatsRecyclerView.setAdapter(mChatsAdapter);
 
         Log.i(LOG, "onViewCreated -> LEAVE");

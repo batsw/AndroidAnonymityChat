@@ -41,15 +41,17 @@ public class DbChatsOperations implements IEntityDbOperations {
         Cursor cursor = mSQLiteDatabase.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
-            do {
-                DBChatEntity contact = new DBChatEntity();
-                contact.setId(Long.parseLong(cursor.getString(0)));
-                contact.setSessionId(Long.parseLong(cursor.getString(1)));
-                contact.setChatName(cursor.getString(2));
-                contact.setHistoryCleanupTime(Long.parseLong(cursor.getString(3)));
+            if (cursor.getCount() > 0) {
+                do {
+                    DBChatEntity contact = new DBChatEntity();
+                    contact.setId(Long.parseLong(cursor.getString(0)));
+                    contact.setSessionId(Long.parseLong(cursor.getString(1)));
+                    contact.setChatName(cursor.getString(2));
+                    contact.setHistoryCleanupTime(Long.parseLong(cursor.getString(3)));
 
-                retVal.add(contact);
-            } while (cursor.moveToNext());
+                    retVal.add(contact);
+                } while (cursor.moveToNext());
+            }
         }
 
         Log.i(LOG, "getAllIDbEntity -> LEAVE retVal=" + retVal);

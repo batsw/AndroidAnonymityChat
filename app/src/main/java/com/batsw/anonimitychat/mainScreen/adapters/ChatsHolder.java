@@ -39,23 +39,24 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
 
         mNameTextView = (TextView) itemView.findViewById(R.id.current_chat_name);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(LOG, "OnClickListener.onClick -> ENTER");
-                int position = getLayoutPosition();
-                //TODO: go to user' CHAT
-                ChatEntity chatEntity = mChatEntitiesList.get(position);
-                //From hete go to ChatList
-
-                Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
-            }
-
-        });
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(LOG, "OnClickListener.onClick -> ENTER");
+//                int position = getLayoutPosition();
+//                //TODO: go to user' CHAT
+//                ChatEntity chatEntity = mChatEntitiesList.get(position);
+//                //From hete go to ChatList
+//
+//                Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
+//            }
+//
+//        });
 
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                Log.i(LOG, "setOnLongClickListener -> ENTER");
 
                 int position = getLayoutPosition();
                 ChatEntity chatEntity = mChatEntitiesList.get(position);
@@ -66,6 +67,7 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
                 chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
 
+                Log.i(LOG, "setOnLongClickListener -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
                 return false;
             }
         });
@@ -86,6 +88,9 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
         mNameTextView.setText(ce.getContactName());
     }
 
+    /**
+     * Todo: This is not working as expected .... the above onClickListener is useful ....
+     */
     @Override
     public void onClick(View view) {
         Log.i(LOG, "OnClickListener.onClick -> ENTER view=" + view);

@@ -11,6 +11,7 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.mainScreen.contactEditor.ContactEditorActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
+import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.List;
 
@@ -31,41 +32,39 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
     public ContactHolder(View itemView, List<ContactEntity> contactsList, TabContacts tcActivity) {
         super(itemView);
 
-        mTabContActivity= tcActivity;
+        mTabContActivity = tcActivity;
 
         mContactEntitiesList = contactsList;
 
         mEditImageView = (ImageView) itemView.findViewById(R.id.current_user_edit);
         mNameTextView = (TextView) itemView.findViewById(R.id.contact_name);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(LOG, "OnClickListener.onClick -> ENTER");
-                int position = getLayoutPosition();
-                //TODO: go to user's ChatList
-                ContactEntity contactEntity = mContactEntitiesList.get(position);
-                //From hete go to ChatList
-
-                Log.i(LOG, "OnClickListener.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
-            }
-
-        });
+//        TODO: decide whether I need this anymore
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(LOG, "OnClickListener.onClick -> ENTER");
+//                int position = getLayoutPosition();
+//                ContactEntity contactEntity = mContactEntitiesList.get(position);
+//                //From hete go to ChatList
+//
+//                Log.i(LOG, "OnClickListener.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
+//            }
+//        });
 
         mEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(LOG, "mEditImageView.onClick -> ENTER");
+                int position = getLayoutPosition();
+                ContactEntity contactEntity = mContactEntitiesList.get(position);
 
-                //TODO: go to edit activity from here
-                // bound to ContactEntity
                 Intent editContactActivityIntent = ContactEditorActivity.makeIntent(mTabContActivity.getActivity());
-
-//                editContactActivityIntent.putExtra(,);
-
+                editContactActivityIntent.putExtra(AppConstants.CONTACT_ITEM_PUT_EXTRA, contactEntity.getSessionId());
                 editContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 mTabContActivity.getActivity().startActivity(editContactActivityIntent);
-
+                Log.i(LOG, "mEditImageView.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
             }
         });
     }
