@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.IEntityDbOperations;
@@ -37,6 +38,10 @@ public class DbChatsOperations implements IEntityDbOperations {
                 PersistenceConstants.COLUMN_CHAT_NAME + ", " +
                 PersistenceConstants.COLUMN_HISTORY_CLEANUP_TIME +
                 " FROM " + PersistenceConstants.TABLE_CHATS;
+
+//        if (!mSQLiteDatabase.isOpen()) {
+//            AppController.getInstanceParameterized(null).openDB(mSQLiteDatabase);
+//        }
 
         Cursor cursor = mSQLiteDatabase.rawQuery(selectQuery, null);
 
@@ -97,7 +102,7 @@ public class DbChatsOperations implements IEntityDbOperations {
             values.put(PersistenceConstants.COLUMN_HISTORY_CLEANUP_TIME, dbChatEntity.getHistoryCleanupTime());
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_CHATS, null, values);
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
 
             retVal = true;
         }
@@ -160,7 +165,7 @@ public class DbChatsOperations implements IEntityDbOperations {
                     new String[]{String.valueOf(chatEntity.getSessionId())
                     });
 
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
         }
 
         Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);

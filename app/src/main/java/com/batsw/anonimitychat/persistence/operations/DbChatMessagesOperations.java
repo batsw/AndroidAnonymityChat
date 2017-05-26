@@ -95,7 +95,7 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
             values.put(PersistenceConstants.COLUMN_TIMESTAMP, messageEntity.getTimestamp());
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_CHATS_MESSAGES, null, values);
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
 
             retVal = true;
         }
@@ -166,7 +166,7 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
                 new String[]{String.valueOf(contactSessionId)
                 });
 
-        mSQLiteDatabase.close();
+//        mSQLiteDatabase.close();
 
         Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);
         return retVal;

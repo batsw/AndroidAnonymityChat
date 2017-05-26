@@ -89,7 +89,7 @@ public class DbMyProfileOperations implements IEntityDbOperations {
             values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress);
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
         }
 
         Log.i(LOG, "updateAddressOnFirstNetworkConnection -> LEAVE");

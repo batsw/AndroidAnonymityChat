@@ -58,20 +58,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             PersistenceConstants.TABLE_CONTACTS + "(" + PersistenceConstants.COLUMN_SESSION_ID + "));";
 
     // all entities operations members
-    DbMyProfileOperations mMyProfileOperations;
-    DbContactsOperations mContactsOperations;
-    DbChatMessagesOperations mChatMessagesOperations;
-    DbChatsOperations mChatsOperations;
+    private DbMyProfileOperations mMyProfileOperations;
+    private DbContactsOperations mContactsOperations;
+    private DbChatMessagesOperations mChatMessagesOperations;
+    private DbChatsOperations mChatsOperations;
 
+    private SQLiteDatabase mSqLiteDatabase;
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         Log.i(LOG, "constructor -> ENTER");
-
-        mMyProfileOperations = new DbMyProfileOperations(this.getWritableDatabase());
-        mContactsOperations = new DbContactsOperations(this.getWritableDatabase());
-        mChatsOperations = new DbChatsOperations(this.getWritableDatabase());
-        mChatMessagesOperations = new DbChatMessagesOperations(this.getWritableDatabase());
 
         Log.i(LOG, "constructor -> LEAVE");
     }
@@ -87,8 +83,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!db.isReadOnly()) {
             // Enable foreign key constraints
             db.execSQL("PRAGMA foreign_keys=ON;");
-            //(OR)
-            db.setForeignKeyConstraintsEnabled(true);
+//            //(OR)
+//            db.setForeignKeyConstraintsEnabled(true);
 
             Log.i(LOG, "Enabled FK constraints");
         }
@@ -99,18 +95,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.i(LOG, "onCreate -> ENTER");
 
-        sqLiteDatabase.execSQL(CREATE_TABLE_MY_PROFILE);
-        sqLiteDatabase.execSQL(CREATE_TABLE_CONTACTS);
-        sqLiteDatabase.execSQL(CREATE_TABLE_CHATS);
-        sqLiteDatabase.execSQL(CREATE_TABLE_CHATS_MESSAGES);
+        mSqLiteDatabase = sqLiteDatabase;
+
+        mSqLiteDatabase.execSQL(CREATE_TABLE_MY_PROFILE);
+        mSqLiteDatabase.execSQL(CREATE_TABLE_CONTACTS);
+        mSqLiteDatabase.execSQL(CREATE_TABLE_CHATS);
+        mSqLiteDatabase.execSQL(CREATE_TABLE_CHATS_MESSAGES);
 
         Log.i(LOG, "Database Created !!!");
+
+        this.onOpen(mSqLiteDatabase);
 
 //        insertDefaultMyProfile();
 //
 //        Log.i(LOG, "My Default Profile Created !!!");
 
         Log.i(LOG, "onCreate -> LEAVE");
+    }
+
+    public void initOperations() {
+        Log.i(LOG, "initOperations -> ENTER");
+
+        if (mSqLiteDatabase != null) {
+            this.onOpen(mSqLiteDatabase);
+
+            mMyProfileOperations = new DbMyProfileOperations(mSqLiteDatabase);
+            mContactsOperations = new DbContactsOperations(mSqLiteDatabase);
+            mChatsOperations = new DbChatsOperations(mSqLiteDatabase);
+            mChatMessagesOperations = new DbChatMessagesOperations(mSqLiteDatabase);
+        } else {
+            mMyProfileOperations = new DbMyProfileOperations(this.getWritableDatabase());
+            mContactsOperations = new DbContactsOperations(this.getWritableDatabase());
+            mChatsOperations = new DbChatsOperations(this.getWritableDatabase());
+            mChatMessagesOperations = new DbChatMessagesOperations(this.getWritableDatabase());
+        }
+
+        Log.i(LOG, "initOperations -> LEAVE");
     }
 
     public void triggerInsertDefaultMyProfile() {
@@ -124,9 +144,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(LOG, "triggerInsertDefaultMyProfile -> LEAVE");
     }
 
-    /**
-     * This is called inside onCreate, immediately after the DB is created
-     */
     private void insertDefaultMyProfile() {
         Log.i(LOG, "insertDefaultMyProfile -> ENTER");
 
@@ -143,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
 
         sqLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
-        sqLiteDatabase.close();
+//        sqLiteDatabase.close();
 
         Log.i(LOG, "insertDefaultMyProfile -> LEAVE");
     }
@@ -159,7 +176,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PersistenceConstants.TABLE_CONTACTS);
 
         Log.i(LOG, "Create new version's tables");
-        onCreate(sqLiteDatabase);
+//        sqLiteDatabase.close();
+//        onCreate(sqLiteDatabase);
 
         Log.i(LOG, "onUpgrade -> LEAVE");
     }

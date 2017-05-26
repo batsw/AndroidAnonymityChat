@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.IEntityDbOperations;
@@ -39,6 +40,10 @@ public class DbContactsOperations implements IEntityDbOperations {
                 PersistenceConstants.COLUMN_NICKNAME + ", " +
                 PersistenceConstants.COLUMN_EMAIL +
                 " FROM " + PersistenceConstants.TABLE_CONTACTS;
+
+//        if (!mSQLiteDatabase.isOpen()) {
+//            AppController.getInstanceParameterized(null).openDB(mSQLiteDatabase);
+//        }
 
         Cursor cursor = mSQLiteDatabase.rawQuery(selectQuery, null);
 
@@ -142,7 +147,7 @@ public class DbContactsOperations implements IEntityDbOperations {
             values.put(PersistenceConstants.COLUMN_EMAIL, dbContactEntity.getEmail());
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_CONTACTS, null, values);
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
 
             retVal = true;
         }
@@ -213,7 +218,7 @@ public class DbContactsOperations implements IEntityDbOperations {
                             String.valueOf(contactEntity.getAddress())
                     });
 
-            mSQLiteDatabase.close();
+//            mSQLiteDatabase.close();
         }
 
         Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);

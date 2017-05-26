@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
@@ -230,6 +231,8 @@ public class MainActivity extends AppCompatActivity {
 
         mTorProcessManager.stopTorBundle();
         Log.i(MAIN_ACTIVITY_TAG, "TOR Bundle is stopped");
+
+        AppController.getInstanceParameterized(null).closeDB();
 
         super.onDestroy();
 

@@ -1,6 +1,7 @@
 package com.batsw.anonimitychat.appManagement;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -74,9 +75,10 @@ public class AppController {
 //        Database init
         mDatabaseHelper = new DatabaseHelper(mMainScreenActivity.getApplicationContext(), PersistenceConstants.DATABASE_ANONYMITY_CHAT,
                 null, PersistenceConstants.DATABASE_VERSION);
-        mDatabaseHelper.triggerInsertDefaultMyProfile();
+        mDatabaseHelper.initOperations();
 
-//mDatabaseHelper.onOpen();
+//        mDatabaseHelper.onOpen(mDatabaseHelper.);
+        mDatabaseHelper.triggerInsertDefaultMyProfile();
 
 //Network Manager init
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
@@ -259,6 +261,22 @@ public class AppController {
     }
 
     //    TODO: all DB interaction
+    public void openDB(SQLiteDatabase sqLiteDatabase) {
+        Log.i(LOG, "openDB -> ENTER");
+
+        mDatabaseHelper.onOpen(sqLiteDatabase);
+
+        Log.i(LOG, "openDB -> LEAVE");
+    }
+
+    public void closeDB() {
+        Log.i(LOG, "closeDB -> ENTER");
+
+        mDatabaseHelper.close();
+
+        Log.i(LOG, "closeDB -> LEAVE");
+    }
+
     public DBMyProfileEntity getMyProfile() {
         Log.i(LOG, "getMyProfile -> ENTER");
         DBMyProfileEntity retVal = null;

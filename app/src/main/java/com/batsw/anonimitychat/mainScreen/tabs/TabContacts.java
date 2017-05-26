@@ -36,16 +36,9 @@ public class TabContacts extends Fragment {
     private static final String LOG = TabContacts.class.getSimpleName();
 
     private List<ContactEntity> mContactsList;
-    private String[] mContactsTestNamesList = {"Bob", "Snack", "Jessie", "John", "Doe", "Drill", "Bet"};
-
-    private LinearLayoutManager mLinearLayoutManager;
 
     private ContactsAdapter mContactsAdapter;
     private RecyclerView mContactsRecyclerView;
-
-    private static int DEFAULT_CONTACT_IMAGE;
-//    private int[] image = {R.drawable.....};
-
 
     private FloatingActionButton mFloatingAddButton;
 
@@ -53,10 +46,7 @@ public class TabContacts extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i(LOG, "onCreate -> ENTER");
 
-        //        TODO: Load contact list from DB
-
-
-        final List<IDbEntity> contactList = AppController.getInstanceParameterized(null).getChatList();
+        final List<IDbEntity> contactList = AppController.getInstanceParameterized(null).getContactList();
         mContactsList = new ArrayList<>();
 
         for (IDbEntity dbEntity : contactList) {
@@ -99,11 +89,7 @@ public class TabContacts extends Fragment {
                 Log.i(LOG, "mFloatingAddButton.onClick -> ENTER");
 
                 Intent addContactActivityIntent = ContactAddActivity.makeIntent(getActivity());
-
-//                addContactActivityIntent.putExtra(,);
-
                 addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                 getActivity().startActivity(addContactActivityIntent);
 
                 Log.i(LOG, "mFloatingAddButton.onClick  -> LEAVE");
