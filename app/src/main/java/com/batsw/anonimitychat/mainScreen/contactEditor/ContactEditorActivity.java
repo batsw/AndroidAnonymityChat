@@ -42,6 +42,8 @@ public class ContactEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.contact_tab_editor);
 
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
+
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 

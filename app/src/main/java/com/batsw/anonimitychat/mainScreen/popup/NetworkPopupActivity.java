@@ -51,6 +51,8 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.network_popup);
 
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(getContext());
+
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(mContext.getAssets(), "font_awesome/fontawesome.ttf");
 

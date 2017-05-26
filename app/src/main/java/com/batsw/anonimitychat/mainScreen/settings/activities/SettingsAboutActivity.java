@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.ChatActivity;
 
 /**
@@ -27,6 +28,8 @@ public class SettingsAboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.settings_about_activity);
+
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
 
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");

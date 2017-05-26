@@ -35,6 +35,8 @@ public class ContactAddActivity extends AppCompatActivity {
         Log.i(LOG, "onCreate -> ENTER");
         setContentView(R.layout.contact_tab_add_contact);
 
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
+
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 

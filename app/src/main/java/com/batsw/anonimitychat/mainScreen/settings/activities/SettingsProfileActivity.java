@@ -32,6 +32,8 @@ public class SettingsProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_profile_activity);
 
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
+
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
         // load my profile

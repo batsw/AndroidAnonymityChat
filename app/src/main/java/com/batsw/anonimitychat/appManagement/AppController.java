@@ -210,6 +210,12 @@ public class AppController {
         Log.i(LOG, "initChatController -> LEAVE");
     }
 
+    public void setChatControllerCurrentActivityContext(Context context) {
+        Log.i(LOG, "setChatControllerCurrentActivityContext -> ENTER context=" + context);
+        ChatController.getInstance().setCurrentActivityContext(context);
+        Log.i(LOG, "setChatControllerCurrentActivityContext -> LEAVE");
+    }
+
 
     // see if it works to remotely update contents of network connection status textViews
     public void updateWithNetworkConnectionStatus(final TextView networkConnStatusLabel) {

@@ -43,6 +43,9 @@ public class ChatsDetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chats_tab_chat_details);
+
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
+
         list.add(0, "never");
 
         //Loading fontAwesome

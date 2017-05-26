@@ -88,13 +88,6 @@ public class DbMyProfileOperations implements IEntityDbOperations {
             ContentValues values = new ContentValues();
             values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress);
 
-//            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
-
-//            ContentValues values = new ContentValues();
-//            values.put(PersistenceConstants.COLUMN_MY_NAME, myProfile.getMyName());
-//            values.put(PersistenceConstants.COLUMN_MY_NICKNAME, myProfile.getMyNickName());
-//            values.put(PersistenceConstants.COLUMN_MY_EMAIL, myProfile.getMyEmail());
-
             mSQLiteDatabase.update(PersistenceConstants.TABLE_MY_PROFILE, values, PersistenceConstants.COLUMN_ID + " = ?",
                     new String[]{String.valueOf(1)});
 
@@ -111,23 +104,6 @@ public class DbMyProfileOperations implements IEntityDbOperations {
     public String getMyAddress(long id) {
         Log.i(LOG, "getMyAddress -> ENTER id=" + id);
         String retVal = "";
-
-//        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
-//                        PersistenceConstants.COLUMN_MY_ADDRESS,
-//                        PersistenceConstants.COLUMN_MY_NAME,
-//                        PersistenceConstants.COLUMN_MY_NICKNAME,
-//                        PersistenceConstants.COLUMN_MY_EMAIL,
-//                }, PersistenceConstants.COLUMN_SESSION_ID + " = ?",
-//                new String[]{String.valueOf(id)}, null, null, null, null);
-//        if (cursor != null)
-//            cursor.moveToFirst();
-//
-//        DBMyProfileEntity myProfile = new DBMyProfileEntity();
-//        myProfile.setId(Long.parseLong(cursor.getString(0)));
-//        myProfile.setMyAddress(cursor.getString(1));
-//        myProfile.setMyName(cursor.getString(2));
-//        myProfile.setMyNickName(cursor.getString(3));
-//        myProfile.setMyEmail(cursor.getString(4));
 
         Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
                         PersistenceConstants.COLUMN_MY_ADDRESS,
@@ -158,22 +134,6 @@ public class DbMyProfileOperations implements IEntityDbOperations {
         Log.i(LOG, "addDbEntity -> ENTER dbEntity=" + dbEntity);
 
         boolean retVal = false;
-
-//        if (dbEntity instanceof DBMyProfileEntity) {
-//
-//            DBMyProfileEntity dbMyProfileEntity = (DBMyProfileEntity) dbEntity;
-//
-//            ContentValues values = new ContentValues();
-//            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, dbMyProfileEntity.getMyAddress());
-//            values.put(PersistenceConstants.COLUMN_MY_NAME, dbMyProfileEntity.getMyName());
-//            values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
-//            values.put(PersistenceConstants.COLUMN_MY_EMAIL, dbMyProfileEntity.getMyEmail());
-//
-//            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
-//            mSQLiteDatabase.close();
-//
-//            retVal = true;
-//        }
 
         Log.i(LOG, "Not implemented");
 
@@ -215,7 +175,6 @@ public class DbMyProfileOperations implements IEntityDbOperations {
     }
 
 //    This is not used in this case
-
     @Override
     public boolean deleteDbEntity(IDbEntity dbEntity) {
         Log.i(LOG, "deleteDbEntity -> ENTER dbEntity=" + dbEntity);
