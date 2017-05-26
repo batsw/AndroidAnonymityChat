@@ -57,7 +57,9 @@ public class ContactEditorActivity extends AppCompatActivity {
         mContactNickname.setText(mContactEntity.getNickName());
 
         mContactAddress = (TextView) findViewById(R.id.address_contact_edit);
-        mContactAddress.setText(mContactEntity.getAddress());
+
+        String contactAddress = mContactEntity.getAddress().substring(0,16);
+        mContactAddress.setText(contactAddress);
 
         mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
         mContactEmail.setText(mContactEntity.getEmail());

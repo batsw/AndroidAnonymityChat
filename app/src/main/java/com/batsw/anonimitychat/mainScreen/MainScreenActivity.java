@@ -168,13 +168,11 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
                 sb.append(charSequence);
                 String textViewText = sb.toString();
 
-//                MenuItem networkMenuItem = (MenuItem) findViewById(R.id.action_network);
-
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     networkItem.setIcon(R.drawable.simple_onion_green);
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
                     networkItem.setIcon(R.drawable.simple_onion_blue);
-                } else {
+                } else if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
                     networkItem.setIcon(R.drawable.simple_onion_white);
                 }
 
@@ -186,7 +184,6 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
             }
         });
-
 
         Log.i(LOG, "onCreateOptionsMenu -> LEAVE");
         return true;

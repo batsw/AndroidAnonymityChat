@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 /**
  * Created by tudor on 4/15/2017.
@@ -52,8 +53,10 @@ public class ContactAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(LOG, "mAdd.onClick -> ENTER");
 
+                String myAddressComplete = mContactAddress.getText().toString() + TorConstants.TOR_ADDRESS_SUFFIX;
+
                 DBContactEntity contact = new DBContactEntity();
-                contact.setAddress(mContactAddress.getText().toString());
+                contact.setAddress(myAddressComplete);
                 contact.setAddress(mContactName.getText().toString());
                 contact.setAddress(mContactNickname.getText().toString());
                 contact.setEmail(mContactEmail.getText().toString());
@@ -63,7 +66,7 @@ public class ContactAddActivity extends AppCompatActivity {
                     boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
 
                     if (!insertSuccessfull) {
-//                        TODO: contact address already exist
+                        finish();
                     }
                 }
 

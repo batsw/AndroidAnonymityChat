@@ -88,7 +88,16 @@ public class DbMyProfileOperations implements IEntityDbOperations {
             ContentValues values = new ContentValues();
             values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress);
 
-            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
+//            mSQLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
+
+//            ContentValues values = new ContentValues();
+//            values.put(PersistenceConstants.COLUMN_MY_NAME, myProfile.getMyName());
+//            values.put(PersistenceConstants.COLUMN_MY_NICKNAME, myProfile.getMyNickName());
+//            values.put(PersistenceConstants.COLUMN_MY_EMAIL, myProfile.getMyEmail());
+
+            mSQLiteDatabase.update(PersistenceConstants.TABLE_MY_PROFILE, values, PersistenceConstants.COLUMN_ID + " = ?",
+                    new String[]{String.valueOf(1)});
+
 //            mSQLiteDatabase.close();
         }
 

@@ -37,13 +37,9 @@ public class AppController {
     private AppCompatActivity mMainScreenActivity = null;
     private static Context mCurrentActivityContext = null;
 
-    private static boolean isIncomingChatConnection = false;
-
     private DatabaseHelper mDatabaseHelper;
     private TorProcessManager mTorProcessManager;
     private TextView mTorStatusCarrier;
-
-    private String mMyTorAddress = "";
 
     private boolean isFirstRun = true;
 
@@ -76,11 +72,8 @@ public class AppController {
         mDatabaseHelper = new DatabaseHelper(mMainScreenActivity.getApplicationContext(), PersistenceConstants.DATABASE_ANONYMITY_CHAT,
                 null, PersistenceConstants.DATABASE_VERSION);
         mDatabaseHelper.initOperations();
-
-//        mDatabaseHelper.onOpen(mDatabaseHelper.);
         mDatabaseHelper.triggerInsertDefaultMyProfile();
 
-//Network Manager init
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
 
         handleChatController();
