@@ -72,6 +72,8 @@ public class TabChats extends Fragment {
         mChatsAdapter = new ChatsAdapter(mChatsList, this);
         mChatsRecyclerView.setAdapter(mChatsAdapter);
 
+        AppController.getInstanceParameterized(null).setChatsTab(this);
+
         Log.i(LOG, "onViewCreated -> LEAVE");
     }
 
@@ -81,5 +83,29 @@ public class TabChats extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Log.i(LOG, "onActivityCreated -> LEAVE");
+    }
+
+    public void addChatToList(ChatEntity chatEntity) {
+        Log.i(LOG, "addContactToList -> ENTER chatEntity=" + chatEntity);
+        mChatsList.add(chatEntity);
+        mChatsAdapter.notifyItemRangeChanged(mChatsList.size() / 2, 1);
+//        mChatsAdapter.notifyDataSetChanged();
+        Log.i(LOG, "addContactToList -> LEAVE");
+    }
+
+    public void updateContactList(ChatEntity chatEntity) {
+        Log.i(LOG, "updateContactList -> ENTER chatEntity=" + chatEntity);
+
+        int i = 0;
+        for (ChatEntity ce : mChatsList) {
+            if (ce.getSessionId() == chatEntity.getSessionId()) {
+                ce.setContactName(chatEntity.getContactName());
+            } else {
+                i++;
+            }
+        }
+
+        mChatsAdapter.notifyItemChanged(i);
+        Log.i(LOG, "updateContactList -> LEAVE");
     }
 }

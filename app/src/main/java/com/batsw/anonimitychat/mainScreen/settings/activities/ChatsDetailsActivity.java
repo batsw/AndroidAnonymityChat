@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.util.AppConstants;
@@ -103,8 +104,17 @@ public class ChatsDetailsActivity extends AppCompatActivity {
 
                     mChatEntity.setChatName(chatName);
                     mChatEntity.setHistoryCleanupTime(historyCleanupTime);
+
                     final boolean updatedChatDetails = AppController.getInstanceParameterized(null).updateChat(mChatEntity);
+
                     if (updatedChatDetails) {
+//TODO: chat network status
+                        ChatEntity tabChatEntity = new ChatEntity(
+                                mChatEntity.getSessionId(), mChatEntity.getChatName(),
+                                false
+                        );
+
+                        AppController.getInstanceParameterized(null).editChatToTab(tabChatEntity);
                         finish();
                     } else {
 //                        TODO: pop-up please check entered data

@@ -71,6 +71,8 @@ public class DbContactsOperations implements IEntityDbOperations {
     public IDbEntity getIDbEntityById(long sessionId) {
         Log.i(LOG, "getIDbEntityById -> LEAVE sessionId=" + sessionId);
 
+        DBContactEntity contact = null;
+
         Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_CONTACTS, new String[]{
                         PersistenceConstants.COLUMN_ID,
                         PersistenceConstants.COLUMN_ADDRESS,
@@ -83,8 +85,8 @@ public class DbContactsOperations implements IEntityDbOperations {
         if (cursor != null)
             cursor.moveToFirst();
 
-        DBContactEntity contact = new DBContactEntity();
         if (cursor.getCount() > 0) {
+            contact = new DBContactEntity();
             contact.setId(Long.parseLong(cursor.getString(0)));
             contact.setSessionId(sessionId);
             contact.setAddress(cursor.getString(1));

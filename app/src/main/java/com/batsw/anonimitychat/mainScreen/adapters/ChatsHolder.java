@@ -75,9 +75,7 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public void bindData(ChatEntity ce, boolean isAvailable) {
         mChatEntity = ce;
-        //TODO 2: to load User's custom image
-        //TODO 1: to load the proper availability bubble
-        //TODO 3: to load the saved avatar
+        //TODO: to load User's custom image
 
         if (isAvailable) {
             mAvailabilityImageView.setImageResource(R.drawable.userstatus_online);

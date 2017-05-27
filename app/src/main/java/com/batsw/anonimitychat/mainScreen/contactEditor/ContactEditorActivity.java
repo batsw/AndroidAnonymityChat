@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
+import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.util.AppConstants;
 
@@ -60,7 +63,7 @@ public class ContactEditorActivity extends AppCompatActivity {
 
         mContactAddress = (TextView) findViewById(R.id.address_contact_edit);
 
-        String contactAddress = mContactEntity.getAddress().substring(0,16);
+        String contactAddress = mContactEntity.getAddress().substring(0, 16);
         mContactAddress.setText(contactAddress);
 
         mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
@@ -74,15 +77,20 @@ public class ContactEditorActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(LOG, "mAdd.onClick -> ENTER");
 
-                mContactEntity.setAddress(mContactAddress.getText().toString());
-                mContactEntity.setAddress(mContactName.getText().toString());
-                mContactEntity.setAddress(mContactNickname.getText().toString());
+//                mContactEntity.setAddress(mContactAddress.getText().toString());
+                mContactEntity.setName(mContactName.getText().toString());
+                mContactEntity.setNickName(mContactNickname.getText().toString());
                 mContactEntity.setEmail(mContactEmail.getText().toString());
 
                 final boolean updateSuccessfull = AppController.getInstanceParameterized(null).updateContact(mContactEntity);
 
                 if (updateSuccessfull) {
-//                    TODO: is this ok?
+                    ContactEntity tabContactEntity = new ContactEntity(
+                            (mContactEntity.getNickName() == null || mContactEntity.getNickName().isEmpty()) ? mContactEntity.getName() : mContactEntity.getNickName(),
+                            mContactEntity.getSessionId()
+                    );
+
+                    AppController.getInstanceParameterized(null).editContactToTab(tabContactEntity);
                     finish();
                 }
 

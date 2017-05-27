@@ -257,6 +257,12 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         }
     }
 
+    public void moveToChatsTab() {
+        Log.i(LOG, "moveToChatsTab -> ENTER");
+        mViewPager.setCurrentItem(1, true);
+        Log.i(LOG, "moveToChatsTab -> LEAVE");
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         Log.i(LOG, "onNewIntent -> LEAVE");

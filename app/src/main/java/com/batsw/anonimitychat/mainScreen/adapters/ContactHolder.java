@@ -8,9 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.contactEditor.ContactEditorActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
+import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.List;
@@ -39,18 +42,25 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
         mEditImageView = (ImageView) itemView.findViewById(R.id.current_user_edit);
         mNameTextView = (TextView) itemView.findViewById(R.id.contact_name);
 
-//        TODO: decide whether I need this anymore
-//        itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(LOG, "OnClickListener.onClick -> ENTER");
-//                int position = getLayoutPosition();
-//                ContactEntity contactEntity = mContactEntitiesList.get(position);
-//                //From hete go to ChatList
-//
-//                Log.i(LOG, "OnClickListener.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
-//            }
-//        });
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(LOG, "item.onClick -> ENTER");
+                int position = getLayoutPosition();
+                ContactEntity contactEntity = mContactEntitiesList.get(position);
+                DBContactEntity dbContactEntity = AppController.getInstanceParameterized(null).getContactEntity(contactEntity.getSessionId());
+
+                final DBChatEntity chatEntity = AppController.getInstanceParameterized(null).getChatEntity(contactEntity.getSessionId());
+                if (chatEntity == null) {
+                    AppController.getInstanceParameterized(null).addNewChatForContact(dbContactEntity);
+                    AppController.getInstanceParameterized(null).moveToChatsTab();
+                } else {
+                    AppController.getInstanceParameterized(null).moveToChatsTab();
+                }
+
+                Log.i(LOG, "item.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
+            }
+        });
 
         mEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,10 +96,6 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
         //TODO: to add custom user image
 //        mImageView.setImageResource(getR.id.ic_earth_white);
         mNameTextView.setText(ce.getName());
-    }
-
-    public TextView getNameTextView() {
-        return mNameTextView;
     }
 }
 

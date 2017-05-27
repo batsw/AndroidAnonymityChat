@@ -11,6 +11,12 @@ import android.widget.TextView;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
+import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
+import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
+import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
+import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
+import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
+import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
@@ -36,6 +42,9 @@ public class AppController {
 
     private AppCompatActivity mMainScreenActivity = null;
     private static Context mCurrentActivityContext = null;
+
+    private TabContacts mContactsTab;
+    private TabChats mChatsTab;
 
     private DatabaseHelper mDatabaseHelper;
     private TorProcessManager mTorProcessManager;
@@ -210,6 +219,48 @@ public class AppController {
         Log.i(LOG, "initChatController -> LEAVE");
     }
 
+    public void setContactsTab(TabContacts contactsTab) {
+        Log.i(LOG, "setContactsTab -> ENTER");
+        mContactsTab = contactsTab;
+        Log.i(LOG, "setContactsTab -> LEAVE");
+    }
+
+    public void addNewContactToTab(ContactEntity newContactEntity) {
+        Log.i(LOG, "addNewContactToTab -> ENTER");
+        mContactsTab.addContactToList(newContactEntity);
+        Log.i(LOG, "addNewContactToTab -> LEAVE");
+    }
+
+    public void setChatsTab(TabChats chatsTab) {
+        Log.i(LOG, "setChatsTab -> ENTER");
+        mChatsTab = chatsTab;
+        Log.i(LOG, "setChatsTab -> LEAVE");
+    }
+
+    private void addNewChatToTab(ChatEntity newChatEntity) {
+        Log.i(LOG, "addNewChatToTab -> ENTER newChatEntity=" + newChatEntity);
+        mChatsTab.addChatToList(newChatEntity);
+        Log.i(LOG, "addNewChatToTab -> LEAVE");
+    }
+
+    public void editChatToTab(ChatEntity chatEntity) {
+        Log.i(LOG, "editChatToTab -> ENTER chatEntity=" + chatEntity);
+        mChatsTab.updateContactList(chatEntity);
+        Log.i(LOG, "editChatToTab -> LEAVE");
+    }
+
+    public void editContactToTab(ContactEntity contactEntity) {
+        Log.i(LOG, "editContactToTab -> ENTER contactEntity=" + contactEntity);
+        mContactsTab.updateContactList(contactEntity);
+        Log.i(LOG, "editContactToTab -> LEAVE");
+    }
+
+    public void moveToChatsTab() {
+        Log.i(LOG, "moveToChatsTab -> ENTER");
+        ((MainScreenActivity) mMainScreenActivity).moveToChatsTab();
+        Log.i(LOG, "moveToChatsTab -> LEAVE");
+    }
+
     public void setChatControllerCurrentActivityContext(Context context) {
         Log.i(LOG, "setChatControllerCurrentActivityContext -> ENTER context=" + context);
         ChatController.getInstance().setCurrentActivityContext(context);
@@ -299,7 +350,7 @@ public class AppController {
         final DBContactEntity contact = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(contactEntity.getAddress());
 
         if (contact == null) {
-            contact.setSessionId(generateSessionId());
+            contactEntity.setSessionId(generateSessionId());
             mDatabaseHelper.getContactsOperations().addDbEntity(contactEntity);
 
             retVal = true;
@@ -382,6 +433,26 @@ public class AppController {
         retVal = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityById(sessionId);
 
         Log.i(LOG, "getContactEntity -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+    public boolean addNewChatForContact(DBContactEntity contactEntity) {
+        Log.i(LOG, "addNewChatForContact -> ENTER contactEntity=" + contactEntity);
+        boolean retVal;
+
+        DBChatEntity chatEntity = new DBChatEntity();
+        chatEntity.setSessionId(contactEntity.getSessionId());
+        chatEntity.setChatName(contactEntity.getAddress());
+        chatEntity.setHistoryCleanupTime(0);
+
+        retVal = mDatabaseHelper.getChatsOperations().addDbEntity(chatEntity);
+        if (retVal) {
+//            TODO: fix chat availability
+            ChatEntity tabChatEntity = new ChatEntity(chatEntity.getSessionId(), chatEntity.getChatName(), false);
+            addNewChatToTab(tabChatEntity);
+        }
+
+        Log.i(LOG, "addNewChatForContact -> LEAVE retVal=" + retVal);
         return retVal;
     }
 

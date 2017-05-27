@@ -44,7 +44,7 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
 
         mContext = context;
 
-        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(mContext);
+//        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(mContext);
     }
 
     @Override

@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
+import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
@@ -59,15 +61,19 @@ public class ContactAddActivity extends AppCompatActivity {
 
                 DBContactEntity contact = new DBContactEntity();
                 contact.setAddress(myAddressComplete);
-                contact.setAddress(mContactName.getText().toString());
-                contact.setAddress(mContactNickname.getText().toString());
+                contact.setName(mContactName.getText().toString());
+                contact.setNickName(mContactNickname.getText().toString());
                 contact.setEmail(mContactEmail.getText().toString());
 
                 if (validateNewContact(contact)) {
 
                     boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
 
-                    if (!insertSuccessfull) {
+                    if (insertSuccessfull) {
+                        ContactEntity newContactEntity = new ContactEntity(
+                                (contact.getNickName() == null || contact.getNickName().isEmpty()) ? contact.getName() : contact.getNickName(),
+                                contact.getSessionId());
+                        AppController.getInstanceParameterized(null).addNewContactToTab(newContactEntity);
                         finish();
                     }
                 }
@@ -98,7 +104,7 @@ public class ContactAddActivity extends AppCompatActivity {
         Log.i(LOG, "validateNewContact -> ENTER contactEntity=" + contactEntity);
         boolean retVal = false;
 
-        if (!(contactEntity.getAddress().length() == 16)) {
+        if (!(contactEntity.getAddress().length() == 22)) {
             retVal = false;
 //            TODO: address is incorrect popup
         } else if (contactEntity.getName() == null) {

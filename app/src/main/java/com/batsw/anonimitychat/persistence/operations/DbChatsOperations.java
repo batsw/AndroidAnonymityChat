@@ -67,6 +67,8 @@ public class DbChatsOperations implements IEntityDbOperations {
     public IDbEntity getIDbEntityById(long sessionId) {
         Log.i(LOG, "getIDbEntityById -> LEAVE sessionId=" + sessionId);
 
+        DBChatEntity retVal = null;
+
         Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_CHATS, new String[]{
                         PersistenceConstants.COLUMN_ID,
                         PersistenceConstants.COLUMN_CHAT_NAME,
@@ -76,14 +78,16 @@ public class DbChatsOperations implements IEntityDbOperations {
         if (cursor != null)
             cursor.moveToFirst();
 
-        DBChatEntity contact = new DBChatEntity();
-        contact.setId(Long.parseLong(cursor.getString(0)));
-        contact.setSessionId(sessionId);
-        contact.setChatName(cursor.getString(1));
-        contact.setHistoryCleanupTime(Long.parseLong(cursor.getString(2)));
+        if (cursor.getCount() > 0) {
+            retVal = new DBChatEntity();
+            retVal.setId(Long.parseLong(cursor.getString(0)));
+            retVal.setSessionId(sessionId);
+            retVal.setChatName(cursor.getString(1));
+            retVal.setHistoryCleanupTime(Long.parseLong(cursor.getString(2)));
+        }
 
-        Log.i(LOG, "getIDbEntityById -> LEAVE contact=" + contact);
-        return contact;
+        Log.i(LOG, "getIDbEntityById -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 
     @Override
@@ -97,9 +101,9 @@ public class DbChatsOperations implements IEntityDbOperations {
             DBChatEntity dbChatEntity = (DBChatEntity) dbEntity;
 
             ContentValues values = new ContentValues();
-            values.put(PersistenceConstants.COLUMN_CONTACT_SESSION_ID, dbChatEntity.getSessionId());
             values.put(PersistenceConstants.COLUMN_CHAT_NAME, dbChatEntity.getChatName());
             values.put(PersistenceConstants.COLUMN_HISTORY_CLEANUP_TIME, dbChatEntity.getHistoryCleanupTime());
+            values.put(PersistenceConstants.COLUMN_CONTACT_SESSION_ID, dbChatEntity.getSessionId());
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_CHATS, null, values);
 //            mSQLiteDatabase.close();

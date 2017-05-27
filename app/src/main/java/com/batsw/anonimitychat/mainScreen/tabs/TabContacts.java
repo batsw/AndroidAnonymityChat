@@ -82,6 +82,8 @@ public class TabContacts extends Fragment {
         mContactsAdapter = new ContactsAdapter(mContactsList, this);
         mContactsRecyclerView.setAdapter(mContactsAdapter);
 
+        AppController.getInstanceParameterized(null).setContactsTab(this);
+
         mFloatingAddButton = (FloatingActionButton) view.findViewById(R.id.contacts_tab_floating_add_button);
         mFloatingAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +130,30 @@ public class TabContacts extends Fragment {
 //            }
 //        });
 
+    }
+
+    public void addContactToList(ContactEntity contactEntity) {
+        Log.i(LOG, "addContactToList -> ENTER contactEntity=" + contactEntity);
+        mContactsList.add(contactEntity);
+        mContactsAdapter.notifyItemRangeChanged(mContactsList.size() / 2, 1);
+//        mContactsAdapter.notifyDataSetChanged();
+        Log.i(LOG, "addContactToList -> LEAVE");
+    }
+
+    public void updateContactList(ContactEntity contactEntity) {
+        Log.i(LOG, "updateContactList -> ENTER contactEntity=" + contactEntity);
+
+        int i = 0;
+        for (ContactEntity ce : mContactsList) {
+            if (ce.getSessionId() == contactEntity.getSessionId()) {
+                ce.setName(contactEntity.getName());
+            } else {
+                i++;
+            }
+        }
+
+        mContactsAdapter.notifyItemChanged(i);
+        Log.i(LOG, "updateContactList -> LEAVE");
     }
 }
 

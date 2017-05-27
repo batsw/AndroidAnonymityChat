@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_CONTACTS = "create table " + PersistenceConstants.TABLE_CONTACTS + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
-            PersistenceConstants.COLUMN_SESSION_ID + " integer not null,\n" +
+            PersistenceConstants.COLUMN_SESSION_ID + " integer not null unique,\n" +
             PersistenceConstants.COLUMN_NAME + " text null,\n" +
             PersistenceConstants.COLUMN_ADDRESS + " text not null,\n" +
             PersistenceConstants.COLUMN_NICKNAME + " text null,\n" +
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_CHATS = "create table " + PersistenceConstants.TABLE_CHATS + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
-            PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null,\n" +
+            PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null unique,\n" +
             PersistenceConstants.COLUMN_CHAT_NAME + " text not null,\n" +
             PersistenceConstants.COLUMN_HISTORY_CLEANUP_TIME + " integer not null,\n" +
             " FOREIGN KEY (" + PersistenceConstants.COLUMN_CONTACT_SESSION_ID + ") REFERENCES " +
@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_CHATS_MESSAGES = "create table " + PersistenceConstants.TABLE_CHATS_MESSAGES + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
-            PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null,\n" +
+            PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null unique,\n" +
             PersistenceConstants.COLUMN_MESSAGE + " text not null,\n" +
             PersistenceConstants.COLUMN_TIMESTAMP + " integer not null,\n" +
             " FOREIGN KEY (" + PersistenceConstants.COLUMN_CONTACT_SESSION_ID + ") REFERENCES " +
