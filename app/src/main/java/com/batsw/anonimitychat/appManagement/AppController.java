@@ -267,6 +267,9 @@ public class AppController {
         Log.i(LOG, "setChatControllerCurrentActivityContext -> LEAVE");
     }
 
+    public Context getCurrentActivityContext() {
+        return mCurrentActivityContext;
+    }
 
     // see if it works to remotely update contents of network connection status textViews
     public void updateWithNetworkConnectionStatus(final TextView networkConnStatusLabel) {
@@ -436,6 +439,16 @@ public class AppController {
         return retVal;
     }
 
+    public DBContactEntity getContactEntity(String address) {
+        Log.i(LOG, "getContactEntity -> ENTER address=" + address);
+        DBContactEntity retVal = null;
+
+        retVal = (DBContactEntity) mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(address);
+
+        Log.i(LOG, "getContactEntity -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
     public boolean addNewChatForContact(DBContactEntity contactEntity) {
         Log.i(LOG, "addNewChatForContact -> ENTER contactEntity=" + contactEntity);
         boolean retVal;
@@ -465,6 +478,16 @@ public class AppController {
         Log.i(LOG, "getChatEntity -> LEAVE retVal=" + retVal);
         return retVal;
     }
+
+//    public DBChatEntity getChatEntity(String address) {
+//        Log.i(LOG, "getChatEntity -> ENTER address=" + address);
+//        DBChatEntity retVal = null;
+//
+//        retVal = (DBChatEntity) mDatabaseHelper.getChatsOperations().getIDbEntityById(sessionId);
+//
+//        Log.i(LOG, "getChatEntity -> LEAVE retVal=" + retVal);
+//        return retVal;
+//    }
 
     public boolean updateChat(DBChatEntity chatEntity) {
         Log.i(LOG, "updateChat -> ENTER chatEntity=" + chatEntity);

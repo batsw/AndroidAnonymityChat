@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.listener.IIncomingConnectionListener;
@@ -12,6 +13,7 @@ import com.batsw.anonimitychat.chat.management.connection.IChatConnectionManager
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.chat.persistence.PersistenceManager;
 import com.batsw.anonimitychat.chat.util.ConnectionType;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 
 import java.util.UUID;
@@ -93,18 +95,20 @@ public class ChatController implements IIncomingConnectionListener {
 
     private ChatDetail getChatDetailForChatAction(String partnerAddress) {
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER partnerAddress=" + partnerAddress);
-
         ChatDetail retVal = null;
 
         if (mPersistenceManager.isPartnerInTheList(partnerAddress)) {
             retVal = mPersistenceManager.getPartnerDetail(partnerAddress);
             retVal.setmConnectionType(ConnectionType.NO_CONNECTION);
+            retVal.setIsAlive(false);
         } else {
 
             // means that the contact is new and it will be added with DEFAULT prameters in the Contacts List
             // default nickName for address is the address itself
             //TODO: differentiate between the two connection types
-            ChatDetail newChatDetail = new ChatDetail(partnerAddress, partnerAddress, null, ConnectionType.NO_CONNECTION, generateSessionId(), false);
+
+            final DBContactEntity dbContactEntity = AppController.getInstanceParameterized(null).getContactEntity(partnerAddress);
+            ChatDetail newChatDetail = new ChatDetail(partnerAddress, dbContactEntity.getNickName(), null, ConnectionType.NO_CONNECTION, dbContactEntity.getSessionId(), false);
 
             mPersistenceManager.addPartnerToList(newChatDetail);
 
@@ -123,14 +127,14 @@ public class ChatController implements IIncomingConnectionListener {
         return retVal;
     }
 
-    private long generateSessionId() {
-        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> ENTER");
-
-        long retVal = UUID.randomUUID().getMostSignificantBits();
-
-        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> LEAVE retVal=" + retVal);
-        return retVal;
-    }
+//    private long generateSessionId() {
+//        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> ENTER");
+//
+//        long retVal = UUID.randomUUID().getMostSignificantBits();
+//
+//        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> LEAVE retVal=" + retVal);
+//        return retVal;
+//    }
 
     public ChatDetail getChatDetail(long sessionId) {
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER sessionId=" + sessionId);

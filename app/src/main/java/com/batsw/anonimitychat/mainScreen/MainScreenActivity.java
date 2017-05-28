@@ -75,6 +75,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
         mNetworkPopupActivity = new NetworkPopupActivity(this);
 
+        AppController.getInstanceParameterized(null).setCurrentActivityContext(this);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

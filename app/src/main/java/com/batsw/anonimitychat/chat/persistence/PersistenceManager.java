@@ -32,13 +32,22 @@ public class PersistenceManager {
         return mPartnerList;
     }
 
-    public boolean isPartnerInTheList(String partnerHostname) {
-        return false;
-    }
+    public boolean isPartnerInTheList(String partnerAddress) {
+        Log.i(PERSISTENCE_MANAGER_LOG, "isPartnerInTheList -> ENTER partnerAddress=" + partnerAddress);
 
-//    public boolean isPartnerInTheList(String name){
-//        return false;
-//    }
+        boolean retVal = false;
+
+        Iterator<ChatDetail> iterator = mPartnerList.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getPartnerAddress() == partnerAddress) {
+                retVal = true;
+                break;
+            }
+        }
+
+        Log.i(PERSISTENCE_MANAGER_LOG, "init -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
 
     public boolean isPartnerInTheList(long sessionId) {
         Log.i(PERSISTENCE_MANAGER_LOG, "isPartnerInTheList -> ENTER sessionId=" + sessionId);

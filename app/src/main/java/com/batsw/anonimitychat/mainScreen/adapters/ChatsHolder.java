@@ -8,9 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.ChatsDetailsActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
+import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.List;
@@ -39,24 +44,33 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
 
         mNameTextView = (TextView) itemView.findViewById(R.id.current_chat_name);
 
-//        itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(LOG, "OnClickListener.onClick -> ENTER");
-//                int position = getLayoutPosition();
-//                //TODO: go to user' CHAT
-//                ChatEntity chatEntity = mChatEntitiesList.get(position);
-//                //From hete go to ChatList
-//
-//                Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
-//            }
-//
-//        });
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(LOG, "OnClickListener.onClick -> ENTER");
+                int position = getLayoutPosition();
+                ChatEntity chatEntity = mChatEntitiesList.get(position);
+
+                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+
+                    DBContactEntity dbContactEntity = AppController.getInstanceParameterized(null).getContactEntity(chatEntity.getSessionId());
+                    ChatController.getInstance().startChatActivity(AppController.getInstanceParameterized(null).getCurrentActivityContext(), dbContactEntity.getAddress());
+
+                } else {
+                    //TODO: show a message on screen
+                    // or tell user to use Offline mode ....
+                    Log.i(LOG, "cannot start chat when network not connected");
+                }
+
+                Log.i(LOG, "OnClickListener.onClick -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
+            }
+
+        });
 
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Log.i(LOG, "setOnLongClickListener -> ENTER");
+                Log.i(LOG, "OnLongClickListener -> ENTER");
 
                 int position = getLayoutPosition();
                 ChatEntity chatEntity = mChatEntitiesList.get(position);
@@ -67,7 +81,7 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
                 chatsDetailsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mTabChatsActivity.getActivity().startActivity(chatsDetailsActivityIntent);
 
-                Log.i(LOG, "setOnLongClickListener -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
+                Log.i(LOG, "OnLongClickListener -> LEAVE chatEntity.contactName=" + chatEntity.getContactName());
                 return false;
             }
         });
