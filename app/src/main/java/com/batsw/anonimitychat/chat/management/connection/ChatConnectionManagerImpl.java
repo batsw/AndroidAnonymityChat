@@ -69,7 +69,7 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
 
         ///TODO: what if is not alive?  ---
         //what if is NULL ---- waiting to crash
-        if (retVal.isAlive()) {
+        if (retVal != null && retVal.isAlive()) {
             mMessageReceivedListenerManager.addTorBundleListener(messageReceivedListener, chatDetail.getSessionId());
         }
 
@@ -81,15 +81,20 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     public void closeConnection(ChatDetail chatDetail) {
         Log.i(CHAT_CONNECTION_MANAGER_LOG, "closeConnection -> ENTER chatDetail=" + chatDetail);
 
-        chatDetail.setIsAlive(false);
         if (chatDetail.getConnectionType().equals(ConnectionType.USER)) {
-            chatDetail.getTorConnection().closeConnection();
+            if (chatDetail.isAlive()) {
+                chatDetail.getTorConnection().closeConnection();
+            }
+
             chatDetail.setTorConnection(null);
             chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
+            chatDetail.setIsAlive(false);
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
 
-            //TODO: manage it ....
-            chatDetail.getTorConnection().closeConnection();
+            //TODO: I am sure it is true ... because is from incoming connection
+            if (chatDetail.isAlive()) {
+                chatDetail.getTorConnection().closeConnection();
+            }
 
             chatDetail.setTorConnection(null);
             chatDetail.setmConnectionType(ConnectionType.NO_CONNECTION);
@@ -103,8 +108,12 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     }
 
     public static void addReceivedConnection(String partnerAddress, ITorConnection torConnection) {
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "addReceivedConnection -> ENTER partnerAddress=" + partnerAddress);
+
         if (torConnection instanceof TorReceiverDelegator) {
             mActiveConnections.put(partnerAddress, torConnection);
         }
+
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "addReceivedConnection -> LEAVE");
     }
 }

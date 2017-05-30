@@ -63,14 +63,14 @@ public class TorPublisher implements ITorConnection, Serializable {
 
     @Override
     public void createConnection() {
-        Log.i(LOG, "getConnection -> ENTER");
+        Log.i(LOG, "createConnection -> ENTER");
 
         mIsConnected = establishConnectionToPartner();
         if (mIsConnected == true) {
             startMessageReceivingThread();
         }
 
-        Log.i(LOG, "getConnection -> LEAVE");
+        Log.i(LOG, "createConnection -> LEAVE");
     }
 
     @Override

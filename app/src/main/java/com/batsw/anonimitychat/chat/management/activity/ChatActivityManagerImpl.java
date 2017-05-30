@@ -32,7 +32,7 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
         //Preparing TorConnection with partner
         ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
 
-        //TODO .........
+        //TODO get ChatDetail and if isAlive is False means Offline Mode
         //If the connection could not be established means that the partner is offline
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> LEAVE");
