@@ -6,6 +6,7 @@ import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.listener.IncomingConnectionListenerManager;
 import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
 import com.batsw.anonimitychat.chat.message.MessageReceivedListenerManager;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -92,6 +93,7 @@ public class TorReceiverDelegator implements ITorConnection {
      * This is the actual message receiver thread
      */
     private void createMessageReceivingLoop(DataInputStream dataInputStream) {
+        Log.i(LOG, "createMessageReceivingLoop -> ENTER");
         String incomingMessage = "";
         while (true) {
             try {
@@ -104,6 +106,10 @@ public class TorReceiverDelegator implements ITorConnection {
                         String partnerAddress = incomingMessage.substring(ChatModelConstants.FIRST_CHAT_MESSAGE.length());
                         String sanitizedPartnerAddress = partnerAddress.trim();
                         mPartnerAddress = sanitizedPartnerAddress;
+//                        TODO: check and recheck this because the address comes  without suffix although the publisgher is sending the complete address
+//                        mPartnerAddress = mPartnerAddress + TorConstants.TOR_ADDRESS_SUFFIX;
+
+                        Log.i(LOG, "mPartnerAddress=" + mPartnerAddress + " mPartnerAddress.length()=" + mPartnerAddress.length());
 
                         //triggering incomming connection received
                         if (!mPartnerAddress.isEmpty() && !mTriggeredChatRequest) {
@@ -116,13 +122,12 @@ public class TorReceiverDelegator implements ITorConnection {
 
                             mTriggeredChatRequest = true;
                         }
-                    }
-
-                    if (!incomingMessage.equals(ChatModelConstants.MESSAGE_END_CHAT)) {
-                        mMessageReceivedListenerManager.messageReceived(incomingMessage, mSessionId);
-                    } else {
+                    } else if (incomingMessage.equals(ChatModelConstants.MESSAGE_END_CHAT)) {
                         Log.i(LOG, "END CHAT Message Receved___" + incomingMessage);
                         break;
+                    } else {
+//TODO: revise and refactor if needed
+                        mMessageReceivedListenerManager.messageReceived(incomingMessage, mSessionId);
                     }
                 }
             } catch (IOException e) {
@@ -145,6 +150,7 @@ public class TorReceiverDelegator implements ITorConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.i(LOG, "createMessageReceivingLoop -> LEAVE");
     }
 
     @Override
@@ -189,6 +195,8 @@ public class TorReceiverDelegator implements ITorConnection {
     }
 
     public void setSessionId(long sessionId) {
+        Log.i(LOG, "setSessionId -> ENTER sessionId=" + sessionId);
         mSessionId = sessionId;
+        Log.i(LOG, "setSessionId -> LEAVE");
     }
 }

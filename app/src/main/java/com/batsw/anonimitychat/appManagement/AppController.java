@@ -19,6 +19,7 @@ import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
+import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
@@ -51,6 +52,8 @@ public class AppController {
     private TextView mTorStatusCarrier;
 
     private boolean isFirstRun = true;
+
+    private String mMyAddress;
 
     private AppController(AppCompatActivity mainActivity) {
         mMainScreenActivity = mainActivity;
@@ -85,7 +88,7 @@ public class AppController {
 
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
 
-        handleChatController();
+//        handleChatController();
 
         Log.i(LOG, "initBackend -> LEAVE");
     }
@@ -114,7 +117,7 @@ public class AppController {
     }
 
     private void detectFirstRun() {
-        Log.i(LOG, "detectFirstRun -> LEAVE");
+        Log.i(LOG, "detectFirstRun -> ENTER");
 
         mTorStatusCarrier.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,16 +129,32 @@ public class AppController {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.i(LOG, "detectFirstRun.onTextChanged -> LEAVE charSequence=" + charSequence);
 
-                if (isFirstRun) {
-                    final StringBuilder sb = new StringBuilder(charSequence.length());
-                    sb.append(charSequence);
-                    String textViewText = sb.toString();
+                final StringBuilder sb = new StringBuilder(charSequence.length());
+                sb.append(charSequence);
+                String textViewText = sb.toString();
 
+                if (isFirstRun) {
                     if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                         handleFirstRun();
                         isFirstRun = false;
+
+                        mMyAddress = getMyProfile().getMyAddress();
                     }
                 }
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    handleChatController();
+                }
+
+                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+                    Log.i(LOG, "tor bundle has stopped ... clearing Chat Controller resources");
+                    // ChatController managed resources --- what is to be set to default
+
+                    //TODO: Must clear out the resources held by ChatController .....
+                    // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
+
+                    ChatController.cleanUp();
+                }
+
                 Log.i(LOG, "detectFirstRun.onTextChanged -> LEAVE");
             }
 
@@ -169,54 +188,16 @@ public class AppController {
     }
 
     private void handleChatController() {
-        Log.i(LOG, "initChatController -> ENTER");
-        mTorStatusCarrier.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        Log.i(LOG, "handleChatController -> ENTER");
 
-            }
+        ChatController.getInstance();
+        ChatController.getInstance().setMyAddress(mMyAddress);
+        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
+        ChatController.getInstance().initializeChatConnectionManagement();
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.i(LOG, "mTorStatusCarrier.addTextChangedListener -> ENTER");
+        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
 
-                final StringBuilder sb = new StringBuilder(charSequence.length());
-                sb.append(charSequence);
-                String textViewText = sb.toString();
-
-                if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    Log.i(LOG, "tor bundle has started ... initializing Chat Controller");
-                    ChatController.getInstance();
-                    ChatController.getInstance().setMyAddress(mTorProcessManager.getTorAddress());
-                    ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
-                    ChatController.getInstance().initializeChatConnectionManagement();
-                }
-
-                //Meaning that TOR is either starting or Stopped
-                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
-                    Log.i(LOG, "tor bundle has stopped ... clearing Chat Controller resources");
-                    // ChatController managed resources --- what is to be set to default
-
-                    //TODO: Must clear out the resources held by ChatController .....
-                    // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
-
-                    ChatController.cleanUp();
-                }
-
-                Log.i(LOG, "mTorStatusCarrier.addTextChangedListener -> LEAVE");
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        if (mTorStatusCarrier.getText().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-            ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
-        }
-
-        Log.i(LOG, "initChatController -> LEAVE");
+        Log.i(LOG, "handleChatController -> LEAVE");
     }
 
     public void setContactsTab(TabContacts contactsTab) {
@@ -253,6 +234,12 @@ public class AppController {
         Log.i(LOG, "editContactToTab -> ENTER contactEntity=" + contactEntity);
         mContactsTab.updateContactList(contactEntity);
         Log.i(LOG, "editContactToTab -> LEAVE");
+    }
+
+    public void addMessageToChatHistory(DBChatMessageEntity chatMessageEntity) {
+        Log.i(LOG, "addMessageToChatHistory -> ENTER chatMessageEntity=" + chatMessageEntity);
+        mDatabaseHelper.getChatMessagesOperations().addDbEntity(chatMessageEntity);
+        Log.i(LOG, "addMessageToChatHistory -> LEAVE");
     }
 
     public void moveToChatsTab() {
@@ -334,8 +321,11 @@ public class AppController {
         Log.i(LOG, "getMyProfile -> ENTER");
         DBMyProfileEntity retVal = null;
 
-        retVal = mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().isEmpty() ?
-                null : (DBMyProfileEntity) mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().get(0);
+//        retVal = mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().isEmpty() ?
+//                null : (DBMyProfileEntity) mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().get(0);
+
+        retVal = (DBMyProfileEntity) mDatabaseHelper.getMyProfileOperations().getAllIDbEntity().get(0);
+
         Log.i(LOG, "getMyProfile -> LEAVE retVal=" + retVal);
         return retVal;
     }

@@ -60,7 +60,7 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
         mCheckIcon.setTypeface(fontAwesome);
 
         mMyAddress = (TextView) findViewById(R.id.network_my_address);
-        mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress());
+        mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0,16));
 
         mNetworkConnectionStatusLabel = (TextView) findViewById(R.id.network_popup_status);
         AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mNetworkConnectionStatusLabel);
@@ -81,12 +81,14 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartedTorStatus));
                     mNetworkConnectionSwitch.setChecked(true);
 
-                    mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress());
+                    mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0,16));
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartingTorStatus));
                 } else {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStoppedTorStatus));
                     mNetworkConnectionSwitch.setChecked(false);
+
+                    mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0,16));
                 }
 
                 Log.i(LOG, "mNetworkConnectionSwitch.onCheckedChanged -> LEAVE");

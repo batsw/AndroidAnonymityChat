@@ -9,6 +9,7 @@ import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.IEntityDbOperations;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class DbMyProfileOperations implements IEntityDbOperations {
             Log.i(LOG, "vaild address and first time connection. updating My address allowed");
 
             ContentValues values = new ContentValues();
-            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress);
+            values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress + TorConstants.TOR_ADDRESS_SUFFIX);
 
             mSQLiteDatabase.update(PersistenceConstants.TABLE_MY_PROFILE, values, PersistenceConstants.COLUMN_ID + " = ?",
                     new String[]{String.valueOf(1)});

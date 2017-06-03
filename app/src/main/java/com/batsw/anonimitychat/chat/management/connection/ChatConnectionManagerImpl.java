@@ -54,12 +54,12 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
         ITorConnection retVal = null;
 
         if (chatDetail.getConnectionType().equals(ConnectionType.USER)) {
-
+            Log.i(CHAT_CONNECTION_MANAGER_LOG, "connection type=" + ConnectionType.USER);
             retVal = new TorPublisher(mMessageReceivedListenerManager, chatDetail.getPartnerAddress(), chatDetail.getSessionId());
             retVal.createConnection();
 
         } else if (chatDetail.getConnectionType().equals(ConnectionType.PARTNER)) {
-
+            Log.i(CHAT_CONNECTION_MANAGER_LOG, "connection type=" + ConnectionType.PARTNER);
             ITorConnection torConnection = mActiveConnections.get(chatDetail.getPartnerAddress());
 
             ((TorReceiverDelegator) torConnection).setSessionId(chatDetail.getSessionId());

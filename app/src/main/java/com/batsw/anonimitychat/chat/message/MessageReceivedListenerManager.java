@@ -1,5 +1,8 @@
 package com.batsw.anonimitychat.chat.message;
 
+import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
+
 import java.util.HashMap;
 
 /**
@@ -20,10 +23,20 @@ public class MessageReceivedListenerManager {
     }
 
     public void messageReceived(String message, long sessionId) {
-        ChatMessage chatMessage = new ChatMessage(message, ChatMessageType.PARTNER, System.currentTimeMillis());
+
+        final long messageTimestamp = System.currentTimeMillis();
+
+        ChatMessage chatMessage = new ChatMessage(message, ChatMessageType.PARTNER, messageTimestamp);
 
         IMessageReceivedListener messageReceivedListener = mMessageReceivedListenerMap.get(sessionId);
         if (messageReceivedListener != null) {
+
+            DBChatMessageEntity chatMessageEntity = new DBChatMessageEntity();
+            chatMessageEntity.setSessionId(sessionId);
+            chatMessageEntity.setMessage(message);
+            chatMessageEntity.setTimestamp(messageTimestamp);
+            AppController.getInstanceParameterized(null).addMessageToChatHistory(chatMessageEntity);
+
             messageReceivedListener.showReceivedMessage(chatMessage);
         }
     }

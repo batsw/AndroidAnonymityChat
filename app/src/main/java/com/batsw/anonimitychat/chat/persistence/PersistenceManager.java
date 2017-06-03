@@ -45,7 +45,7 @@ public class PersistenceManager {
             }
         }
 
-        Log.i(PERSISTENCE_MANAGER_LOG, "init -> LEAVE retVal=" + retVal);
+        Log.i(PERSISTENCE_MANAGER_LOG, "isPartnerInTheList -> LEAVE retVal=" + retVal);
         return retVal;
     }
 
@@ -62,7 +62,7 @@ public class PersistenceManager {
             }
         }
 
-        Log.i(PERSISTENCE_MANAGER_LOG, "init -> LEAVE retVal=" + retVal);
+        Log.i(PERSISTENCE_MANAGER_LOG, "isPartnerInTheList -> LEAVE retVal=" + retVal);
         return retVal;
     }
 

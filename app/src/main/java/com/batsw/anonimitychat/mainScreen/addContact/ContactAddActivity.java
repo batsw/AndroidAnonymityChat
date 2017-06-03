@@ -57,25 +57,31 @@ public class ContactAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(LOG, "mAdd.onClick -> ENTER");
 
-                String myAddressComplete = mContactAddress.getText().toString() + TorConstants.TOR_ADDRESS_SUFFIX;
+                final String enteredAddress = mContactAddress.getText().toString();
 
-                DBContactEntity contact = new DBContactEntity();
-                contact.setAddress(myAddressComplete);
-                contact.setName(mContactName.getText().toString());
-                contact.setNickName(mContactNickname.getText().toString());
-                contact.setEmail(mContactEmail.getText().toString());
+                if (enteredAddress.length() == 16) {
+                    String myAddressComplete = enteredAddress + TorConstants.TOR_ADDRESS_SUFFIX;
 
-                if (validateNewContact(contact)) {
+                    DBContactEntity contact = new DBContactEntity();
+                    contact.setAddress(myAddressComplete);
+                    contact.setName(mContactName.getText().toString());
+                    contact.setNickName(mContactNickname.getText().toString());
+                    contact.setEmail(mContactEmail.getText().toString());
 
-                    boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
+                    if (validateNewContact(contact)) {
 
-                    if (insertSuccessfull) {
-                        ContactEntity newContactEntity = new ContactEntity(
-                                (contact.getNickName() == null || contact.getNickName().isEmpty()) ? contact.getName() : contact.getNickName(),
-                                contact.getSessionId());
-                        AppController.getInstanceParameterized(null).addNewContactToTab(newContactEntity);
-                        finish();
+                        boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
+
+                        if (insertSuccessfull) {
+                            ContactEntity newContactEntity = new ContactEntity(
+                                    (contact.getNickName() == null || contact.getNickName().isEmpty()) ? contact.getName() : contact.getNickName(),
+                                    contact.getSessionId());
+                            AppController.getInstanceParameterized(null).addNewContactToTab(newContactEntity);
+                            finish();
+                        }
                     }
+                } else {
+//                    TODO: popup on the screen the address must contain 16 characters (without suffix)
                 }
 
                 Log.i(LOG, "mAdd.onClick -> LEAVE");

@@ -132,7 +132,9 @@ public class TorPublisher implements ITorConnection, Serializable {
             mDataInputStream = new DataInputStream(mSocketConnection.getInputStream());
 
             // first after connecting, send my address to partner
-            sendMessage(ChatModelConstants.FIRST_CHAT_MESSAGE + ChatController.getInstance().getMyAddress());
+            String startChatMessage = ChatModelConstants.FIRST_CHAT_MESSAGE + ChatController.getInstance().getMyAddress();
+            Log.i(LOG, "startChatMessage=" + startChatMessage);
+            sendMessage(startChatMessage);
 
         } catch (UnknownHostException unknownHost) {
             Log.e(LOG, "You are trying to connect to an unknown host! " + unknownHost.getStackTrace().toString(), unknownHost);

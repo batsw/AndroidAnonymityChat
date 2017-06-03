@@ -59,7 +59,8 @@ public class SettingsProfileActivity extends AppCompatActivity {
         mMyNickname.setText(mMyProfileEntity.getMyNickName());
 
         mMyAddress = (TextView) findViewById(R.id.my_address_edit);
-        mMyAddress.setText(mMyProfileEntity.getMyAddress());
+//        Without the suffix
+        mMyAddress.setText(mMyProfileEntity.getMyAddress().substring(0, 16));
 
         mMyEmail = (EditText) findViewById(R.id.email_contact_edit);
         mMyEmail.setText(mMyProfileEntity.getMyEmail());
@@ -77,7 +78,6 @@ public class SettingsProfileActivity extends AppCompatActivity {
                         !myNickName.equals(mMyProfileEntity.getMyNickName().toString()) ||
                         !myEmail.equals(mMyProfileEntity.getMyEmail().toString())) {
 
-//                    TODO: call update my profile because name or nick or email has changed
                     mMyProfileEntity.setMyName(myName);
                     mMyProfileEntity.setMyNickName(myNickName);
                     mMyProfileEntity.setMyEmail(myEmail);
