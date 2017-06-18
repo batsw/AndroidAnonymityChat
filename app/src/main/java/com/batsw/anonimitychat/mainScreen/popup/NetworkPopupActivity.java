@@ -34,6 +34,7 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
     private Context mContext;
 
     private TextView mCheckIcon, mMyAddress;
+//    private TextView mDoneLabel;
     private TextView mNetworkConnectionStatusLabel;
     private Switch mNetworkConnectionSwitch;
 
@@ -116,6 +117,14 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
                 Log.i(LOG, "mNetworkConnectionSwitch.onCheckedChanged -> LEAVE");
             }
         });
+
+//        mDoneLabel = (TextView) findViewById(R.id.network_popup_done);
+//        mDoneLabel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

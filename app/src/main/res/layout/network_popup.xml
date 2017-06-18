@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
         android:orientation="horizontal">
         <!--android:background="#3E80B4"-->
         <TextView
@@ -63,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -86,40 +86,42 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="OK"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:id="@+id/network_popup_done"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:text="DONE"-->
+            <!--android:textColor="@color/colorPrimary"-->
+            <!--android:textSize="15dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:paddingLeft="125dp"/>-->
 
-        <TextView
-            android:id="@+id/network_popup_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawablePadding="10dp"
-            android:paddingBottom="5dp"
-            android:paddingEnd="15dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="15dp"
-            android:paddingStart="15dp"
-            android:paddingTop="5dp"
-            android:text="@string/check"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:id="@+id/network_popup_check"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:drawablePadding="10dp"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:paddingEnd="15dp"-->
+            <!--android:paddingLeft="0dp"-->
+            <!--android:paddingRight="15dp"-->
+            <!--android:paddingStart="15dp"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:text="@string/check"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textStyle="bold" />-->
 
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 
 </LinearLayout>
