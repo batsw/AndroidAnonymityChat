@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.batsw.anonimitychat.appManagement.AppController;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;

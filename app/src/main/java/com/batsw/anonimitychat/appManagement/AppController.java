@@ -22,10 +22,8 @@ import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
-import com.batsw.anonimitychat.tor.bundle.TorProcess;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.util.AppConstants;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
