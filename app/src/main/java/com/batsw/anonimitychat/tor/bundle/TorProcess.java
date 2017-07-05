@@ -2,9 +2,11 @@ package com.batsw.anonimitychat.tor.bundle;
 
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.tor.listener.TorBundleListenerManager;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -17,7 +19,7 @@ public class TorProcess implements Runnable {
 
     private TorBundleListenerManager mTorBundleListenerManager;
     private String mCommand;
-    private Process torProcess;
+    private Process mTorProcess;
     private int mPID = 0;
 
     private Scanner torLogMessages = null;
@@ -34,16 +36,18 @@ public class TorProcess implements Runnable {
         Log.i(LOG, "starting the TOR process WITH command: " + " \n" + mCommand);
 
         try {
-            torProcess = Runtime.getRuntime().exec(mCommand);
+            mTorProcess = Runtime.getRuntime().exec(mCommand);
             Log.i(LOG, "TOR prccess launched");
 
-            String torProcessString = torProcess.toString();
+            String torProcessString = mTorProcess.toString();
 
             int torPID = Integer.parseInt(torProcessString.substring(12, torProcessString.length() - 1));
             Log.i(LOG, "TOR process successfully started: " + torPID);
             mPID = torPID;
 
-            torLogMessages = new Scanner(torProcess.getInputStream());
+            AppController.getInstanceParameterized(null).updateBundlePid(mPID);
+
+            torLogMessages = new Scanner(mTorProcess.getInputStream());
 
             while (torLogMessages.hasNextLine()) {
                 String torData = torLogMessages.nextLine();
@@ -58,8 +62,8 @@ public class TorProcess implements Runnable {
         } catch (IOException e) {
             Log.i(LOG, "TOR process is closing");
 
-            if (torProcess != null) {
-                torProcess.destroy();
+            if (mTorProcess != null) {
+                mTorProcess.destroy();
                 mPID = 0;
             }
 
@@ -76,14 +80,16 @@ public class TorProcess implements Runnable {
 
         torLogMessages = null;
 
-        torProcess.destroy();
+        mTorProcess.destroy();
         mPID = 0;
+
+        AppController.getInstanceParameterized(null).updateBundlePid(mPID);
 
         Log.i(LOG, "stopTorProcess -> LEAVE");
     }
 
-    public Process getTorProcess() {
-        return torProcess;
+    public Process getmTorProcess() {
+        return mTorProcess;
     }
 
     public int getPID() {

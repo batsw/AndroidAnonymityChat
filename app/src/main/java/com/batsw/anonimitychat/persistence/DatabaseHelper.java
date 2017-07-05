@@ -31,7 +31,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             PersistenceConstants.COLUMN_MY_ADDRESS + " text not null,\n" +
             PersistenceConstants.COLUMN_MY_NAME + " text null,\n" +
             PersistenceConstants.COLUMN_MY_NICKNAME + " text null,\n" +
-            PersistenceConstants.COLUMN_MY_EMAIL + " text null);";
+            PersistenceConstants.COLUMN_MY_EMAIL + " text null,\n" +
+            PersistenceConstants.COLUMN_TBE_PID + " integer not null," +
+            PersistenceConstants.COLUMN_TBE_PROCESS + " text null);";
 
     private static final String CREATE_TABLE_CONTACTS = "create table " + PersistenceConstants.TABLE_CONTACTS + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
@@ -158,6 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(PersistenceConstants.COLUMN_MY_ADDRESS, dbMyProfileEntity.getMyAddress());
         values.put(PersistenceConstants.COLUMN_MY_NAME, dbMyProfileEntity.getMyName());
         values.put(PersistenceConstants.COLUMN_MY_NICKNAME, dbMyProfileEntity.getMyNickName());
+        values.put(PersistenceConstants.COLUMN_TBE_PID, String.valueOf(0));
 
         sqLiteDatabase.insert(PersistenceConstants.TABLE_MY_PROFILE, null, values);
 //        sqLiteDatabase.close();

@@ -3,6 +3,9 @@ package com.batsw.anonimitychat.tor.bundle;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +25,8 @@ public class CopyTorResource {
     public String provideTorResource(String internalRootFilesDir, AssetManager assetManager, String activityTagName) {
 
         String torResourceAbsolutePath = "";
+
+        boolean ioExceptionFileRelated = false;
 
         try {
             //creating the android internal folder
@@ -60,10 +65,11 @@ public class CopyTorResource {
             torResourceAbsolutePath = internalFile.getAbsolutePath();
 
         } catch (IOException e) {
+            Log.e(activityTagName, "Killing the previous TorProcess");
+            android.os.Process.killProcess((int) AppController.getInstanceParameterized(null).getBundlePid());
             Log.e(activityTagName, "Unable to locate files in the tor_bundle folder...." + e.getMessage(), e);
         }
 
-        //TODO: please review as a check that the resource files were actually copied
         return torResourceAbsolutePath;
     }
 

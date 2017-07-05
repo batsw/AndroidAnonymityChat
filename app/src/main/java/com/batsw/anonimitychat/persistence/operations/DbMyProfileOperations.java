@@ -84,7 +84,7 @@ public class DbMyProfileOperations implements IEntityDbOperations {
         Log.i(LOG, "updateAddressOnFirstNetworkConnection -> ENTER myAddress=" + myAddress);
 
         if (!myAddress.isEmpty() && myAddress.length() == AppConstants.ADDRESS_SIZE && getMyAddress(1).equals(AppConstants.MY_DEFAULT_ADDRESS)) {
-            Log.i(LOG, "vaild address and first time connection. updating My address allowed");
+            Log.i(LOG, "valid address and first time connection. updating My address allowed");
 
             ContentValues values = new ContentValues();
             values.put(PersistenceConstants.COLUMN_MY_ADDRESS, myAddress + TorConstants.TOR_ADDRESS_SUFFIX);
@@ -121,6 +121,77 @@ public class DbMyProfileOperations implements IEntityDbOperations {
         Log.i(LOG, "getMyAddress -> LEAVE retVal=" + retVal);
         return retVal;
     }
+
+    /**
+     * @param
+     * @return long
+     */
+    public long getBundlePid(long id) {
+        Log.i(LOG, "getBundlePid -> ENTER id=" + id);
+        long retVal = 0;
+
+        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
+                        PersistenceConstants.COLUMN_TBE_PID,
+                }, PersistenceConstants.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        if (cursor.getCount() > 0) {
+
+            retVal = Long.parseLong(cursor.getString(0));
+        }
+
+        Log.i(LOG, "getBundlePid -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
+//    /**
+//     * @param
+//     * @return String
+//     */
+//    public String getBundleProcess(long id) {
+//        Log.i(LOG, "getBundleProcess -> ENTER id=" + id);
+//        String retVal = "";
+//
+//        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_MY_PROFILE, new String[]{
+//                        PersistenceConstants.COLUMN_TBE_PROCESS,
+//                }, PersistenceConstants.COLUMN_ID + " = ?",
+//                new String[]{String.valueOf(id)}, null, null, null, null);
+//        if (cursor != null)
+//            cursor.moveToFirst();
+//
+//        if (cursor.getCount() > 0) {
+//            retVal = cursor.getString(0);
+//        }
+//
+//        Log.i(LOG, "getBundleProcess -> LEAVE retVal=" + retVal);
+//        return retVal;
+//    }
+
+    public void updateBundlePid(long newPid) {
+        Log.i(LOG, "updateBundlePid -> ENTER newPid=" + newPid);
+
+        ContentValues values = new ContentValues();
+        values.put(PersistenceConstants.COLUMN_TBE_PID, newPid);
+
+        mSQLiteDatabase.update(PersistenceConstants.TABLE_MY_PROFILE, values, PersistenceConstants.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(1)});
+
+        Log.i(LOG, "updateBundlePid -> LEAVE");
+    }
+
+//    public void updateBundleProcess(String gsonSerializedProcess) {
+//        Log.i(LOG, "updateBundleProcess -> ENTER gsonSerializedProcess=" + gsonSerializedProcess);
+//
+//        ContentValues values = new ContentValues();
+//        values.put(PersistenceConstants.COLUMN_TBE_PROCESS, gsonSerializedProcess);
+//
+//        mSQLiteDatabase.update(PersistenceConstants.TABLE_MY_PROFILE, values, PersistenceConstants.COLUMN_ID + " = ?",
+//                new String[]{String.valueOf(1)});
+//
+//        Log.i(LOG, "updateBundleProcess -> LEAVE");
+//    }
 
     /**
      * TODO: this should never be exposed ... move to private inside DatabaseHelper
@@ -175,7 +246,7 @@ public class DbMyProfileOperations implements IEntityDbOperations {
         return retVal;
     }
 
-//    This is not used in this case
+    //    This is not used in this case
     @Override
     public boolean deleteDbEntity(IDbEntity dbEntity) {
         Log.i(LOG, "deleteDbEntity -> ENTER dbEntity=" + dbEntity);

@@ -8,11 +8,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.batsw.anonimitychat.R;
-import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
-import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
@@ -25,8 +22,10 @@ import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
+import com.batsw.anonimitychat.tor.bundle.TorProcess;
 import com.batsw.anonimitychat.tor.bundle.TorProcessManager;
 import com.batsw.anonimitychat.util.AppConstants;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +52,7 @@ public class AppController {
 
     private boolean isFirstRun = true;
 
+    private long mBundlePid;
     private String mMyAddress;
 
     private AppController(AppCompatActivity mainActivity) {
@@ -86,9 +86,21 @@ public class AppController {
         mDatabaseHelper.initOperations();
         mDatabaseHelper.triggerInsertDefaultMyProfile();
 
-        mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
+        mBundlePid = mDatabaseHelper.getMyProfileOperations().getBundlePid(1);
+        Log.i(LOG, "bundlePidLong=" + mBundlePid);
 
-//        handleChatController();
+//        handling the previous instance of the app which left the bundle process open
+        if (mBundlePid > 0) {
+            Log.i(LOG, "the previous bundle process needs to be cleaned: mBundlePid=" + mBundlePid);
+
+            Log.e(LOG, "Killing the previous TorProcess");
+            android.os.Process.killProcess((int) getBundlePid());
+            Log.e(LOG, "succeded. Now updating the current PID");
+
+            updateBundlePid(0);
+        }
+
+        mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
 
         Log.i(LOG, "initBackend -> LEAVE");
     }
@@ -98,10 +110,10 @@ public class AppController {
 
         final String networkStatus = mTorStatusCarrier.getText().toString().trim();
 
+        //TODO: add more conditionals --- involve PID ... etc
         if (!mTorProcessManager.isTorBundleStarted() && (networkStatus.equals(TorConstants.TOR_BUNDLE_STOPPED))) {
             mTorProcessManager.startTorBundle();
 
-            //        TODO: call this here?
             detectFirstRun();
         }
 
@@ -200,6 +212,50 @@ public class AppController {
         Log.i(LOG, "handleChatController -> LEAVE");
     }
 
+    public void updateBundlePid(long newPid) {
+        Log.i(LOG, "updateBundlePid -> ENTER newPid=" + newPid);
+
+        mBundlePid = newPid;
+
+        long currentPid = mDatabaseHelper.getMyProfileOperations().getBundlePid(1);
+
+        if (currentPid != newPid) {
+            mDatabaseHelper.getMyProfileOperations().updateBundlePid(newPid);
+        }
+
+        Log.i(LOG, "updateBundlePid -> LEAVE");
+    }
+
+//    public void updateBundlePprocessGson(String processGsonString) {
+//        Log.i(LOG, "updateBundlePprocess -> ENTER processGsonString=" + processGsonString);
+//
+//        String bundleProcessString = mDatabaseHelper.getMyProfileOperations().getBundleProcess(1);
+//
+//        if (bundleProcessString != null) {
+//            mDatabaseHelper.getMyProfileOperations().updateBundleProcess(processGsonString);
+//        }
+//
+//        Log.i(LOG, "updateBundlePprocess -> LEAVE");
+//    }
+//
+//    public String getBundlePprocessGson() {
+//        Log.i(LOG, "getBundlePprocess -> ENTER");
+//
+//        String retVal = "";
+//
+//        retVal = mDatabaseHelper.getMyProfileOperations().getBundleProcess(1);
+//
+//        Log.i(LOG, "getBundlePprocessGson -> LEAVE retVal=" + retVal);
+//        return retVal;
+//    }
+
+    public long getBundlePid() {
+        Log.i(LOG, "getBundlePid -> ENTER");
+
+        Log.i(LOG, "getBundlePid -> LEAVE mBundlePid=" + mBundlePid);
+        return mBundlePid;
+    }
+
     public void setContactsTab(TabContacts contactsTab) {
         Log.i(LOG, "setContactsTab -> ENTER");
         mContactsTab = contactsTab;
@@ -258,7 +314,6 @@ public class AppController {
         return mCurrentActivityContext;
     }
 
-    // see if it works to remotely update contents of network connection status textViews
     public void updateWithNetworkConnectionStatus(final TextView networkConnStatusLabel) {
         Log.i(LOG, "getNetworkConnectionStatus -> ENTER networkConnStatusLabel=" + networkConnStatusLabel);
 

@@ -82,9 +82,6 @@ public class TorProcessManager {
                 mTorProcessCommanderThread = Executors.newSingleThreadScheduledExecutor();
                 mTorProcessCommanderThread.submit(mTorProcessCommander);
 
-//                mTorProcessCommanderThread = new Thread(mTorProcessCommander);
-//                mTorProcessCommanderThread.start();
-
                 updateTorBundleStatus();
             }
 
@@ -103,6 +100,7 @@ public class TorProcessManager {
     }
 
     private String createTorProcessStartingPrerequisites() {
+        Log.i(TOR_PROCESS_MANAGER_TAG, "createTorProcessStartingPrerequisites -> ENTER");
 
         CopyTorResource copyTorResource = new CopyTorResource();
         mTorResourceLocation = copyTorResource.provideTorResource(mMainActivity.getFilesDir().toString(), mAssetManager, TOR_PROCESS_MANAGER_TAG);
@@ -132,6 +130,8 @@ public class TorProcessManager {
         } catch (IOException e) {
             Log.e(TOR_PROCESS_MANAGER_TAG, "error when changing TOR Bundle permissions: " + e);
         }
+
+        Log.i(TOR_PROCESS_MANAGER_TAG, "createTorProcessStartingPrerequisites -> LEAVE cmd=" + cmd);
 
         return cmd;
     }
@@ -196,7 +196,6 @@ public class TorProcessManager {
 
             mTorStatusTextView.setTextColor(mMainActivity.getResources().getColor(R.color.colorStoppedTorStatus));
             mTorStatusTextView.setText(TorConstants.TOR_BUNDLE_STOPPED);
-
         } else {
             //TODO: Show a message that TOR Bundle is already STOPPED
             //Do nothing for now

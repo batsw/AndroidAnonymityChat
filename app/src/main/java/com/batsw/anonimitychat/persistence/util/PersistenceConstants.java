@@ -36,5 +36,7 @@ public interface PersistenceConstants {
     public static final String COLUMN_MY_NAME = "my_name";
     public static final String COLUMN_MY_NICKNAME = "my_nickname";
     public static final String COLUMN_MY_EMAIL = "my_email";
+    public static final String COLUMN_TBE_PID = "bundle_pid";
+    public static final String COLUMN_TBE_PROCESS = "bundle_process";
 
 }
