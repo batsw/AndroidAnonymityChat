@@ -19,9 +19,10 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsNetworkActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsProfileActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsStorageActivity;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
-import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.util.List;
 
@@ -135,14 +136,18 @@ public class NavigationDrawerMenuAdapter extends RecyclerView.Adapter<RecyclerVi
             case MainScreenConstants.NAVIGATION_NETWORK:
                 Log.i(LOG, "-> start network");
                 //TODO: start the Network activity
+                Intent settingsNetworkActivityIntent = SettingsNetworkActivity.makeIntent(mContext);
+//                addContactActivityIntent.putExtra(,);
+                settingsNetworkActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(settingsNetworkActivityIntent);
                 break;
             case MainScreenConstants.NAVIGATION_STORAGE:
                 Log.i(LOG, "-> start storage");
                 //TODO: start the Storage activity
-//                Intent addContactActivityIntent = SettingsAboutActivity.makeIntent(mContext);
-////                addContactActivityIntent.putExtra(,);
-//                addContactActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                mContext.startActivity(addContactActivityIntent);
+                Intent settingsStorageActivity = SettingsStorageActivity.makeIntent(mContext);
+//                addContactActivityIntent.putExtra(,);
+                settingsStorageActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(settingsStorageActivity);
                 break;
             default:
                 Log.i(LOG, "main_screen_navigation_drawer_item_and_img.msniiOnClickHandling -> DEFAULT - do nothing");

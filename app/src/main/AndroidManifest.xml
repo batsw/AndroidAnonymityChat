@@ -78,8 +78,8 @@
         <activity
             android:name=".mainScreen.settings.activities.SettingsProfileActivity"
             android:screenOrientation="portrait"></activity>
-        <!--<activity android:name=".mainScreen.settings.activities.SettingsNetworkActivity" android:screenOrientation="portrait">-->
-        <!--</activity>-->
+        <activity android:name=".mainScreen.settings.activities.SettingsNetworkActivity" android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".mainScreen.settings.activities.SettingsStorageActivity"
             android:screenOrientation="portrait"></activity>

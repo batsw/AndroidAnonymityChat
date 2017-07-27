@@ -39,8 +39,8 @@ public class SettingsProfileActivity extends AppCompatActivity {
         // load my profile
         mMyProfileEntity = AppController.getInstanceParameterized(null).getMyProfile();
 
-        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_edit);
-        mEmailIcon.setTypeface(fontAwesome);
+//        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_edit);
+//        mEmailIcon.setTypeface(fontAwesome);
 
         mBackIcon = (TextView) findViewById(R.id.settings_profile_back);
         mBackIcon.setTypeface(fontAwesome);
@@ -62,8 +62,8 @@ public class SettingsProfileActivity extends AppCompatActivity {
 //        Without the suffix
         mMyAddress.setText(mMyProfileEntity.getMyAddress().substring(0, 16));
 
-        mMyEmail = (EditText) findViewById(R.id.email_contact_edit);
-        mMyEmail.setText(mMyProfileEntity.getMyEmail());
+//        mMyEmail = (EditText) findViewById(R.id.email_contact_edit);
+//        mMyEmail.setText(mMyProfileEntity.getMyEmail());
 
         mSave = (TextView) findViewById(R.id.settings_my_profile_save);
 
@@ -72,15 +72,19 @@ public class SettingsProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String myName = getTextFromEditText(mMyName);
                 String myNickName = getTextFromEditText(mMyNickname);
-                String myEmail = getTextFromEditText(mMyEmail);
+//                String myEmail = getTextFromEditText(mMyEmail);
+
+//                if (!myName.equals(mMyProfileEntity.getMyName().toString()) ||
+//                        !myNickName.equals(mMyProfileEntity.getMyNickName().toString()) ||
+//                        !myEmail.equals(mMyProfileEntity.getMyEmail().toString())) {
 
                 if (!myName.equals(mMyProfileEntity.getMyName().toString()) ||
-                        !myNickName.equals(mMyProfileEntity.getMyNickName().toString()) ||
-                        !myEmail.equals(mMyProfileEntity.getMyEmail().toString())) {
+                        !myNickName.equals(mMyProfileEntity.getMyNickName().toString())) {
 
                     mMyProfileEntity.setMyName(myName);
                     mMyProfileEntity.setMyNickName(myNickName);
-                    mMyProfileEntity.setMyEmail(myEmail);
+//                    mMyProfileEntity.setMyEmail(myEmail);
+                    mMyProfileEntity.setMyEmail(null);
 
                     AppController.getInstanceParameterized(null).updateMyProfile(mMyProfileEntity);
                 }

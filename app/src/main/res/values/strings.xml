@@ -44,4 +44,8 @@
     <string name="spinner_arrow">never</string>
     <string name="time_unit">min</string>
 
+    <!--Main screen -->
+    <string name="drawer_menu_open">drawer menu open</string>
+    <string name="drawer_menu_closed">drawer menu closed</string>
+
 </resources>

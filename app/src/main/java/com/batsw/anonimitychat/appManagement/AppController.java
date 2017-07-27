@@ -224,29 +224,6 @@ public class AppController {
         Log.i(LOG, "updateBundlePid -> LEAVE");
     }
 
-//    public void updateBundlePprocessGson(String processGsonString) {
-//        Log.i(LOG, "updateBundlePprocess -> ENTER processGsonString=" + processGsonString);
-//
-//        String bundleProcessString = mDatabaseHelper.getMyProfileOperations().getBundleProcess(1);
-//
-//        if (bundleProcessString != null) {
-//            mDatabaseHelper.getMyProfileOperations().updateBundleProcess(processGsonString);
-//        }
-//
-//        Log.i(LOG, "updateBundlePprocess -> LEAVE");
-//    }
-//
-//    public String getBundlePprocessGson() {
-//        Log.i(LOG, "getBundlePprocess -> ENTER");
-//
-//        String retVal = "";
-//
-//        retVal = mDatabaseHelper.getMyProfileOperations().getBundleProcess(1);
-//
-//        Log.i(LOG, "getBundlePprocessGson -> LEAVE retVal=" + retVal);
-//        return retVal;
-//    }
-
     public long getBundlePid() {
         Log.i(LOG, "getBundlePid -> ENTER");
 

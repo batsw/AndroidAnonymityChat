@@ -9,11 +9,15 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.mainScreen.contactEditor.ContactEditorActivity;
+import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.ChatsDetailsActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.List;
@@ -28,7 +32,7 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     private TabContacts mTabContActivity;
     private ContactEntity mContactEntity;
-    private ImageView mEditImageView;
+    private ImageView mEditImageView, mAvailabilityImageView;
     private TextView mNameTextView;
     private List<ContactEntity> mContactEntitiesList;
 
@@ -39,9 +43,13 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
 
         mContactEntitiesList = contactsList;
 
+        mAvailabilityImageView = (ImageView) itemView.findViewById(R.id.current_user_availability);
+
         mEditImageView = (ImageView) itemView.findViewById(R.id.current_user_edit);
         mNameTextView = (TextView) itemView.findViewById(R.id.contact_name);
 
+//        Chats and Contacts tabs together
+//         from click go directly to chatActivity with selected Contact
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,17 +58,51 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
                 ContactEntity contactEntity = mContactEntitiesList.get(position);
                 DBContactEntity dbContactEntity = AppController.getInstanceParameterized(null).getContactEntity(contactEntity.getSessionId());
 
-                final DBChatEntity chatEntity = AppController.getInstanceParameterized(null).getChatEntity(contactEntity.getSessionId());
-                if (chatEntity == null) {
-                    AppController.getInstanceParameterized(null).addNewChatForContact(dbContactEntity);
-                    AppController.getInstanceParameterized(null).moveToChatsTab();
+//                final DBChatEntity chatEntity = AppController.getInstanceParameterized(null).getChatEntity(contactEntity.getSessionId());
+//                if (chatEntity == null) {
+//                    AppController.getInstanceParameterized(null).addNewChatForContact(dbContactEntity);
+////                    AppController.getInstanceParameterized(null).moveToChatsTab();
+//                }
+//                } else {
+//                    AppController.getInstanceParameterized(null).moveToChatsTab();
+//                }
+
+                Log.i(LOG, "Start chat activity");
+                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+
+                    ChatController.getInstance().startChatActivity(AppController.getInstanceParameterized(null).getCurrentActivityContext(), dbContactEntity.getAddress());
+
                 } else {
-                    AppController.getInstanceParameterized(null).moveToChatsTab();
+                    //TODO: show a message on screen
+                    // or tell user to use Offline mode ....
+                    Log.i(LOG, "cannot start chat when network not connected");
                 }
 
                 Log.i(LOG, "item.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
             }
         });
+
+//      Contact and Chat apart (there were 2 tabs one for chats and one for contacts)
+
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(LOG, "item.onClick -> ENTER");
+//                int position = getLayoutPosition();
+//                ContactEntity contactEntity = mContactEntitiesList.get(position);
+//                DBContactEntity dbContactEntity = AppController.getInstanceParameterized(null).getContactEntity(contactEntity.getSessionId());
+//
+//                final DBChatEntity chatEntity = AppController.getInstanceParameterized(null).getChatEntity(contactEntity.getSessionId());
+//                if (chatEntity == null) {
+//                    AppController.getInstanceParameterized(null).addNewChatForContact(dbContactEntity);
+//                    AppController.getInstanceParameterized(null).moveToChatsTab();
+//                } else {
+//                    AppController.getInstanceParameterized(null).moveToChatsTab();
+//                }
+//
+//                Log.i(LOG, "item.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
+//            }
+//        });
 
         mEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -32,8 +32,7 @@
                 android:paddingTop="5dp"
                 android:text="@string/left_arrow"
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,8 +64,7 @@
                 android:paddingTop="5dp"
                 android:text="Save"
                 android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="14sp" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -87,8 +85,7 @@
             <LinearLayout
                 android:id="@+id/details_layout"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dip"
                 android:layout_marginTop="60dp"
                 android:orientation="horizontal">
@@ -97,15 +94,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Configurations"
+                        android:text="Connection"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -115,87 +110,38 @@
                         android:layout_marginBottom="12dp"
                         android:background="@color/colorAccent" />
 
-                    <EditText
-                        android:id="@+id/name_contdcdcact_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Refresh connection"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
-                        android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/name_contact_edit"
+                    <LinearLayout
+                        android:id="@+id/connect_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Time until connection refresh:  (5min, 1h, ...))"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
-                        android:textSize="15sp" />
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/nickname_contact_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Tor Circuit length (adv option) (comming soon...)"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/start_stop_connection"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="13dip"
+                            android:layout_weight="1"
+                            android:hint="Start/Stop connection:"
+                            android:padding="10dip"
+                            android:textColor="@color/colorInfoText"
+                            android:textColorHint="@color/colorInfoText"
+                            android:textSize="16dip" />
+
+                        <Switch
+                            android:id="@+id/network_connection_toogle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:checked="false"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/info_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="Advanced settings"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <View
-                android:id="@+id/info_separator"
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:background="@color/colorAccent" />
-
-            <LinearLayout
-                android:id="@+id/address_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:layout_marginTop="10dip"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/address_contact_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dip"
-                    android:layout_weight="1"
-                    android:hint="Occor Circuit length (adv option) (comming soon...)"
-                    android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
-                    android:textSize="16dip" />
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.1"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/tor_onion" />
 
             </LinearLayout>
 

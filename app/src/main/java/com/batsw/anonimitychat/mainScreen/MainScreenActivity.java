@@ -6,7 +6,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,6 +55,8 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     private boolean mReceivedIntent = false;
 
+    NavigationDrawerMenuFragment mDrawerFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -90,7 +94,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
         List<Fragment> listFragments = new ArrayList<>();
         listFragments.add(new TabContacts());
-        listFragments.add(new TabChats());
+//        listFragments.add(new TabChats());
 
         MainScreenAdapter mainScreenAdapter = new MainScreenAdapter(getSupportFragmentManager(), listFragments);
         mViewPager.setAdapter(mainScreenAdapter);
@@ -103,7 +107,8 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     private void initTabs() {
         Log.i(LOG, "initTabs -> ENTER");
 
-        String[] tabNames = {"Contacts", "Chat List"};
+//        String[] tabNames = {"Contacts", "Chat List"};
+        String[] tabNames = {"Contacts"};
 
         for (int i = 0; i < tabNames.length; i++) {
             TabHost.TabSpec tabSpec;
@@ -122,16 +127,16 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         Log.i(LOG, "initNavigationDrawerMenu -> ENTER");
 
         List<NavigationDrawerEntry> drawerEntries = new ArrayList<>();
-        drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
+//        drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
         drawerEntries.add(new NavigationDrawerDivider());
         drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_PROFILE, R.drawable.ic_info_outline_white));
-//        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
+        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
         drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_STORAGE, R.drawable.ic_info_outline_white));
         drawerEntries.add(new NavigationDrawerDivider());
         drawerEntries.add(new NavigationDrawerItem(MainScreenConstants.NAVIGATION_ABOUT));
 
-        NavigationDrawerMenuFragment drawerFragment = (NavigationDrawerMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_screen_fragment_navigation_drawer);
-        drawerFragment.init((android.support.v4.widget.DrawerLayout) findViewById(R.id.main_screen_layout),
+        mDrawerFragment = (NavigationDrawerMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_screen_fragment_navigation_drawer);
+        mDrawerFragment.init((android.support.v4.widget.DrawerLayout) findViewById(R.id.main_screen_layout),
                 null, drawerEntries);
 
         Log.i(LOG, "initNavigationDrawerMenu -> LEAVE");

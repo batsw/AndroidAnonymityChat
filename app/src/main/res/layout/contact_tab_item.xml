@@ -39,6 +39,13 @@
             tools:text="Contact Name" />
 
         <ImageView
+            android:id="@+id/current_user_availability"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/userstatus_offline" />
+
+        <ImageView
             android:id="@+id/current_user_edit"
             android:layout_width="30dp"
             android:layout_height="30dp"

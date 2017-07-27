@@ -18,6 +18,7 @@ import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
+import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.util.AppConstants;
 
@@ -30,8 +31,9 @@ public class ContactEditorActivity extends AppCompatActivity {
     private static final String LOG = ContactEditorActivity.class.getSimpleName();
 
     private DBContactEntity mContactEntity;
+    private DBChatEntity mChatEntity;
 
-    private EditText mContactName, mContactNickname;
+    private EditText mContactName, mContactNickname, mHistoryCleanupTime;
     private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon;
     private ImageView mContactAvatar;
     private TextView mSave;
@@ -39,9 +41,8 @@ public class ContactEditorActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         Log.i(LOG, "onCreate -> ENTER");
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.contact_tab_editor);
 
@@ -53,6 +54,7 @@ public class ContactEditorActivity extends AppCompatActivity {
         Long contactSessionId = getIntent().getLongExtra(AppConstants.CONTACT_ITEM_PUT_EXTRA, 0l);
         if (contactSessionId != 0l) {
             mContactEntity = AppController.getInstanceParameterized(null).getContactEntity(contactSessionId);
+            mChatEntity = AppController.getInstanceParameterized(null).getChatEntity(contactSessionId);
         }
 
         mContactName = (EditText) findViewById(R.id.name_contact_edit);
@@ -66,21 +68,38 @@ public class ContactEditorActivity extends AppCompatActivity {
         String contactAddress = mContactEntity.getAddress().substring(0, 16);
         mContactAddress.setText(contactAddress);
 
-        mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
-        mContactEmail.setText(mContactEntity.getEmail());
+//        mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
+//        mContactEmail.setText(mContactEntity.getEmail());
 
         mContactAvatar = (ImageView) findViewById(R.id.contact_avatar_edit);
+
+// Chat details
+        mHistoryCleanupTime = (EditText) findViewById(R.id.chat_details_history_cleanup_time);
+
+        if (mChatEntity != null) {
+            mHistoryCleanupTime.setText(String.valueOf(mChatEntity.getHistoryCleanupTime()));
+        }
 
         mSave = (TextView) findViewById(R.id.save_contact_edit_button);
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(LOG, "mAdd.onClick -> ENTER");
+                Log.i(LOG, "mSave.onClick -> ENTER");
 
 //                mContactEntity.setAddress(mContactAddress.getText().toString());
                 mContactEntity.setName(mContactName.getText().toString());
                 mContactEntity.setNickName(mContactNickname.getText().toString());
                 mContactEntity.setEmail(mContactEmail.getText().toString());
+
+                long historyCleanupTime = 0;
+                try {
+                    historyCleanupTime = Long.parseLong(mHistoryCleanupTime.getText().toString());
+                    mChatEntity.setHistoryCleanupTime(historyCleanupTime);
+                } catch (NumberFormatException nfe) {
+                    //TODO: pop-up history cleanup time numeric only - if <= 0 never delete
+                }
+
+                AppController.getInstanceParameterized(null).updateChat(mChatEntity);
 
                 final boolean updateSuccessfull = AppController.getInstanceParameterized(null).updateContact(mContactEntity);
 
@@ -94,7 +113,7 @@ public class ContactEditorActivity extends AppCompatActivity {
                     finish();
                 }
 
-                Log.i(LOG, "mAdd.onClick -> LEAVE");
+                Log.i(LOG, "mSave.onClick -> LEAVE");
             }
         });
 
@@ -125,8 +144,8 @@ public class ContactEditorActivity extends AppCompatActivity {
             }
         });
 
-        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_edit);
-        mEmailIcon.setTypeface(fontAwesome);
+//        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_edit);
+//        mEmailIcon.setTypeface(fontAwesome);
 
         //TODO: to add a listener that allows loading pictures for avatars
         mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_edit);
