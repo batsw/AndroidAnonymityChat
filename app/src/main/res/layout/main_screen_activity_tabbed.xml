@@ -5,14 +5,9 @@
     android:id="@+id/main_screen_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+
     android:orientation="vertical"
     tools:context="com.batsw.anonimitychat.mainScreen.MainScreenActivity">
-
-    <include
-        layout="@layout/main_screen_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <TabHost
         android:id="@+id/main_screen_tab_host"
@@ -57,24 +52,15 @@
 
     </TabHost>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+    <fragment
+        android:id="@+id/main_screen_fragment_navigation_drawer"
+        android:name="com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/main_screen_nav_header"
-        app:menu="@menu/main_screen_navigation_menu" />
+        app:layout="@layout/main_screen_navigation_drawer_menu"
+        tools:layout="@layout/main_screen_navigation_drawer_menu">
 
-    <!--<fragment-->
-        <!--android:id="@+id/main_screen_fragment_navigation_drawer"-->
-        <!--android:name="com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--app:layout="@layout/main_screen_navigation_drawer_menu"-->
-        <!--tools:layout="@layout/main_screen_navigation_drawer_menu">-->
-
-    <!--</fragment>-->
+    </fragment>
 
 </android.support.v4.widget.DrawerLayout>

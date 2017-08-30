@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +35,7 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.popup.NetworkPopupActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
@@ -43,7 +48,7 @@ import java.util.List;
  * Created by tudor on 3/27/2017.
  */
 
-public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
+public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG = MainScreenActivity.class.getSimpleName();
 
@@ -55,7 +60,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
     private boolean mReceivedIntent = false;
 
-    NavigationDrawerMenuFragment mDrawerFragment;
+//    NavigationDrawerMenuFragment mDrawerFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,8 +70,8 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen_activity);
 
-        //Loading fontAwesome
-        Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
+//        //Loading fontAwesome
+//        Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
         initLayout();
         initTabs();
@@ -126,18 +131,31 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
     private void initNavigationDrawerMenu() {
         Log.i(LOG, "initNavigationDrawerMenu -> ENTER");
 
-        List<NavigationDrawerEntry> drawerEntries = new ArrayList<>();
-//        drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
-        drawerEntries.add(new NavigationDrawerDivider());
-        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_PROFILE, R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_STORAGE, R.drawable.ic_info_outline_white));
-        drawerEntries.add(new NavigationDrawerDivider());
-        drawerEntries.add(new NavigationDrawerItem(MainScreenConstants.NAVIGATION_ABOUT));
+//        List<NavigationDrawerEntry> drawerEntries = new ArrayList<>();
+////        drawerEntries.add(new NavigationDrawerToogle(MainScreenConstants.NAVIGATION_TOOGLE));
+//        drawerEntries.add(new NavigationDrawerDivider());
+//        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_PROFILE, R.drawable.ic_info_outline_white));
+//        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_NETWORK, R.drawable.ic_info_outline_white));
+//        drawerEntries.add(new NavigationDrawerItemAndImg(MainScreenConstants.NAVIGATION_STORAGE, R.drawable.ic_info_outline_white));
+//        drawerEntries.add(new NavigationDrawerDivider());
+//        drawerEntries.add(new NavigationDrawerItem(MainScreenConstants.NAVIGATION_ABOUT));
 
-        mDrawerFragment = (NavigationDrawerMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_screen_fragment_navigation_drawer);
-        mDrawerFragment.init((android.support.v4.widget.DrawerLayout) findViewById(R.id.main_screen_layout),
-                null, drawerEntries);
+//        mDrawerFragment = (NavigationDrawerMenuFragment) getSupportFragmentManager().findFragmentById(R.id.main_screen_fragment_navigation_drawer);
+//        mDrawerFragment.init((android.support.v4.widget.DrawerLayout) findViewById(R.id.main_screen_layout),
+//                null, drawerEntries);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_screen_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.main_screen_drawer_open, R.string.main_screen_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         Log.i(LOG, "initNavigationDrawerMenu -> LEAVE");
     }
@@ -206,18 +224,43 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
                 mNetworkPopupActivity.show();
 
-                break;
+                return true;
+
+            case R.id.action_settings:
+                Log.i(LOG, "action_settings");
+                return true;
 
 //            case R.id.action_search:
 //                Log.i(LOG, "action_search");
 //                break;
-
-            default:
-                Log.i(LOG, "default toolbar ... never here");
-                break;
         }
 
         Log.i(LOG, "onOptionsItemSelected -> LEAVE");
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.i(LOG, "onNavigationItemSelected -> ENTER MenuItem=" + item);
+        int id = item.getItemId();
+
+        if (id == R.id.nav_my_profile) {
+
+//            TODO: call the fragment class here
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsAboutActivity()).commit();
+
+        } else if (id == R.id.nav_network) {
+
+        } else if (id == R.id.nav_storage) {
+
+        } else if (id == R.id.nav_about) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_screen_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        Log.i(LOG, "onNavigationItemSelected -> LEAVE");
         return true;
     }
 

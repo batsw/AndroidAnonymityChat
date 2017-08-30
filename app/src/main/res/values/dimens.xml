@@ -10,4 +10,8 @@
     <dimen name="margin_32">32dp</dimen>
 
     <dimen name="margin_20">20dp</dimen>
+
+    <dimen name="margin_50">50dp</dimen>
+
+    <!--Navigation Menu dimensions-->
 </resources>

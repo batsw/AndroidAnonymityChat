@@ -7,6 +7,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="chat_text_message_style">
@@ -45,16 +47,16 @@
     <!--example-->
 
     <!--<style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
 
-        <!--<item name="android:textColorLink">@drawable/selector_text_color_link</item>-->
-        <!--<item name="colorControlActivated">@color/colorAccentDark</item>-->
-        <!--<item name="android:textColorHighlight">@color/colorAccent_a40</item>-->
+    <!--<item name="android:textColorLink">@drawable/selector_text_color_link</item>-->
+    <!--<item name="colorControlActivated">@color/colorAccentDark</item>-->
+    <!--<item name="android:textColorHighlight">@color/colorAccent_a40</item>-->
 
-        <!--<item name="actionModeBackground">?attr/colorPrimaryDark</item>-->
-        <!--<item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>-->
-        <!--<item name="android:navigationBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>-->
+    <!--<item name="actionModeBackground">?attr/colorPrimaryDark</item>-->
+    <!--<item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>-->
+    <!--<item name="android:navigationBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>-->
     <!--</style>-->
 </resources>

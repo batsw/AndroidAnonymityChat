@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:text="Connection"
+        android:text="Network Connection"
         android:textColor="@color/colorPrimary"
         android:textSize="15dp"
         android:textStyle="bold" />
@@ -76,10 +76,10 @@
 
         <TextView
             android:id="@+id/network_my_address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="xxxxxxxxxxxxxxxx"
+            android:gravity="center"
+            android:text="address"
             android:textColor="@color/colorAccent"
             android:textSize="18dp" />
 
