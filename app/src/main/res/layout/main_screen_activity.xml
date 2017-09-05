@@ -9,53 +9,55 @@
     android:orientation="vertical"
     tools:context="com.batsw.anonimitychat.mainScreen.MainScreenActivity">
 
-    <include
-        layout="@layout/main_screen_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<include-->
+    <!--layout="@layout/main_screen_app_bar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
 
-    <TabHost
-        android:id="@+id/main_screen_tab_host"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="166dp"-->
+        android:layout_height="wrap_content">
+        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
 
-        <LinearLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryDark" />
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
 
-            <HorizontalScrollView
-                android:id="@+id/main_screen_scroll_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none">
+    </android.support.design.widget.AppBarLayout>
 
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></TabWidget>
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="57dp"
+        android:clickable="true">
 
-            </HorizontalScrollView>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_screen_view_pager"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    </FrameLayout>
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/main_screen_view_pager"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+    <!--<TabHost-->
+    <!--android:id="@+id/main_screen_tab_host"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-            </FrameLayout>
 
-        </LinearLayout>
+    <!--<FrameLayout-->
+    <!--android:id="@android:id/tabcontent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-    </TabHost>
+    <!---->
+
+    <!--</FrameLayout>-->
+
+    <!--</TabHost>-->
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -67,13 +69,13 @@
         app:menu="@menu/main_screen_navigation_menu" />
 
     <!--<fragment-->
-        <!--android:id="@+id/main_screen_fragment_navigation_drawer"-->
-        <!--android:name="com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--app:layout="@layout/main_screen_navigation_drawer_menu"-->
-        <!--tools:layout="@layout/main_screen_navigation_drawer_menu">-->
+    <!--android:id="@+id/main_screen_fragment_navigation_drawer"-->
+    <!--android:name="com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="start"-->
+    <!--app:layout="@layout/main_screen_navigation_drawer_menu"-->
+    <!--tools:layout="@layout/main_screen_navigation_drawer_menu">-->
 
     <!--</fragment>-->
 

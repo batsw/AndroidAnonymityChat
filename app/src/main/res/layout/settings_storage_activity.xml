@@ -1,135 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="horizontal"
     tools:ignore="MissingPrefix">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/settings_storage_appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/settings_storage_appBar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:clickable="true">-->
+    <!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay"&ndash;&gt;-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/settings_storage_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/settings_storage_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimary">-->
+    <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay">&ndash;&gt;-->
 
-            <TextView
-                android:id="@+id/settings_storage_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="@string/left_arrow"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+    <!--<TextView-->
+    <!--android:id="@+id/settings_storage_back"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="left"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="@string/left_arrow"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="20sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="@string/settings_storage"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="@string/settings_storage"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="bold" />-->
 
-            <TextView
-                android:id="@+id/settings_storage_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="Save"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+    <!--<TextView-->
+    <!--android:id="@+id/settings_storage_save"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="end"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="Save"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="14sp"-->
+    <!--android:textStyle="bold" />-->
 
-        </android.support.v7.widget.Toolbar>
+    <!--</android.support.v7.widget.Toolbar>-->
 
-    </android.support.design.widget.AppBarLayout>
+    <!--</android.support.design.widget.AppBarLayout>-->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:clickable="true"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/details_layout"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dip"
-                android:layout_marginTop="60dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
                 android:orientation="horizontal">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:clickable="true"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Configurations"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/settings_storage_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:drawablePadding="10dp"
+                            android:paddingBottom="5dp"
+                            android:paddingEnd="15dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingStart="15dp"
+                            android:paddingTop="17dp"
+                            android:text="@string/left_arrow"
+                            android:textColor="@android:color/white"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Storage configurations"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"
                         android:layout_marginBottom="12dp"
+                        android:layout_marginRight="20dp"
                         android:background="@color/colorAccent" />
-
-                    <EditText
-                        android:id="@+id/name_contact_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Periodic chats history deletion: ENABLE/DISABLE"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
-                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/nickname_contact_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
                         android:hint="History cleaning time: every 5h (1min, 1 day, etc)"
                         android:imeOptions="actionDone"
                         android:singleLine="true"
@@ -144,8 +161,7 @@
                 android:id="@+id/info_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Details"
                 android:textColor="@color/white"
@@ -156,14 +172,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="10dp"
                 android:background="@color/colorAccent" />
 
             <LinearLayout
                 android:id="@+id/address_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
+                android:layout_marginLeft="10dip"
                 android:layout_marginTop="10dip"
                 android:orientation="horizontal">
 
@@ -193,10 +210,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
                 android:layout_marginTop="10dip"
+                android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/contact_email_sefsrthficon_edit"
+                    android:id="@+id/storage_settings_email_icon"
                     android:layout_width="0dip"
                     android:layout_height="30dip"
                     android:layout_weight="0.1"
@@ -206,64 +224,26 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/email_contasrthefefct_edit"
                     android:layout_width="164dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="23dip"
                     android:layout_marginTop="5dip"
-                    android:hint="Contact number: 55"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:hint="Partner name"
                     android:textColor="@color/colorInfoText"
                     android:textColorHint="@color/colorInfoText" />
 
                 <TextView
+                    android:id="@+id/settings_storage_erase_contact"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_weight="0.1"
+                    android:clickable="true"
                     android:gravity="center_vertical"
-                    android:id="@+id/imageVirthrthew"
                     android:text="Erase all"
-                    android:textSize="17dp"
-                    android:textColor="@color/colorAccent"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/email_layouefesft"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:layout_marginTop="10dip"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/contact_email_sefseficon_edit"
-                    android:layout_width="0dip"
-                    android:layout_height="30dip"
-                    android:layout_weight="0.1"
-                    android:alpha="0.25"
-                    android:gravity="center_vertical"
-                    android:text="@string/email"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/email_contasefefct_edit"
-                    android:layout_width="164dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="23dip"
-                    android:layout_marginTop="5dip"
-                    android:hint="Chat number: 55"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="0.1"
-                    android:gravity="center_vertical"
-                    android:id="@+id/imageView"
-                    android:text="Erase all"
-                    android:textSize="17dp"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17dp" />
 
             </LinearLayout>
 
@@ -284,4 +264,4 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</FrameLayout>

@@ -1,10 +1,8 @@
 package com.batsw.anonimitychat.mainScreen.tabs;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
@@ -25,7 +22,6 @@ import com.batsw.anonimitychat.persistence.util.IDbEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by tudor on 3/29/2017.
@@ -85,6 +81,7 @@ public class TabContacts extends Fragment {
         AppController.getInstanceParameterized(null).setContactsTab(this);
 
         mFloatingAddButton = (FloatingActionButton) view.findViewById(R.id.contacts_tab_floating_add_button);
+        mFloatingAddButton.show();
         mFloatingAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,6 +151,10 @@ public class TabContacts extends Fragment {
 
         mContactsAdapter.notifyItemChanged(i);
         Log.i(LOG, "updateContactList -> LEAVE");
+    }
+
+    public FloatingActionButton getFloatingAddButton() {
+        return mFloatingAddButton;
     }
 }
 

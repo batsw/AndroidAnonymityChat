@@ -1,155 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:ignore="MissingPrefix">
+    android:id="@+id/sn_frame_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="horizontal">
+    <!--tools:ignore="MissingPrefix"-->
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/settings_network_appBar"
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/settings_network_appBar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay"&ndash;&gt;-->
+
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/settings_network_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimaryDark">-->
+    <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/settings_network_back"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_gravity="left"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:drawablePadding="10dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingBottom="5dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingEnd="15dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingLeft="15dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingRight="15dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingStart="15dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingTop="5dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="@string/left_arrow"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:textColor="@android:color/white"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:textSize="20sp" />&ndash;&gt;-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="@string/settings_network"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <LinearLayout
+        android:id="@+id/sn_connection_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dip"
+        android:orientation="horizontal">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/settings_network_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
-
-            <TextView
-                android:id="@+id/settings_network_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="@string/left_arrow"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="@string/settings_network"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/settings_network_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="Save"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/details_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dip"
-                android:layout_marginTop="60dp"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/settings_network_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:drawablePadding="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingStart="15dp"
+                    android:paddingTop="17dp"
+                    android:text="@string/left_arrow"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Connection"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginBottom="12dp"
-                        android:background="@color/colorAccent" />
-
-
-                    <LinearLayout
-                        android:id="@+id/connect_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/start_stop_connection"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="13dip"
-                            android:layout_weight="1"
-                            android:hint="Start/Stop connection:"
-                            android:padding="10dip"
-                            android:textColor="@color/colorInfoText"
-                            android:textColorHint="@color/colorInfoText"
-                            android:textSize="16dip" />
-
-                        <Switch
-                            android:id="@+id/network_connection_toogle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="10dp"
-                            android:checked="false"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="15dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Network connection"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="0.1dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/colorAccent" />
+
+
+            <LinearLayout
+                android:id="@+id/connect_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/start_stop_connection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Start/Stop connection:"
+                    android:padding="10dip"
+                    android:textColor="@color/colorInfoText"
+                    android:textColorHint="@color/colorInfoText"
+                    android:textSize="16dip" />
+
+                <Switch
+                    android:id="@+id/settings_network_connection_toogle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:checked="false"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </RelativeLayout>

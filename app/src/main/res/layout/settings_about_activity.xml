@@ -5,18 +5,65 @@
     android:layout_height="wrap_content"
     tools:ignore="MissingPrefix">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/settings_about_appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/settings_about_appBar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay"&ndash;&gt;-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/settings_about_toolbar"
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/settings_about_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimary">-->
+    <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay">&ndash;&gt;-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/about_back_icon"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="left"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="@string/left_arrow"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:drawablePadding="10dp"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingEnd="15dp"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp"-->
+    <!--android:paddingStart="15dp"-->
+    <!--android:paddingTop="5dp"-->
+    <!--android:text="@string/settings_about"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:textSize="20sp" />-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/about_back_icon"
@@ -29,45 +76,26 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingStart="15dp"
-                android:paddingTop="5dp"
+                android:paddingTop="17dp"
                 android:text="@string/left_arrow"
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="10dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="15dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="5dp"
-                android:text="@string/settings_about"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="10dp"
+                android:text="About"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="100dp"
-        android:orientation="vertical">
+        </LinearLayout>
 
         <TextView
             android:id="@+id/about_copyright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="13dip"
             android:layout_weight="1"
             android:padding="25dip"
             android:text="Copyright BAT Software Organization"
@@ -75,14 +103,22 @@
             android:textSize="16dip" />
 
         <TextView
-            android:id="@+id/address_contact_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="13dip"
             android:layout_weight="1"
             android:padding="10dip"
-            android:text="https://github.com/batsw"
+            android:text="Support: https://batsoftware.freshdesk.com/helpdesk/"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:padding="10dip"
+            android:text="Open Source Version: https://github.com/batsw"
             android:textColor="@color/colorAccent"
             android:textSize="16dip" />
 

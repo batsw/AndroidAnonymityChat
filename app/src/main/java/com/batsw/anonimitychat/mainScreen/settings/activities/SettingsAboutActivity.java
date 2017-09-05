@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
+import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
+import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 
 /**
  * Created by tudor on 4/25/2017.
@@ -22,7 +24,7 @@ import com.batsw.anonimitychat.appManagement.AppController;
 public class SettingsAboutActivity extends Fragment {
     private static final String LOG = SettingsAboutActivity.class.getSimpleName();
 
-//    private Fragment mThis = null;
+    private Fragment mThis = null;
 
     private View mView;
     private TextView mBackIcon;
@@ -32,33 +34,25 @@ public class SettingsAboutActivity extends Fragment {
         Log.i(LOG, "onCreate -> ENTER");
         super.onCreate(savedInstanceState);
 
-//        //Loading fontAwesome
-//        Typeface fontAwesome = Typeface.createFromAsset(AppController.getInstanceParameterized(null).getCurrentActivityContext().getAssets(),
-//                "font_awesome/fontawesome.ttf");
-//
-//        mBackIcon = (TextView) AppController.getInstanceParameterized(null).getCurrentActivityContext().findViewById(R.id.about_back_icon);
-//        mBackIcon.setTypeface(fontAwesome);
-//
-//        mBackIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+        mThis = this;
 
-//        mThis = this;
-
-        Log.i(LOG, "onCreate -> ENTER");
+        Log.i(LOG, "onCreate -> LEAVE");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        Log.i(LOG, "onCreateView -> ENTER");
         mView = inflater.inflate(R.layout.settings_about_activity, container, false);
 
         //Loading fontAwesome
         Typeface fontAwesome = Typeface.createFromAsset(AppController.getInstanceParameterized(null).getCurrentActivityContext().getAssets(),
                 "font_awesome/fontawesome.ttf");
+
+//        Hiding the floating Add contact button
+        TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
+        if (contactsFragment != null) {
+            contactsFragment.getView().setVisibility(View.INVISIBLE);
+        }
 
         mBackIcon = (TextView) mView.findViewById(R.id.about_back_icon);
         mBackIcon.setTypeface(fontAwesome);
@@ -66,11 +60,16 @@ public class SettingsAboutActivity extends Fragment {
         mBackIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getActivity().getFragmentManager().beginTransaction().remove(mThis).commit();
-                getActivity().getFragmentManager().popBackStack();
+                getActivity().getFragmentManager().beginTransaction().remove(mThis).commit();
+
+                TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
+                if (contactsFragment != null) {
+                    contactsFragment.getView().setVisibility(View.VISIBLE);
+                }
             }
         });
 
+        Log.i(LOG, "onCreateView -> LEAVE");
         return mView;
     }
 

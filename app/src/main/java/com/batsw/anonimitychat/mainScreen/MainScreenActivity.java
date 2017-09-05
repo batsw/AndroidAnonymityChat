@@ -1,11 +1,13 @@
 package com.batsw.anonimitychat.mainScreen;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +38,9 @@ import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDraw
 import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.popup.NetworkPopupActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsNetworkActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsProfileActivity;
+import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsStorageActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
@@ -48,12 +53,17 @@ import java.util.List;
  * Created by tudor on 3/27/2017.
  */
 
-public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener, NavigationView.OnNavigationItemSelectedListener {
+//public class MainScreenActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener, NavigationView.OnNavigationItemSelectedListener {
+
+public class MainScreenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG = MainScreenActivity.class.getSimpleName();
 
     private ViewPager mViewPager;
-    private TabHost mTabHost;
+
+    private TabContacts mTabContacts;
+
+//    private TabHost mTabHost;
 
     private NetworkPopupActivity mNetworkPopupActivity;
     private TextView mTextView;
@@ -74,7 +84,7 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 //        Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
         initLayout();
-        initTabs();
+//        initTabs();
         initNavigationDrawerMenu();
 
         initBackend();
@@ -94,39 +104,41 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
         mViewPager = (ViewPager) findViewById(R.id.main_screen_view_pager);
 
-        mTabHost = (TabHost) findViewById(R.id.main_screen_tab_host);
-        mTabHost.setup();
+//        mTabHost = (TabHost) findViewById(R.id.main_screen_tab_host);
+//        mTabHost.setup();
+
+        mTabContacts = new TabContacts();
 
         List<Fragment> listFragments = new ArrayList<>();
-        listFragments.add(new TabContacts());
+        listFragments.add(mTabContacts);
 //        listFragments.add(new TabChats());
 
         MainScreenAdapter mainScreenAdapter = new MainScreenAdapter(getSupportFragmentManager(), listFragments);
         mViewPager.setAdapter(mainScreenAdapter);
 
-        mViewPager.setOnPageChangeListener(this);
+//        mViewPager.setOnPageChangeListener(this);
 
         Log.i(LOG, "init -> LEAVE");
     }
 
-    private void initTabs() {
-        Log.i(LOG, "initTabs -> ENTER");
-
-//        String[] tabNames = {"Contacts", "Chat List"};
-        String[] tabNames = {"Contacts"};
-
-        for (int i = 0; i < tabNames.length; i++) {
-            TabHost.TabSpec tabSpec;
-            tabSpec = mTabHost.newTabSpec(tabNames[i]);
-            tabSpec.setIndicator(tabNames[i]);
-            tabSpec.setContent(new TabContent(getApplicationContext()));
-            mTabHost.addTab(tabSpec);
-        }
-
-        mTabHost.setOnTabChangedListener(this);
-
-        Log.i(LOG, "initTabs -> LEAVE");
-    }
+//    private void initTabs() {
+//        Log.i(LOG, "initTabs -> ENTER");
+//
+////        String[] tabNames = {"Contacts", "Chat List"};
+//        String[] tabNames = {"Contacts"};
+//
+//        for (int i = 0; i < tabNames.length; i++) {
+//            TabHost.TabSpec tabSpec;
+//            tabSpec = mTabHost.newTabSpec(tabNames[i]);
+//            tabSpec.setIndicator(tabNames[i]);
+//            tabSpec.setContent(new TabContent(getApplicationContext()));
+//            mTabHost.addTab(tabSpec);
+//        }
+//
+////        mTabHost.setOnTabChangedListener(this);
+//
+//        Log.i(LOG, "initTabs -> LEAVE");
+//    }
 
     private void initNavigationDrawerMenu() {
         Log.i(LOG, "initNavigationDrawerMenu -> ENTER");
@@ -226,9 +238,9 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
 
                 return true;
 
-            case R.id.action_settings:
-                Log.i(LOG, "action_settings");
-                return true;
+//            case R.id.action_settings:
+//                Log.i(LOG, "action_settings");
+//                return true;
 
 //            case R.id.action_search:
 //                Log.i(LOG, "action_search");
@@ -245,16 +257,23 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         int id = item.getItemId();
 
         if (id == R.id.nav_my_profile) {
+//            SettingsProfileActivity settingsProfileActivity = new SettingsProfileActivity();
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+////            transaction.addToBackStack(null);
+//            transaction.replace(R.id.content_frame, settingsProfileActivity).commit();
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.content_frame, new SettingsProfileActivity(), "mainFrqgment").commit();
 
-//            TODO: call the fragment class here
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsAboutActivity()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsProfileActivity()).commit();
 
         } else if (id == R.id.nav_network) {
-
+            SettingsNetworkActivity settingsNetworkActivity = new SettingsNetworkActivity();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsNetworkActivity).commit();
         } else if (id == R.id.nav_storage) {
-
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsStorageActivity()).commit();
         } else if (id == R.id.nav_about) {
-
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsAboutActivity()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_screen_layout);
@@ -264,47 +283,53 @@ public class MainScreenActivity extends AppCompatActivity implements ViewPager.O
         return true;
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+    public TabContacts getContactsFragment() {
+        Log.i(LOG, "getFloatingActionButton -> ENTER");
+        Log.i(LOG, "getFloatingActionButton -> LEAVE");
+        return mTabContacts;
     }
 
-    @Override
-    public void onPageSelected(int selectedPage) {
-        mTabHost.setCurrentTab(selectedPage);
-    }
+//    @Override
+//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//    }
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
+//    @Override
+//    public void onPageSelected(int selectedPage) {
+//        mTabHost.setCurrentTab(selectedPage);
+//    }
 
-    }
+//    @Override
+//    public void onPageScrollStateChanged(int state) {
+//
+//    }
 
-    @Override
-    public void onTabChanged(String s) {
-        int selectedPage = mTabHost.getCurrentTab();
-        mViewPager.setCurrentItem(selectedPage);
+//    @Override
+//    public void onTabChanged(String s) {
+//        int selectedPage = mTabHost.getCurrentTab();
+//        mViewPager.setCurrentItem(selectedPage);
+//
+//        HorizontalScrollView horizontalScrollView = (HorizontalScrollView) findViewById(R.id.main_screen_scroll_view);
+//        View tabView = mTabHost.getCurrentTabView();
+//        int scrollPosition = tabView.getLeft() - (horizontalScrollView.getWidth() - tabView.getWidth()) / 2;
+//        horizontalScrollView.smoothScrollBy(scrollPosition, 0);
+//    }
 
-        HorizontalScrollView horizontalScrollView = (HorizontalScrollView) findViewById(R.id.main_screen_scroll_view);
-        View tabView = mTabHost.getCurrentTabView();
-        int scrollPosition = tabView.getLeft() - (horizontalScrollView.getWidth() - tabView.getWidth()) / 2;
-        horizontalScrollView.smoothScrollBy(scrollPosition, 0);
-    }
-
-    private class TabContent implements TabHost.TabContentFactory {
-        Context context;
-
-        public TabContent(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public View createTabContent(String s) {
-            View fakeView = new View(context);
-            fakeView.setMinimumHeight(0);
-            fakeView.setMinimumWidth(0);
-            return fakeView;
-        }
-    }
+//    private class TabContent implements TabHost.TabContentFactory {
+//        Context context;
+//
+//        public TabContent(Context context) {
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public View createTabContent(String s) {
+//            View fakeView = new View(context);
+//            fakeView.setMinimumHeight(0);
+//            fakeView.setMinimumWidth(0);
+//            return fakeView;
+//        }
+//    }
 
     public void moveToChatsTab() {
         Log.i(LOG, "moveToChatsTab -> ENTER");
