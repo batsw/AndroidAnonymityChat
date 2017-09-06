@@ -32,7 +32,7 @@ public class ChatsDetailsActivity extends AppCompatActivity {
 
     private Spinner historyCleanupSpinner;
     private LinearLayout historyCleanupLayout;
-    private TextView trashIcon, spinnerArrow, mBack, mSave, mContactAddress;
+    private TextView spinnerArrow, mBack, mSave, mContactAddress;
     private EditText mChatName, mHistoryCleanupTime;
     private List<String> list = new ArrayList<>();
 
@@ -83,9 +83,6 @@ public class ChatsDetailsActivity extends AppCompatActivity {
         });
 
         historyCleanupLayout = (LinearLayout) findViewById(R.id.history_cleanup_layout);
-
-        trashIcon = (TextView) findViewById(R.id.chat_details_trash_icon);
-        trashIcon.setTypeface(fontAwesome);
 
         mSave = (TextView) findViewById(R.id.chat_details_save);
         mSave.setOnClickListener(new View.OnClickListener() {

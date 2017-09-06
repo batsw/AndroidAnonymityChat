@@ -46,10 +46,10 @@ public class ContactAddActivity extends AppCompatActivity {
         mContactNickname = (EditText) findViewById(R.id.nickname_contact_add);
 
         mContactAddress = (EditText) findViewById(R.id.address_contact_add);
-        mContactEmail = (EditText) findViewById(R.id.email_contact_add);
+//        mContactEmail = (EditText) findViewById(R.id.email_contact_add);
 
-        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_add);
-        mEmailIcon.setTypeface(fontAwesome);
+//        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_add);
+//        mEmailIcon.setTypeface(fontAwesome);
 
         mAdd = (Button) findViewById(R.id.contact_add_button);
         mAdd.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +66,7 @@ public class ContactAddActivity extends AppCompatActivity {
                     contact.setAddress(myAddressComplete);
                     contact.setName(mContactName.getText().toString());
                     contact.setNickName(mContactNickname.getText().toString());
-                    contact.setEmail(mContactEmail.getText().toString());
+//                    contact.setEmail(mContactEmail.getText().toString());
 
                     if (validateNewContact(contact)) {
 

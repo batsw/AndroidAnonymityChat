@@ -29,6 +29,8 @@
     <string name="camera">&#xf030;</string>
     <string name="email">&#xf003;</string>
     <string name="check">&#xf00c;</string>
+    <string name="clock">&#xf017;</string>
+
 
     <!--Settings-->
     <string name="settings_storage">Storage</string>

@@ -40,7 +40,7 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
         mChatEntitiesList = chatsList;
 
         mAvatarImageView = (ImageView) itemView.findViewById(R.id.current_user_avatar);
-        mAvailabilityImageView = (ImageView) itemView.findViewById(R.id.current_user_availability);
+//        mAvailabilityImageView = (ImageView) itemView.findViewById(R.id.current_user_availability);
 
         mNameTextView = (TextView) itemView.findViewById(R.id.current_chat_name);
 
@@ -91,11 +91,11 @@ public class ChatsHolder extends RecyclerView.ViewHolder implements View.OnClick
         mChatEntity = ce;
         //TODO: to load User's custom image
 
-        if (isAvailable) {
-            mAvailabilityImageView.setImageResource(R.drawable.userstatus_online);
-        } else {
-            mAvailabilityImageView.setImageResource(R.drawable.userstatus_offline);
-        }
+//        if (isAvailable) {
+//            mAvailabilityImageView.setImageResource(R.drawable.userstatus_online);
+//        } else {
+//            mAvailabilityImageView.setImageResource(R.drawable.userstatus_offline);
+//        }
 
         mNameTextView.setText(ce.getContactName());
     }

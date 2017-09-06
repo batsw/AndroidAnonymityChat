@@ -89,10 +89,10 @@ public class SettingsNetworkActivity extends Fragment {
             }
         });
 
-        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-            mNetworkConnectionSwitch.setChecked(true);
-        } else {
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STOPPED)) {
             mNetworkConnectionSwitch.setChecked(false);
+        } else {
+            mNetworkConnectionSwitch.setChecked(true);
         }
 
         Log.i(LOG, "onCreateView -> LEAVE");

@@ -34,7 +34,7 @@ public class ContactEditorActivity extends AppCompatActivity {
     private DBChatEntity mChatEntity;
 
     private EditText mContactName, mContactNickname, mHistoryCleanupTime;
-    private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon;
+    private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon, mClockIcon;
     private ImageView mContactAvatar;
     private TextView mSave;
     private Button mDelete;
@@ -71,6 +71,9 @@ public class ContactEditorActivity extends AppCompatActivity {
 //        mContactEmail = (TextView) findViewById(R.id.email_contact_edit);
 //        mContactEmail.setText(mContactEntity.getEmail());
 
+        mClockIcon = (TextView) findViewById(R.id.contact_edit_clock_icon);
+        mClockIcon.setTypeface(fontAwesome);
+
         mContactAvatar = (ImageView) findViewById(R.id.contact_avatar_edit);
 
 // Chat details
@@ -89,7 +92,7 @@ public class ContactEditorActivity extends AppCompatActivity {
 //                mContactEntity.setAddress(mContactAddress.getText().toString());
                 mContactEntity.setName(mContactName.getText().toString());
                 mContactEntity.setNickName(mContactNickname.getText().toString());
-                mContactEntity.setEmail(mContactEmail.getText().toString());
+//                mContactEntity.setEmail(mContactEmail.getText().toString());
 
                 long historyCleanupTime = 0;
                 try {

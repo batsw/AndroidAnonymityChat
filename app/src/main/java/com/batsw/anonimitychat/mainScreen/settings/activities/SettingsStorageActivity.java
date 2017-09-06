@@ -27,7 +27,7 @@ public class SettingsStorageActivity extends Fragment {
     private Fragment mThis = null;
 
     private View mView;
-    private TextView mBackIcon;
+    private TextView mBackIcon, mClockIcon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,9 @@ public class SettingsStorageActivity extends Fragment {
         if (contactsFragment != null) {
             contactsFragment.getView().setVisibility(View.INVISIBLE);
         }
+
+        mClockIcon = (TextView) mView.findViewById(R.id.settings_storage_clock_icon);
+        mClockIcon.setTypeface(fontAwesome);
 
         mBackIcon = (TextView) mView.findViewById(R.id.settings_storage_back);
         mBackIcon.setTypeface(fontAwesome);
