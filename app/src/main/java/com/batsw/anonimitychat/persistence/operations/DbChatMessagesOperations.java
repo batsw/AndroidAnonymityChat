@@ -158,18 +158,16 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
         return null;
     }
 
-    public boolean deleteAllMessagesForSessionId(long contactSessionId) {
-        Log.i(LOG, "deleteDbEntity -> ENTER contactSessionId=" + contactSessionId);
-        boolean retVal = false;
+    public void deleteAllMessagesForSessionId(long contactSessionId) {
+        Log.i(LOG, "deleteAllMessagesForSessionId -> ENTER contactSessionId=" + contactSessionId);
 
-        mSQLiteDatabase.delete(PersistenceConstants.TABLE_CHATS_MESSAGES, PersistenceConstants.COLUMN_SESSION_ID,
+        mSQLiteDatabase.delete(PersistenceConstants.TABLE_CHATS_MESSAGES, PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " = ?",
                 new String[]{String.valueOf(contactSessionId)
                 });
 
 //        mSQLiteDatabase.close();
 
-        Log.i(LOG, "deleteDbEntity -> LEAVE retVal=" + retVal);
-        return retVal;
+        Log.i(LOG, "deleteAllMessagesForSessionId -> LEAVE");
     }
 }
 

@@ -20,6 +20,7 @@ import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.util.AppConstants;
 
 /**
@@ -96,7 +97,9 @@ public class ContactEditorActivity extends AppCompatActivity {
 
                 long historyCleanupTime = 0;
                 try {
-                    historyCleanupTime = Long.parseLong(mHistoryCleanupTime.getText().toString());
+                    if (mHistoryCleanupTime.getText().toString() != null) {
+                        historyCleanupTime = Long.parseLong(mHistoryCleanupTime.getText().toString());
+                    }
                     mChatEntity.setHistoryCleanupTime(historyCleanupTime);
                 } catch (NumberFormatException nfe) {
                     //TODO: pop-up history cleanup time numeric only - if <= 0 never delete
@@ -125,10 +128,17 @@ public class ContactEditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(LOG, "mDelete.onClick -> ENTER");
-                final String contactAddress = mContactAddress.getText().toString();
+                final String contactAddress = mContactAddress.getText().toString() + TorConstants.TOR_ADDRESS_SUFFIX;
                 final boolean deletedContact = AppController.getInstanceParameterized(null).deleteContact(contactAddress);
                 if (deletedContact) {
                     Log.i(LOG, "contact deleted successfully");
+
+                    ContactEntity deletedContactEntity = new ContactEntity(
+                            (mContactEntity.getNickName() == null || mContactEntity.getNickName().isEmpty()) ? mContactEntity.getName() : mContactEntity.getNickName(),
+                            mContactEntity.getSessionId()
+                    );
+                    AppController.getInstanceParameterized(null).removeContactFromTab(deletedContactEntity);
+
                     finish();
                 }
 

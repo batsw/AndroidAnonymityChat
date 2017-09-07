@@ -137,6 +137,29 @@ public class TabContacts extends Fragment {
         Log.i(LOG, "addContactToList -> LEAVE");
     }
 
+    public void removeContactFromList(ContactEntity contactEntity) {
+        Log.i(LOG, "removeContactFromList -> ENTER contactEntity=" + contactEntity);
+
+        for (ContactEntity ce : mContactsList) {
+            if (ce.getSessionId() == contactEntity.getSessionId()) {
+
+                int contactIndex = mContactsList.indexOf(ce);
+                Log.i(LOG, "contactIndex = " + contactIndex);
+
+                mContactsList.remove(ce);
+                Log.i(LOG, "removed from contacts tab");
+
+                mContactsAdapter.notifyItemRemoved(contactIndex);
+
+                break;
+            }
+        }
+
+//        mContactsAdapter.notifyItemRangeChanged(mContactsList.size(), 1);
+//        mContactsAdapter.notifyDataSetChanged();
+        Log.i(LOG, "removeContactFromList -> LEAVE");
+    }
+
     public void updateContactList(ContactEntity contactEntity) {
         Log.i(LOG, "updateContactList -> ENTER contactEntity=" + contactEntity);
 

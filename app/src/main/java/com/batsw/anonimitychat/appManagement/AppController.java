@@ -243,6 +243,12 @@ public class AppController {
         Log.i(LOG, "addNewContactToTab -> LEAVE");
     }
 
+    public void removeContactFromTab(ContactEntity newContactEntity) {
+        Log.i(LOG, "removeContactFromTab -> ENTER");
+        mContactsTab.removeContactFromList(newContactEntity);
+        Log.i(LOG, "removeContactFromTab -> LEAVE");
+    }
+
     public void setChatsTab(TabChats chatsTab) {
         Log.i(LOG, "setChatsTab -> ENTER");
         mChatsTab = chatsTab;
@@ -376,6 +382,8 @@ public class AppController {
             contactEntity.setSessionId(generateSessionId());
             mDatabaseHelper.getContactsOperations().addDbEntity(contactEntity);
 
+            addNewChatForContact(contactEntity);
+
             retVal = true;
 
         } else {
@@ -412,37 +420,19 @@ public class AppController {
 
         // if the contact to be updated is found
         if (contact != null) {
-            final boolean deletedAllMessages = mDatabaseHelper.getChatMessagesOperations().deleteAllMessagesForSessionId(contact.getSessionId());
-            Log.i(LOG, "all messages deleted -> " + deletedAllMessages);
+            mDatabaseHelper.getChatMessagesOperations().deleteAllMessagesForSessionId(contact.getSessionId());
+            Log.i(LOG, "all messages deleted");
 
-            if (deletedAllMessages) {
-                DBChatEntity chatEntity = new DBChatEntity();
-                chatEntity.setSessionId(contact.getSessionId());
-                final boolean deletedAllChats = mDatabaseHelper.getChatsOperations().deleteDbEntity(chatEntity);
-                Log.i(LOG, "all chats deleted -> " + deletedAllChats);
+            DBChatEntity chatEntity = new DBChatEntity();
+            chatEntity.setSessionId(contact.getSessionId());
+            boolean chatsDeleted = mDatabaseHelper.getChatsOperations().deleteDbEntity(chatEntity);
 
-                if (deletedAllChats) {
-                    final boolean deletedContact = mDatabaseHelper.getContactsOperations().deleteDbEntity(contact);
-                    Log.i(LOG, "contact deleted -> " + deletedContact);
+            if (chatsDeleted) {
+                Log.i(LOG, "all chats deleted -> ");
 
-                    if (deletedContact) {
-                        retVal = true;
-                    } else {
-                        //TODO: popup with ccould not delete the contact
-                        Log.i(LOG, "TODO: popup with ccould not delete the contact");
-                    }
-                } else {
-                    //TODO: popup with ccould not delete all chats with contact
-                    Log.i(LOG, "TODO: popup with ccould not delete all chats with contact");
-                }
-            } else {
-//TODO: popup with ccould not delete all messages from contact
-                Log.i(LOG, "TODO: popup with ccould not delete all messages from contact");
+                retVal = mDatabaseHelper.getContactsOperations().deleteDbEntity(contact);
+                Log.i(LOG, "contact deleted -> ");
             }
-        } else {
-            //TODO: popup with contact not found
-            Log.i(LOG, "TODO: popup with contact not found");
-            retVal = false;
         }
 
         Log.i(LOG, "deleteContact -> LEAVE retVal=" + retVal);
@@ -469,7 +459,7 @@ public class AppController {
         return retVal;
     }
 
-    public boolean addNewChatForContact(DBContactEntity contactEntity) {
+    private boolean addNewChatForContact(DBContactEntity contactEntity) {
         Log.i(LOG, "addNewChatForContact -> ENTER contactEntity=" + contactEntity);
         boolean retVal;
 
@@ -479,11 +469,11 @@ public class AppController {
         chatEntity.setHistoryCleanupTime(0);
 
         retVal = mDatabaseHelper.getChatsOperations().addDbEntity(chatEntity);
-        if (retVal) {
-//            TODO: fix chat availability
-            ChatEntity tabChatEntity = new ChatEntity(chatEntity.getSessionId(), chatEntity.getChatName(), false);
-            addNewChatToTab(tabChatEntity);
-        }
+//        if (retVal) {
+////            TODO: fix chat availability
+//            ChatEntity tabChatEntity = new ChatEntity(chatEntity.getSessionId(), chatEntity.getChatName(), false);
+//            addNewChatToTab(tabChatEntity);
+//        }
 
         Log.i(LOG, "addNewChatForContact -> LEAVE retVal=" + retVal);
         return retVal;

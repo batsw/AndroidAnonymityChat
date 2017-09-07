@@ -165,9 +165,12 @@ public class DbChatsOperations implements IEntityDbOperations {
 
             DBChatEntity chatEntity = (DBChatEntity) dbEntity;
 
-            mSQLiteDatabase.delete(PersistenceConstants.TABLE_CHATS, PersistenceConstants.COLUMN_CONTACT_SESSION_ID,
+            int delete = mSQLiteDatabase.delete(PersistenceConstants.TABLE_CHATS, PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " = ?",
                     new String[]{String.valueOf(chatEntity.getSessionId())
                     });
+
+            Log.i(LOG, "delete = " + delete);
+            retVal = delete > 0 ? true : false;
 
 //            mSQLiteDatabase.close();
         }

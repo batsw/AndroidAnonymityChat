@@ -259,46 +259,46 @@
                     android:textSize="16dip" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/email_layouerghhfesft"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:clickable="true"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/email_layouerghhfesft"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dip"-->
+                <!--android:clickable="true"-->
+                <!--android:orientation="horizontal">-->
 
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.06"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="10dip"
-                    android:layout_marginLeft="10dip"
-                    android:src="@drawable/ic_earth_white" />
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_weight="0.06"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:layout_marginTop="10dip"-->
+                    <!--android:layout_marginLeft="10dip"-->
+                    <!--android:src="@drawable/ic_earth_white" />-->
 
-                <EditText
-                    android:layout_width="164dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="23dip"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:hint="Partner name"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText" />
+                <!--<EditText-->
+                    <!--android:layout_width="164dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="23dip"-->
+                    <!--android:clickable="true"-->
+                    <!--android:gravity="center"-->
+                    <!--android:hint="Partner name"-->
+                    <!--android:textColor="@color/colorInfoText"-->
+                    <!--android:textColorHint="@color/colorInfoText" />-->
 
-                <TextView
-                    android:id="@+id/settings_storage_erase_contact"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
-                    android:clickable="true"
-                    android:gravity="center_horizontal"
-                    android:text="Erase"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="17dp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/settings_storage_erase_contact"-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:clickable="true"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:text="Erase"-->
+                    <!--android:textColor="@color/colorAccent"-->
+                    <!--android:textSize="17dp" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"

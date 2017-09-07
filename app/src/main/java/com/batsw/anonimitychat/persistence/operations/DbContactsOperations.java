@@ -160,7 +160,7 @@ public class DbContactsOperations implements IEntityDbOperations {
 
     @Override
     public int updateDbEntity(IDbEntity dbEntity) {
-        Log.i(LOG, "updateMyContact -> ENTER myProfile=" + dbEntity);
+        Log.i(LOG, "updateDbEntity -> ENTER dbEntity=" + dbEntity);
         int retVal = -1;
 
         if (dbEntity instanceof DBContactEntity) {
@@ -190,7 +190,7 @@ public class DbContactsOperations implements IEntityDbOperations {
             retVal = -1;
         }
 
-        Log.i(LOG, "updateMyContact -> LEAVE retVal=" + retVal);
+        Log.i(LOG, "updateDbEntity -> LEAVE dbEntity=" + retVal);
         return retVal;
     }
 
@@ -205,20 +205,21 @@ public class DbContactsOperations implements IEntityDbOperations {
     @Override
     public boolean deleteDbEntity(IDbEntity dbEntity) {
         Log.i(LOG, "deleteDbEntity -> ENTER dbEntity=" + dbEntity);
-
         boolean retVal = false;
-
         if (dbEntity instanceof DBContactEntity) {
 
             DBContactEntity contactEntity = (DBContactEntity) dbEntity;
 
-            mSQLiteDatabase.delete(PersistenceConstants.TABLE_CONTACTS, PersistenceConstants.COLUMN_ID + " = ? and " +
+            int delete = mSQLiteDatabase.delete(PersistenceConstants.TABLE_CONTACTS, PersistenceConstants.COLUMN_ID + " = ? and " +
                             PersistenceConstants.COLUMN_SESSION_ID + " = ? and " +
                             PersistenceConstants.COLUMN_ADDRESS + " = ? ",
                     new String[]{String.valueOf(contactEntity.getId()),
                             String.valueOf(contactEntity.getSessionId()),
                             String.valueOf(contactEntity.getAddress())
                     });
+
+            Log.i(LOG, "delete = " + delete);
+            retVal = delete > 0 ? true : false;
 
 //            mSQLiteDatabase.close();
         }
