@@ -2,6 +2,7 @@ package com.batsw.anonimitychat.chat;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,15 @@ import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tudor on 10/15/2016.
  */
 
 public class ChatListAdapter extends BaseAdapter {
+
+    private static final String LOG = ChatListAdapter.class.getSimpleName();
 
     private ArrayList<ChatMessage> mChatMessageList;
     private Context mContext;
@@ -46,20 +50,22 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-
+        Log.i(LOG, "getView -> ENTER position=" + position + ", convertView=" + convertView + ", viewGroup=" + viewGroup);
         View retVal;
         ChatMessage message = mChatMessageList.get(position);
 
         if (message.getChatMessageType().equals(ChatMessageType.USER)) {
             retVal = displayMessage(convertView, message, R.layout.user_chat_item);
         } else {
-            retVal = displayMessage(convertView, message,R.layout.partner_chat_item);
+            retVal = displayMessage(convertView, message, R.layout.partner_chat_item);
         }
 
+        Log.i(LOG, "getView -> LEAVE retVal=" + retVal);
         return retVal;
     }
 
     private View displayMessage(View convertView, ChatMessage message, int messageViewLayout) {
+        Log.i(LOG, "getView -> ENTER convertView=" + convertView + ", message=" + message + ", messageViewLayout=" + messageViewLayout);
         View retVal;
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -80,7 +86,31 @@ public class ChatListAdapter extends BaseAdapter {
         viewHolder.messageTextView.setText(message.getMessage());
 
         viewHolder.timeTextView.setText(ChatModelConstants.SIMPLE_DATE_FORMAT.format(message.getTimeStamp()));
+
+        Log.i(LOG, "getView -> LEAVE retVal=" + retVal);
         return retVal;
+    }
+
+    public void addMessageToList(List<ChatMessage> chatMessagesList) {
+        Log.i(LOG, "addMessageToList -> ENTER chatMessagesList=" + chatMessagesList);
+
+        mChatMessageList.addAll(chatMessagesList);
+        this.notifyDataSetChanged();
+//        notifyItemRangeChanged(mContactsList.size() / 2, 1);
+//        mContactsAdapter.notifyDataSetChanged();
+
+        Log.i(LOG, "addMessageToList -> LEAVE");
+    }
+
+    public void removeMessageFromList(List<ChatMessage> chatMessagesList) {
+        Log.i(LOG, "removeMessageFromList -> ENTER chatMessagesList=" + chatMessagesList);
+
+        mChatMessageList.removeAll(chatMessagesList);
+        this.notifyDataSetChanged();
+//        notifyItemRangeChanged(mContactsList.size() / 2, 1);
+//        mContactsAdapter.notifyDataSetChanged();
+
+        Log.i(LOG, "removeMessageFromList -> LEAVE");
     }
 
     private class ViewHolder {

@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.persistence.entities;
 
+import com.batsw.anonimitychat.chat.message.ChatMessageType;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 
 /**
@@ -11,6 +12,7 @@ public class DBChatMessageEntity implements IDbEntity {
     private long mSessionId;
     private String mMessage;
     private long mTimestamp;
+    private ChatMessageType mChatMessageType;
 
     public long getId() {
         return mId;
@@ -44,6 +46,14 @@ public class DBChatMessageEntity implements IDbEntity {
         this.mTimestamp = timestamp;
     }
 
+    public ChatMessageType getChatMessageType() {
+        return mChatMessageType;
+    }
+
+    public void setChatMessageType(ChatMessageType chatMessageType) {
+        this.mChatMessageType = chatMessageType;
+    }
+
     @Override
     public String toString() {
         return "DBChatMessageEntity{" +
@@ -51,6 +61,7 @@ public class DBChatMessageEntity implements IDbEntity {
                 ", mSessionId=" + mSessionId +
                 ", mMessage='" + mMessage + '\'' +
                 ", mTimestamp=" + mTimestamp +
+                ", mChatMessageType=" + mChatMessageType +
                 '}';
     }
 }

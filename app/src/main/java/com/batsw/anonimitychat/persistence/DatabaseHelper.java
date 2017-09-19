@@ -54,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CHATS_MESSAGES = "create table " + PersistenceConstants.TABLE_CHATS_MESSAGES + " (\n" +
             PersistenceConstants.COLUMN_ID + " integer primary key autoincrement,\n" +
             PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " integer not null,\n" +
+            PersistenceConstants.COLUMN_MESSAGE_TYPE + " text not null,\n" +
             PersistenceConstants.COLUMN_MESSAGE + " text not null,\n" +
             PersistenceConstants.COLUMN_TIMESTAMP + " integer not null,\n" +
             " FOREIGN KEY (" + PersistenceConstants.COLUMN_CONTACT_SESSION_ID + ") REFERENCES " +

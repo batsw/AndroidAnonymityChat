@@ -68,15 +68,15 @@ public class ContactHolder extends RecyclerView.ViewHolder implements View.OnCli
 //                }
 
                 Log.i(LOG, "Start chat activity");
-                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+//                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
 
                     ChatController.getInstance().startChatActivity(AppController.getInstanceParameterized(null).getCurrentActivityContext(), dbContactEntity.getAddress());
 
-                } else {
-                    //TODO: show a message on screen
-                    // or tell user to use Offline mode ....
-                    Log.i(LOG, "cannot start chat when network not connected");
-                }
+//                } else {
+//                    //TODO: show a message on screen
+//                    // or tell user to use Offline mode ....
+//                    Log.i(LOG, "cannot start chat when network not connected");
+//                }
 
                 Log.i(LOG, "item.onClick -> LEAVE contactEntity.name=" + contactEntity.getName());
             }

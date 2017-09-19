@@ -29,6 +29,7 @@ public interface PersistenceConstants {
 
     //    chats_messages
     public static final String COLUMN_MESSAGE = "message";
+    public static final String COLUMN_MESSAGE_TYPE = "message_type";
     public static final String COLUMN_TIMESTAMP = "timestamp";
 
     //  my profile table

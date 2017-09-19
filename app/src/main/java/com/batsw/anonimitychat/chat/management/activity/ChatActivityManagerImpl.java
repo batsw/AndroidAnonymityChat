@@ -2,10 +2,12 @@ package com.batsw.anonimitychat.chat.management.activity;
 
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 /**
  * Created by tudor on 2/11/2017.
@@ -29,9 +31,10 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     public void onCreate() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onCreate -> ENTER");
 
-        //Preparing TorConnection with partner
-        ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
-
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            //Preparing TorConnection with partner
+            ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
+        }
         //TODO get ChatDetail and if isAlive is False means Offline Mode
         //If the connection could not be established means that the partner is offline
 
@@ -55,7 +58,9 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     public void onDestroy() {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onDestroy -> ENTER");
 
-        ChatController.getInstance().stoppedChatActivity(this, mSessionId);
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            ChatController.getInstance().stoppedChatActivity(this, mSessionId);
+        }
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "onDestroy -> LEAVE");
     }
@@ -64,7 +69,9 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     public void sendMessage(String message) {
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "sendMessage -> ENTER message=" + message);
 
-        ChatController.getInstance().sendMessage(mSessionId, message);
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            ChatController.getInstance().sendMessage(mSessionId, message);
+        }
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "sendMessage -> LEAVE");
     }
@@ -105,5 +112,11 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
         mChatActivity = chatActivity;
 
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "setChatActivity -> LEAVE");
+    }
+
+    public void connectToPartner() {
+        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> ENTER");
+        ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
+        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> LEAVE");
     }
 }

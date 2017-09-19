@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.batsw.anonimitychat.chat.message.ChatMessageType;
 import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.persistence.util.IEntityDbOperations;
@@ -35,6 +36,7 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
         String selectQuery = "SELECT " + PersistenceConstants.COLUMN_ID + ", " +
                 PersistenceConstants.COLUMN_CONTACT_SESSION_ID + ", " +
                 PersistenceConstants.COLUMN_MESSAGE + ", " +
+                PersistenceConstants.COLUMN_MESSAGE_TYPE + ", " +
                 PersistenceConstants.COLUMN_TIMESTAMP +
                 " FROM " + PersistenceConstants.TABLE_CHATS_MESSAGES;
 
@@ -46,7 +48,8 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
                 messageEntity.setId(Integer.parseInt(cursor.getString(0)));
                 messageEntity.setSessionId(Long.parseLong(cursor.getString(1)));
                 messageEntity.setMessage(cursor.getString(2));
-                messageEntity.setTimestamp(Long.parseLong(cursor.getString(3)));
+                messageEntity.setChatMessageType(ChatMessageType.valueOf(cursor.getString(3)));
+                messageEntity.setTimestamp(Long.parseLong(cursor.getString(4)));
 
                 retVal.add(messageEntity);
             } while (cursor.moveToNext());
@@ -92,6 +95,7 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
             ContentValues values = new ContentValues();
             values.put(PersistenceConstants.COLUMN_CONTACT_SESSION_ID, messageEntity.getSessionId());
             values.put(PersistenceConstants.COLUMN_MESSAGE, messageEntity.getMessage());
+            values.put(PersistenceConstants.COLUMN_MESSAGE_TYPE, messageEntity.getChatMessageType().toString());
             values.put(PersistenceConstants.COLUMN_TIMESTAMP, messageEntity.getTimestamp());
 
             mSQLiteDatabase.insert(PersistenceConstants.TABLE_CHATS_MESSAGES, null, values);
@@ -155,7 +159,34 @@ public class DbChatMessagesOperations implements IEntityDbOperations {
     }
 
     public List<IDbEntity> getAllMessagesForSessionId(long contactSessionId) {
-        return null;
+        Log.i(LOG, "getAllMessagesForSessionId -> LEAVE contactSessionId=" + contactSessionId);
+
+        List<IDbEntity> retVal = new ArrayList<>();
+
+        Cursor cursor = mSQLiteDatabase.query(PersistenceConstants.TABLE_CHATS_MESSAGES, new String[]{
+                        PersistenceConstants.COLUMN_ID,
+                        PersistenceConstants.COLUMN_MESSAGE,
+                        PersistenceConstants.COLUMN_MESSAGE_TYPE,
+                        PersistenceConstants.COLUMN_TIMESTAMP
+                }, PersistenceConstants.COLUMN_CONTACT_SESSION_ID + " = ?",
+                new String[]{String.valueOf(contactSessionId)}, null, null, null, null);
+
+        Log.i(LOG, "cursor.getCount()=" + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            do {
+                DBChatMessageEntity messageEntity = new DBChatMessageEntity();
+                messageEntity.setId(Long.parseLong(cursor.getString(0)));
+                messageEntity.setSessionId(contactSessionId);
+                messageEntity.setMessage(cursor.getString(1));
+                messageEntity.setChatMessageType(ChatMessageType.valueOf(cursor.getString(2)));
+                messageEntity.setTimestamp(Long.parseLong(cursor.getString(3)));
+
+                retVal.add(messageEntity);
+            } while (cursor.moveToNext());
+        }
+
+        Log.i(LOG, "getAllMessagesForSessionId -> LEAVE retVal=" + retVal);
+        return retVal;
     }
 
     public void deleteAllMessagesForSessionId(long contactSessionId) {

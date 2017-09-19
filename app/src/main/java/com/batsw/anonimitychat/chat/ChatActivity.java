@@ -2,6 +2,7 @@ package com.batsw.anonimitychat.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -13,9 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.chat.management.ChatDetail;
@@ -23,9 +26,14 @@ import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
+import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
+import com.batsw.anonimitychat.persistence.util.IDbEntity;
+import com.batsw.anonimitychat.tor.bundle.TorConstants;
 import com.batsw.anonimitychat.tor.connections.TorPublisher;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,7 +55,11 @@ public class ChatActivity extends AppCompatActivity {
     private ChatListAdapter mChatListAdapter;
     private ArrayList<ChatMessage> mChatMessageList;
 
+    private long mSessionId = 0;
+
     private EditText chatEditText;
+
+    private TextView mNetworkConnection, mHistory, mChatName, mBack;
 
     private ImageView mEnterChatMessage;
 
@@ -62,12 +74,14 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (view.equals(mEnterChatMessage)) {
-                final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+                if (!AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
 
-                //TODO: I send the message HERE
-                mChatActivityManager.sendMessage(message.getMessage());
+                    //sending the message HERE
+                    mChatActivityManager.sendMessage(message.getMessage());
 
-                mChatMessageList.add(message);
+                    mChatMessageList.add(message);
+                }
             }
             chatEditText.setText("");
         }
@@ -81,7 +95,6 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             if (!chatEditText.getText().toString().isEmpty()) {
                 mEnterChatMessage.setImageResource(R.drawable.input_send);
             }
@@ -108,9 +121,12 @@ public class ChatActivity extends AppCompatActivity {
 
         mChatActivityManager.setChatActivity(this);
 
-        long chatSessionId = getIntent().getLongExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatModelConstants.DEFAULT_SESSION_ID);
-        if (chatSessionId != ChatModelConstants.DEFAULT_SESSION_ID) {
-            mChatActivityManager.configureChatDetail(chatSessionId);
+        //Loading fontAwesome
+        Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
+
+        mSessionId = getIntent().getLongExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatModelConstants.DEFAULT_SESSION_ID);
+        if (mSessionId != ChatModelConstants.DEFAULT_SESSION_ID) {
+            mChatActivityManager.configureChatDetail(mSessionId);
         }
 
         mChatMessageList = new ArrayList<>();
@@ -138,6 +154,90 @@ public class ChatActivity extends AppCompatActivity {
 
         //TODO:
         //IChatActivityManager.getPartnerAddress (16x.onion)
+
+        mBack = (TextView) findViewById(R.id.chat_back_icon);
+        mBack.setTypeface(fontAwesome);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mBack.setOnClickListener -> ENTER");
+                finish();
+                Log.i(LOG, "mBack.setOnClickListener -> LEAVE");
+            }
+        });
+
+        DBContactEntity contactEntity = AppController.getInstanceParameterized(null).getContactEntity(mSessionId);
+        mChatName = (TextView) findViewById(R.id.chat_name);
+        mChatName.setText(contactEntity.getName());
+
+        mNetworkConnection = (TextView) findViewById(R.id.chat_network_status_button);
+        AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mNetworkConnection);
+
+        mNetworkConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mNetworkConnection.setOnClickListener -> ENTER");
+
+                if (!AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    AppController.getInstanceParameterized(null).startNetworkConnection();
+                } else {
+                    AppController.getInstanceParameterized(null).stopNetworkConnection();
+                }
+
+                Log.i(LOG, "mNetworkConnection.setOnClickListener -> LEAVE");
+            }
+        });
+
+        mNetworkConnection.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    ((ChatActivityManagerImpl) mChatActivityManager).connectToPartner();
+                } else {
+                    mChatActivityManager.onDestroy();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mHistory = (TextView) findViewById(R.id.chat_history_button);
+        mHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mHistory.setOnClickListener -> ENTER");
+
+                List<IDbEntity> messageHistoryForSessionId = AppController.getInstanceParameterized(null).getMessageHistoryForSessionId(mSessionId);
+
+                if (messageHistoryForSessionId.size() > 0) {
+
+                    List<ChatMessage> chatMessages = new ArrayList<>();
+
+                    for (IDbEntity ide : messageHistoryForSessionId) {
+                        DBChatMessageEntity dbChatMessageEntity = (DBChatMessageEntity) ide;
+
+                        ChatMessage chatMessage = new ChatMessage(dbChatMessageEntity.getMessage(),
+                                dbChatMessageEntity.getChatMessageType(),
+                                dbChatMessageEntity.getTimestamp()
+                        );
+
+                        chatMessages.add(chatMessage);
+                    }
+
+                    mChatListAdapter.addMessageToList(chatMessages);
+                }
+
+                Log.i(LOG, "mHistory.setOnClickListener -> LEAVE");
+            }
+        });
 
         mChatActivityManager.onCreate();
     }

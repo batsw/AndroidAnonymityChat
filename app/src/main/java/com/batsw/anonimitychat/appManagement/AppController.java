@@ -15,6 +15,8 @@ import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.persistence.DatabaseHelper;
+import com.batsw.anonimitychat.persistence.cleanup.HistoryCleanupJob;
+import com.batsw.anonimitychat.persistence.cleanup.HistoryCleanupManager;
 import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
@@ -28,6 +30,8 @@ import com.batsw.anonimitychat.util.AppConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by tudor on 5/13/2017.
@@ -52,6 +56,8 @@ public class AppController {
 
     private long mBundlePid;
     private String mMyAddress;
+
+    private HistoryCleanupManager mHistoryCleanupManager;
 
     private AppController(AppCompatActivity mainActivity) {
         mMainScreenActivity = mainActivity;
@@ -83,6 +89,13 @@ public class AppController {
                 null, PersistenceConstants.DATABASE_VERSION);
         mDatabaseHelper.initOperations();
         mDatabaseHelper.triggerInsertDefaultMyProfile();
+        Log.i(LOG, "init -> mDatabaseHelper - DONE");
+
+        mHistoryCleanupManager = new HistoryCleanupManager();
+
+        final AppController appController = this;
+        mHistoryCleanupManager.init(appController);
+        Log.i(LOG, "init -> mHistoryCleanupManager - DONE");
 
         mBundlePid = mDatabaseHelper.getMyProfileOperations().getBundlePid(1);
         Log.i(LOG, "bundlePidLong=" + mBundlePid);
@@ -99,6 +112,7 @@ public class AppController {
         }
 
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
+        Log.i(LOG, "init -> mTorProcessManager - DONE");
 
         Log.i(LOG, "initBackend -> LEAVE");
     }
@@ -116,6 +130,14 @@ public class AppController {
         }
 
         Log.i(LOG, "startNetworkConnection -> LEAVE");
+    }
+
+    public void stopHistoryCleanupJob() {
+        Log.i(LOG, "stopHistoryCleanupJob -> ENTER");
+
+        mHistoryCleanupManager.stopAllCleanupJobs();
+
+        Log.i(LOG, "stopHistoryCleanupJob -> LEAVE");
     }
 
     public void stopNetworkConnection() {
@@ -279,6 +301,22 @@ public class AppController {
         Log.i(LOG, "addMessageToChatHistory -> LEAVE");
     }
 
+    public List<IDbEntity> getMessageHistoryForSessionId(long contactSessionId) {
+        Log.i(LOG, "getMessageHistory -> ENTER contactSessionId=" + contactSessionId);
+        List<IDbEntity> retVal;
+
+        retVal = mDatabaseHelper.getChatMessagesOperations().getAllMessagesForSessionId(contactSessionId);
+
+        Log.i(LOG, "getMessageHistory -> LEAVE retVal=" + retVal + ", retVal.size()=" + retVal.size());
+        return retVal;
+    }
+
+    public void removeMessagesForChat(long contactSessionId) {
+        Log.i(LOG, "addMessageToChatHistory -> ENTER contactSessionId=" + contactSessionId);
+        mDatabaseHelper.getChatMessagesOperations().deleteAllMessagesForSessionId(contactSessionId);
+        Log.i(LOG, "addMessageToChatHistory -> LEAVE");
+    }
+
     public void moveToChatsTab() {
         Log.i(LOG, "moveToChatsTab -> ENTER");
         ((MainScreenActivity) mMainScreenActivity).moveToChatsTab();
@@ -432,6 +470,9 @@ public class AppController {
 
                 retVal = mDatabaseHelper.getContactsOperations().deleteDbEntity(contact);
                 Log.i(LOG, "contact deleted -> ");
+
+                mHistoryCleanupManager.removeHistoryCleanupJob(chatEntity.getSessionId());
+                Log.i(LOG, "history cleanup job deleted -> ");
             }
         }
 
@@ -469,6 +510,10 @@ public class AppController {
         chatEntity.setHistoryCleanupTime(0);
 
         retVal = mDatabaseHelper.getChatsOperations().addDbEntity(chatEntity);
+
+        mHistoryCleanupManager.addHistoryCleanupJob(chatEntity.getSessionId(), chatEntity.getHistoryCleanupTime());
+
+
 //        if (retVal) {
 ////            TODO: fix chat availability
 //            ChatEntity tabChatEntity = new ChatEntity(chatEntity.getSessionId(), chatEntity.getChatName(), false);
@@ -503,10 +548,11 @@ public class AppController {
         Log.i(LOG, "updateChat -> ENTER chatEntity=" + chatEntity);
         boolean retVal = false;
 
-        // if the contact to be updated is found
         if (chatEntity != null) {
 
             mDatabaseHelper.getChatsOperations().updateDbEntity(chatEntity);
+
+            mHistoryCleanupManager.updateHistoryCleanupJob(chatEntity.getSessionId(), chatEntity.getHistoryCleanupTime());
 
             retVal = true;
         }

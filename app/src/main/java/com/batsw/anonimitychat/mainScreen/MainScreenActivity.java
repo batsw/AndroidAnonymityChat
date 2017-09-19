@@ -1,13 +1,10 @@
 package com.batsw.anonimitychat.mainScreen;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -23,27 +20,16 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.NavigationDrawerMenuFragment;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerDivider;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerEntry;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItem;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerItemAndImg;
-import com.batsw.anonimitychat.mainScreen.navigation.drawer.entry.NavigationDrawerToogle;
 import com.batsw.anonimitychat.mainScreen.popup.NetworkPopupActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsAboutActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsNetworkActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsProfileActivity;
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsStorageActivity;
-import com.batsw.anonimitychat.mainScreen.tabs.TabChats;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
-import com.batsw.anonimitychat.mainScreen.util.MainScreenConstants;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
 import java.util.ArrayList;
@@ -387,6 +373,9 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onDestroy() {
         Log.i(LOG, "onDestroy -> ENTER");
+
+//        TODO: stop history clearing thread
+        AppController.getInstanceParameterized(null).stopHistoryCleanupJob();
 
         AppController.getInstanceParameterized(null).stopNetworkConnection();
         Log.i(LOG, "TOR Bundle is stopped");
