@@ -247,12 +247,23 @@
                     android:src="@drawable/tor_onion" />
 
                 <TextView
-                    android:id="@+id/address_contact_edit"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="13dip"
+                    android:layout_weight="0.03"
+                    android:hint="History size: "
+                    android:padding="10dip"
+                    android:textColor="@color/colorInfoText"
+                    android:textColorHint="@color/colorInfoText"
+                    android:textSize="16dip" />
+
+                <TextView
+                    android:id="@+id/storage_settings_db_size"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dip"
                     android:layout_weight="1"
-                    android:hint="Occupied disk space: xxxxx.xxx MB"
+                    android:hint=" xxxxx.xxx KB"
                     android:padding="10dip"
                     android:textColor="@color/colorInfoText"
                     android:textColorHint="@color/colorInfoText"

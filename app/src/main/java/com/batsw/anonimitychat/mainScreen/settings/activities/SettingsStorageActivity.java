@@ -16,6 +16,9 @@ import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
+import com.batsw.anonimitychat.persistence.util.PersistenceConstants;
+
+import java.io.File;
 
 /**
  * Created by tudor on 4/25/2017.
@@ -27,7 +30,7 @@ public class SettingsStorageActivity extends Fragment {
     private Fragment mThis = null;
 
     private View mView;
-    private TextView mBackIcon, mClockIcon;
+    private TextView mBackIcon, mClockIcon, mDbSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,14 @@ public class SettingsStorageActivity extends Fragment {
                 }
             }
         });
+
+        mDbSize = (TextView) mView.findViewById(R.id.storage_settings_db_size);
+
+        File f = mView.getContext().getDatabasePath(PersistenceConstants.DATABASE_ANONYMITY_CHAT);
+        long dbSize = f.length();
+        Log.i(LOG, "mDbSize -> " + dbSize);
+
+        mDbSize.setText(String.valueOf(dbSize/1024) + " KB");
 
         Log.i(LOG, "onCreateView -> LEAVE");
         return mView;
