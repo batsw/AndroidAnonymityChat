@@ -25,78 +25,66 @@ import com.batsw.anonimitychat.persistence.entities.DBMyProfileEntity;
  * Created by tudor on 4/25/2017.
  */
 
-public class SettingsProfileActivity extends Fragment {
+public class SettingsProfileActivity extends AppCompatActivity {
     private static final String LOG = SettingsProfileActivity.class.getSimpleName();
 
     private TextView mBackIcon, mMyAddress, mSave;
-    private EditText mMyName, mMyNickname;
+    private EditText mMyName;
+    //    private EditText mMyNickname;
     private DBMyProfileEntity mMyProfileEntity;
 
 
-    private Fragment mThis = null;
-
-    private View mView;
+//    private Fragment mThis = null;
+//
+//    private View mView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(LOG, "onCreate -> ENTER");
         super.onCreate(savedInstanceState);
 
-        mThis = this;
+//        mThis = this;
 
-        Log.i(LOG, "onCreate -> LEAVE");
-    }
+        setContentView(R.layout.settings_profile_activity);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.i(LOG, "onCreateView -> ENTER");
-        mView = inflater.inflate(R.layout.settings_profile_activity, container, false);
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
 
         Typeface fontAwesome = Typeface.createFromAsset(AppController.getInstanceParameterized(null).getCurrentActivityContext().getAssets(),
                 "font_awesome/fontawesome.ttf");
 
-//        Hiding the floating Add contact button
-        TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
-        if (contactsFragment != null) {
-            contactsFragment.getView().setVisibility(View.INVISIBLE);
-        }
         // load my profile
         mMyProfileEntity = AppController.getInstanceParameterized(null).getMyProfile();
 
-        mBackIcon = (TextView) mView.findViewById(R.id.settings_profile_back);
+        mBackIcon = (TextView) findViewById(R.id.settings_profile_back);
         mBackIcon.setTypeface(fontAwesome);
 
         mBackIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getFragmentManager().beginTransaction().remove(mThis).commit();
-
-                TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
-                if (contactsFragment != null) {
-                    contactsFragment.getView().setVisibility(View.VISIBLE);
-                }
+                finish();
             }
         });
 
-        mMyName = (EditText) mView.findViewById(R.id.my_name_edit);
+        mMyName = (EditText) findViewById(R.id.my_name_edit);
         mMyName.setText(mMyProfileEntity.getMyName());
-        mMyNickname = (EditText) mView.findViewById(R.id.my_nickname_edit);
-        mMyNickname.setText(mMyProfileEntity.getMyNickName());
+//        mMyNickname = (EditText) mView.findViewById(R.id.my_nickname_edit);
+//        mMyNickname.setText(mMyProfileEntity.getMyNickName());
 
-        mMyAddress = (TextView) mView.findViewById(R.id.my_address_edit);
+        mMyAddress = (TextView) findViewById(R.id.my_address_edit);
 //        Without the suffix
         mMyAddress.setText(mMyProfileEntity.getMyAddress().substring(0, 16));
 
 //        mMyEmail = (EditText) findViewById(R.id.email_contact_edit);
 //        mMyEmail.setText(mMyProfileEntity.getMyEmail());
 
-        mSave = (TextView) mView.findViewById(R.id.settings_my_profile_save);
+        mSave = (TextView) findViewById(R.id.settings_my_profile_save);
 
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String myName = getTextFromEditText(mMyName);
-                String myNickName = getTextFromEditText(mMyNickname);
+                String myNickName = myName;
+//                String myNickName = getTextFromEditText(mMyNickname);
 //                String myEmail = getTextFromEditText(mMyEmail);
 
 //                if (!myName.equals(mMyProfileEntity.getMyName().toString()) ||
@@ -112,13 +100,88 @@ public class SettingsProfileActivity extends Fragment {
                     mMyProfileEntity.setMyEmail(null);
 
                     AppController.getInstanceParameterized(null).updateMyProfile(mMyProfileEntity);
+
+                    finish();
                 }
             }
         });
 
-        Log.i(LOG, "onCreateView -> LEAVE");
-        return mView;
+        Log.i(LOG, "onCreate -> LEAVE");
     }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//        Log.i(LOG, "onCreateView -> ENTER");
+//        mView = inflater.inflate(R.layout.settings_profile_activity, container, false);
+//
+//        Typeface fontAwesome = Typeface.createFromAsset(AppController.getInstanceParameterized(null).getCurrentActivityContext().getAssets(),
+//                "font_awesome/fontawesome.ttf");
+//
+////        Hiding the floating Add contact button
+//        TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
+//        if (contactsFragment != null) {
+//            contactsFragment.getView().setVisibility(View.INVISIBLE);
+//        }
+//        // load my profile
+//        mMyProfileEntity = AppController.getInstanceParameterized(null).getMyProfile();
+//
+//        mBackIcon = (TextView) mView.findViewById(R.id.settings_profile_back);
+//        mBackIcon.setTypeface(fontAwesome);
+//
+//        mBackIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getActivity().getFragmentManager().beginTransaction().remove(mThis).commit();
+//
+//                TabContacts contactsFragment = ((MainScreenActivity) getActivity()).getContactsFragment();
+//                if (contactsFragment != null) {
+//                    contactsFragment.getView().setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//
+//        mMyName = (EditText) mView.findViewById(R.id.my_name_edit);
+//        mMyName.setText(mMyProfileEntity.getMyName());
+////        mMyNickname = (EditText) mView.findViewById(R.id.my_nickname_edit);
+////        mMyNickname.setText(mMyProfileEntity.getMyNickName());
+//
+//        mMyAddress = (TextView) mView.findViewById(R.id.my_address_edit);
+////        Without the suffix
+//        mMyAddress.setText(mMyProfileEntity.getMyAddress().substring(0, 16));
+//
+////        mMyEmail = (EditText) findViewById(R.id.email_contact_edit);
+////        mMyEmail.setText(mMyProfileEntity.getMyEmail());
+//
+//        mSave = (TextView) mView.findViewById(R.id.settings_my_profile_save);
+//
+//        mSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String myName = getTextFromEditText(mMyName);
+//                String myNickName = myName;
+////                String myNickName = getTextFromEditText(mMyNickname);
+////                String myEmail = getTextFromEditText(mMyEmail);
+//
+////                if (!myName.equals(mMyProfileEntity.getMyName().toString()) ||
+////                        !myNickName.equals(mMyProfileEntity.getMyNickName().toString()) ||
+////                        !myEmail.equals(mMyProfileEntity.getMyEmail().toString())) {
+//
+//                if (!myName.equals(mMyProfileEntity.getMyName().toString()) ||
+//                        !myNickName.equals(mMyProfileEntity.getMyNickName().toString())) {
+//
+//                    mMyProfileEntity.setMyName(myName);
+//                    mMyProfileEntity.setMyNickName(myNickName);
+////                    mMyProfileEntity.setMyEmail(myEmail);
+//                    mMyProfileEntity.setMyEmail(null);
+//
+//                    AppController.getInstanceParameterized(null).updateMyProfile(mMyProfileEntity);
+//                }
+//            }
+//        });
+//
+//        Log.i(LOG, "onCreateView -> LEAVE");
+//        return mView;
+//    }
 
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {

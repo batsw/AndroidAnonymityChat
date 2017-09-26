@@ -1,10 +1,10 @@
 package com.batsw.anonimitychat.mainScreen.tabs;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -71,7 +71,7 @@ public class TabContacts extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mContactsRecyclerView = (RecyclerView) view.findViewById(R.id.contacts_list);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AppController.getInstanceParameterized(null).getCurrentActivityContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mContactsRecyclerView.setLayoutManager(linearLayoutManager);
 

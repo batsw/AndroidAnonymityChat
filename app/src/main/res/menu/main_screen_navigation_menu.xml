@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="all">
 
         <item
@@ -18,12 +19,18 @@
             android:title="Storage" />
     </group>
 
-    <item android:title="">
-        <menu>
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/message_got_receipt_from_server"
-                android:title="About" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="all"></group>
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@drawable/message_got_receipt_from_server"
+        android:title="About" />
+
+    <!--<item android:title="">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_about"-->
+                <!--android:icon="@drawable/message_got_receipt_from_server"-->
+                <!--android:title="About" />-->
+        <!--</menu>-->
+    <!--</item>-->
 </menu>

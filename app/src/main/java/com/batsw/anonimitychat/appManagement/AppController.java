@@ -317,11 +317,11 @@ public class AppController {
         Log.i(LOG, "addMessageToChatHistory -> LEAVE");
     }
 
-    public void moveToChatsTab() {
-        Log.i(LOG, "moveToChatsTab -> ENTER");
-        ((MainScreenActivity) mMainScreenActivity).moveToChatsTab();
-        Log.i(LOG, "moveToChatsTab -> LEAVE");
-    }
+//    public void moveToChatsTab() {
+//        Log.i(LOG, "moveToChatsTab -> ENTER");
+//        ((MainScreenActivity) mMainScreenActivity).moveToChatsTab();
+//        Log.i(LOG, "moveToChatsTab -> LEAVE");
+//    }
 
     public void setChatControllerCurrentActivityContext(Context context) {
         Log.i(LOG, "setChatControllerCurrentActivityContext -> ENTER context=" + context);
@@ -463,16 +463,19 @@ public class AppController {
 
             DBChatEntity chatEntity = new DBChatEntity();
             chatEntity.setSessionId(contact.getSessionId());
-            boolean chatsDeleted = mDatabaseHelper.getChatsOperations().deleteDbEntity(chatEntity);
+            boolean chatDeleted = mDatabaseHelper.getChatsOperations().deleteDbEntity(chatEntity);
 
-            if (chatsDeleted) {
-                Log.i(LOG, "all chats deleted -> ");
+            if (chatDeleted) {
+                Log.i(LOG, "chat deleted -> ");
 
                 retVal = mDatabaseHelper.getContactsOperations().deleteDbEntity(contact);
                 Log.i(LOG, "contact deleted -> ");
 
                 mHistoryCleanupManager.removeHistoryCleanupJob(chatEntity.getSessionId());
                 Log.i(LOG, "history cleanup job deleted -> ");
+
+                ContactEntity contactEntity = new ContactEntity(contact.getName(), contact.getSessionId());
+                removeContactFromTab(contactEntity);
             }
         }
 

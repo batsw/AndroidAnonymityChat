@@ -15,10 +15,10 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/margin_20"
-        android:paddingLeft="@dimen/margin_16"
-        android:paddingRight="@dimen/margin_16"
-        android:paddingTop="@dimen/margin_20">
+        android:paddingBottom="@dimen/margin_10"
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingRight="@dimen/margin_8"
+        android:paddingTop="@dimen/margin_10">
 
         <ImageView
             android:id="@+id/contact_avatar"
@@ -50,7 +50,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="30dp"
-            android:src="@drawable/ic_info_outline_white" />
+            android:src="@drawable/ic_edit_white" />
     </LinearLayout>
 
     <View

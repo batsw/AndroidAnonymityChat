@@ -14,33 +14,92 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent" />-->
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark" />
-        <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+            android:layout_height="wrap_content">
+            <!--android:theme="@style/AppTheme.AppBarOverlay"-->
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimaryDark" />
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="57dp"
-        android:clickable="true">
+        </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/main_screen_view_pager"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appBarLayout"
+            android:layout_marginTop="57dp"
+            android:clickable="true"></FrameLayout>
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="57dp"-->
+        <!--android:clickable="true"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:visibility="visible">-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="asefgfherufhwuiefhuiwefhuiwefhuiwehfuif"/>-->
+
+        <!--</LinearLayout>-->
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/contacts_list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/contacts_tab_floating_add_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_margin="@dimen/margin_8"-->
+
+    <!--android:background="@color/colorInfoText"-->
+    <!--android:clickable="true"-->
+    <!--android:src="@drawable/ic_add_black" />-->
+    <!---->
+
+    <!--/////////////////////////////////////////////-->
+
+
+    <!--<include layout="@layout/contacts_tab" />-->
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/content_frame"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_below="@+id/appBarLayout"-->
+    <!--android:layout_marginTop="57dp"-->
+    <!--android:clickable="true">-->
+    <!--</FrameLayout>-->
+
+
+    <!--<android.support.v4.view.ViewPager-->
+    <!--android:id="@+id/main_screen_view_pager"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"></android.support.v4.view.ViewPager>-->
+
 
     <!--<TabHost-->
     <!--android:id="@+id/main_screen_tab_host"-->
@@ -59,14 +118,6 @@
 
     <!--</TabHost>-->
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/main_screen_nav_header"
-        app:menu="@menu/main_screen_navigation_menu" />
 
     <!--<fragment-->
     <!--android:id="@+id/main_screen_fragment_navigation_drawer"-->
@@ -78,5 +129,16 @@
     <!--tools:layout="@layout/main_screen_navigation_drawer_menu">-->
 
     <!--</fragment>-->
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/main_screen_nav_header"
+        app:menu="@menu/main_screen_navigation_menu" />
 
 </android.support.v4.widget.DrawerLayout>

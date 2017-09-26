@@ -77,7 +77,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="57dp"
+        android:layout_below="@+id/contact_editor_appBar"
         android:fillViewport="true">
 
         <LinearLayout
@@ -101,26 +101,26 @@
                         android:id="@+id/contact_avatar_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignBottom="@+id/change_avatar_contact_edit"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:background="@android:color/darker_gray"
                         android:onClick="selectPhoto"
                         android:src="@drawable/ic_perm_identity_white" />
 
                     <!--This is used for adding a camera image to right down side of the Avatar image-->
-                    <TextView
-                        android:id="@+id/change_avatar_contact_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginLeft="123dp"
-                        android:layout_marginStart="123dp"
-                        android:alpha="0.5"
-                        android:text="@string/camera"
-                        android:textSize="15sp">
+                    <!--<TextView-->
+                    <!--android:id="@+id/change_avatar_contact_edit"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_marginBottom="2dp"-->
+                    <!--android:layout_marginLeft="123dp"-->
+                    <!--android:layout_marginStart="123dp"-->
+                    <!--android:alpha="0.5"-->
+                    <!--android:text="@string/camera"-->
+                    <!--android:textSize="15sp">-->
 
-                    </TextView>
+                    <!--</TextView>-->
                 </RelativeLayout>
 
                 <LinearLayout
@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="NAME"
+                        android:text="ALIAS"
                         android:textColor="@color/colorInfoText"
                         android:textSize="17sp" />
 
@@ -150,21 +150,20 @@
                         android:layout_height="wrap_content"
                         android:hint="Name"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"
                         android:textColor="@color/colorInfoText"
                         android:textColorHint="@color/colorInfoText"
                         android:textSize="15sp" />
 
-                    <EditText
-                        android:id="@+id/nickname_contact_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nickame"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
-                        android:textSize="15sp" />
+                    <!--<EditText-->
+                    <!--android:id="@+id/nickname_contact_edit"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="Nickame"-->
+                    <!--android:imeOptions="actionDone"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:textColor="@color/colorInfoText"-->
+                    <!--android:textColorHint="@color/colorInfoText"-->
+                    <!--android:textSize="15sp" />-->
                 </LinearLayout>
 
             </LinearLayout>
@@ -199,22 +198,35 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_weight="0.1"
+                    android:layout_weight="0.04"
                     android:gravity="center_vertical"
                     android:src="@drawable/tor_onion" />
 
                 <TextView
                     android:id="@+id/address_contact_edit"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dip"
-                    android:layout_weight="1"
+                    android:layout_marginRight="10dip"
+
                     android:hint="xxxxxxxxxxxxxxxx"
                     android:padding="10dip"
                     android:textColor="@color/colorInfoText"
                     android:textColorHint="@color/colorInfoText"
                     android:textSize="16dip" />
+
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginLeft="13dip"-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="120dip"
+                    android:text=".onion"
+                    android:textColor="@color/colorInfoText"
+                    android:textSize="17sp" />
+
             </LinearLayout>
+
 
             <!--<LinearLayout-->
             <!--android:id="@+id/email_layout"-->
@@ -280,6 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:gravity="center_horizontal"
+                    android:inputType="number"
                     android:text="0"
                     android:textColor="@color/colorInfoText"
                     android:textSize="20sp" />
@@ -302,6 +315,24 @@
                 <!--android:text="seconds"-->
                 <!--android:textColor="@color/colorInfoText"-->
                 <!--android:textSize="15sp" />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="0dip"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="* When 0 the history is NEVER deleted. Default: 0"
+                    android:textColor="@color/colorInfoText"
+                    android:textSize="10sp" />
+
             </LinearLayout>
 
             <LinearLayout

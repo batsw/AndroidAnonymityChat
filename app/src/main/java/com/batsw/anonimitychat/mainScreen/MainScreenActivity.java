@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -45,7 +46,7 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 
     private static final String LOG = MainScreenActivity.class.getSimpleName();
 
-    private ViewPager mViewPager;
+//    private ViewPager mViewPager;
 
     private TabContacts mTabContacts;
 
@@ -88,21 +89,20 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
     private void initLayout() {
         Log.i(LOG, "init -> ENTER");
 
-        mViewPager = (ViewPager) findViewById(R.id.main_screen_view_pager);
+//        mViewPager = (ViewPager) findViewById(R.id.main_screen_view_pager);
 
 //        mTabHost = (TabHost) findViewById(R.id.main_screen_tab_host);
 //        mTabHost.setup();
 
         mTabContacts = new TabContacts();
 
-        List<Fragment> listFragments = new ArrayList<>();
-        listFragments.add(mTabContacts);
-//        listFragments.add(new TabChats());
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, mTabContacts).commit();
 
-        MainScreenAdapter mainScreenAdapter = new MainScreenAdapter(getSupportFragmentManager(), listFragments);
-        mViewPager.setAdapter(mainScreenAdapter);
+//        List<Fragment> listFragments = new ArrayList<>();
+//        listFragments.add(mTabContacts);
 
-//        mViewPager.setOnPageChangeListener(this);
+//        MainScreenAdapter mainScreenAdapter = new MainScreenAdapter(getSupportFragmentManager(), listFragments);
+//        mViewPager.setAdapter(mainScreenAdapter);
 
         Log.i(LOG, "init -> LEAVE");
     }
@@ -243,23 +243,42 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         int id = item.getItemId();
 
         if (id == R.id.nav_my_profile) {
-//            SettingsProfileActivity settingsProfileActivity = new SettingsProfileActivity();
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-////            transaction.addToBackStack(null);
-//            transaction.replace(R.id.content_frame, settingsProfileActivity).commit();
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.content_frame, new SettingsProfileActivity(), "mainFrqgment").commit();
+//            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsProfileActivity()).commit();
 
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsProfileActivity()).commit();
+            Context currentActivityContext = AppController.getInstanceParameterized(null).getCurrentActivityContext();
+            Intent profileActivity = SettingsProfileActivity.makeIntent(currentActivityContext);
+            profileActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            currentActivityContext.startActivity(profileActivity);
 
         } else if (id == R.id.nav_network) {
-            SettingsNetworkActivity settingsNetworkActivity = new SettingsNetworkActivity();
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsNetworkActivity).commit();
+//            SettingsNetworkActivity settingsNetworkActivity = new SettingsNetworkActivity();
+//            getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsNetworkActivity).commit();
+
+            Context currentActivityContext = AppController.getInstanceParameterized(null).getCurrentActivityContext();
+            Intent networkSettingsActivity = SettingsNetworkActivity.makeIntent(currentActivityContext);
+            networkSettingsActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            currentActivityContext.startActivity(networkSettingsActivity);
+
         } else if (id == R.id.nav_storage) {
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsStorageActivity()).commit();
+//            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsStorageActivity()).commit();
+
+            Context currentActivityContext = AppController.getInstanceParameterized(null).getCurrentActivityContext();
+            Intent storageActivity = SettingsStorageActivity.makeIntent(currentActivityContext);
+            storageActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            currentActivityContext.startActivity(storageActivity);
+
         } else if (id == R.id.nav_about) {
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsAboutActivity()).commit();
+
+            Context currentActivityContext = AppController.getInstanceParameterized(null).getCurrentActivityContext();
+            Intent aboutActivity = SettingsAboutActivity.makeIntent(currentActivityContext);
+
+//            chatActivityIntent.putExtra(ChatModelConstants.CHAT_ACTIVITY_INTENT_EXTRA_KEY, ChatController.getInstance().getChatDetailForChatAction(partnerHostName).getSessionId());
+
+            aboutActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            currentActivityContext.startActivity(aboutActivity);
+
+//            getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsAboutActivity()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_screen_layout);
@@ -317,11 +336,11 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 //        }
 //    }
 
-    public void moveToChatsTab() {
-        Log.i(LOG, "moveToChatsTab -> ENTER");
-        mViewPager.setCurrentItem(1, true);
-        Log.i(LOG, "moveToChatsTab -> LEAVE");
-    }
+//    public void moveToChatsTab() {
+//        Log.i(LOG, "moveToChatsTab -> ENTER");
+//        mViewPager.setCurrentItem(1, true);
+//        Log.i(LOG, "moveToChatsTab -> LEAVE");
+//    }
 
     @Override
     protected void onNewIntent(Intent intent) {

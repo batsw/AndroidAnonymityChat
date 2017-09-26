@@ -34,7 +34,8 @@ public class ContactEditorActivity extends AppCompatActivity {
     private DBContactEntity mContactEntity;
     private DBChatEntity mChatEntity;
 
-    private EditText mContactName, mContactNickname, mHistoryCleanupTime;
+    private EditText mContactName, mHistoryCleanupTime;
+//    private EditText mContactNickname;
     private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon, mClockIcon;
     private ImageView mContactAvatar;
     private TextView mSave;
@@ -61,8 +62,8 @@ public class ContactEditorActivity extends AppCompatActivity {
         mContactName = (EditText) findViewById(R.id.name_contact_edit);
         mContactName.setText(mContactEntity.getName());
 
-        mContactNickname = (EditText) findViewById(R.id.nickname_contact_edit);
-        mContactNickname.setText(mContactEntity.getNickName());
+//        mContactNickname = (EditText) findViewById(R.id.nickname_contact_edit);
+//        mContactNickname.setText(mContactEntity.getNickName());
 
         mContactAddress = (TextView) findViewById(R.id.address_contact_edit);
 
@@ -92,7 +93,8 @@ public class ContactEditorActivity extends AppCompatActivity {
 
 //                mContactEntity.setAddress(mContactAddress.getText().toString());
                 mContactEntity.setName(mContactName.getText().toString());
-                mContactEntity.setNickName(mContactNickname.getText().toString());
+                mContactEntity.setNickName(mContactName.getText().toString());
+//                mContactEntity.setNickName(mContactNickname.getText().toString());
 //                mContactEntity.setEmail(mContactEmail.getText().toString());
 
                 long historyCleanupTime = 0;
@@ -161,8 +163,8 @@ public class ContactEditorActivity extends AppCompatActivity {
 //        mEmailIcon.setTypeface(fontAwesome);
 
         //TODO: to add a listener that allows loading pictures for avatars
-        mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_edit);
-        mChangeContactAvatar.setTypeface(fontAwesome);
+//        mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_edit);
+//        mChangeContactAvatar.setTypeface(fontAwesome);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

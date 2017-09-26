@@ -27,8 +27,10 @@ public class ContactAddActivity extends AppCompatActivity {
 
     private static final String LOG = ContactAddActivity.class.getSimpleName();
 
-    private EditText mContactName, mContactNickname, mContactAddress, mContactEmail;
-    private TextView mBackIcon, mEmailIcon, mChangeContactAvatar;
+    private EditText mContactName, mContactAddress, mContactEmail;
+    //    private EditText mContactNickname;
+    private TextView mBackIcon, mEmailIcon;
+    private TextView mChangeContactAvatar;
     private Button mAdd;
 
     @Override
@@ -44,7 +46,7 @@ public class ContactAddActivity extends AppCompatActivity {
         Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "font_awesome/fontawesome.ttf");
 
         mContactName = (EditText) findViewById(R.id.name_contact_add);
-        mContactNickname = (EditText) findViewById(R.id.nickname_contact_add);
+//        mContactNickname = (EditText) findViewById(R.id.nickname_contact_add);
 
         mContactAddress = (EditText) findViewById(R.id.address_contact_add);
 //        mContactEmail = (EditText) findViewById(R.id.email_contact_add);
@@ -66,7 +68,8 @@ public class ContactAddActivity extends AppCompatActivity {
                     DBContactEntity contact = new DBContactEntity();
                     contact.setAddress(myAddressComplete);
                     contact.setName(mContactName.getText().toString());
-                    contact.setNickName(mContactNickname.getText().toString());
+                    contact.setNickName(mContactName.getText().toString());
+//                    contact.setNickName(mContactNickname.getText().toString());
 //                    contact.setEmail(mContactEmail.getText().toString());
 
                     if (validateNewContact(contact)) {
@@ -101,8 +104,8 @@ public class ContactAddActivity extends AppCompatActivity {
         });
 
         //TODO: to add a listener that allows loading pictures for avatars
-        mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_add);
-        mChangeContactAvatar.setTypeface(fontAwesome);
+//        mChangeContactAvatar = (TextView) findViewById(R.id.change_avatar_contact_add);
+//        mChangeContactAvatar.setTypeface(fontAwesome);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

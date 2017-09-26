@@ -5,62 +5,63 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:orientation="horizontal">
-    <!--tools:ignore="MissingPrefix"-->
+    android:orientation="horizontal"
+    tools:ignore="MissingPrefix">
 
-    <!--<android.support.design.widget.AppBarLayout-->
-    <!--android:id="@+id/settings_network_appBar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
-    <!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay"&ndash;&gt;-->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/settings_network_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
 
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/settings_network_toolbar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="?attr/actionBarSize"-->
-    <!--android:background="?attr/colorPrimaryDark">-->
-    <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay">&ndash;&gt;-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/settings_network_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
-    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/settings_network_back"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_gravity="left"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:drawablePadding="10dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingBottom="5dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingEnd="15dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingLeft="15dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingRight="15dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingStart="15dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingTop="5dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:text="@string/left_arrow"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:textColor="@android:color/white"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:textSize="20sp" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/settings_network_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:drawablePadding="10dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/left_arrow"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
 
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:drawablePadding="10dp"-->
-    <!--android:paddingBottom="5dp"-->
-    <!--android:paddingEnd="15dp"-->
-    <!--android:paddingLeft="15dp"-->
-    <!--android:paddingRight="15dp"-->
-    <!--android:paddingStart="15dp"-->
-    <!--android:paddingTop="5dp"-->
-    <!--android:text="@string/settings_network"-->
-    <!--android:textColor="@android:color/white"-->
-    <!--android:textSize="20sp"-->
-    <!--android:textStyle="bold" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/settings_network"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-    <!--</android.support.v7.widget.Toolbar>-->
+        </android.support.v7.widget.Toolbar>
 
-    <!--</android.support.design.widget.AppBarLayout>-->
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/sn_connection_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_network_appBar"
         android:layout_marginStart="10dip"
         android:orientation="horizontal">
 
@@ -70,43 +71,43 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                <TextView
-                    android:id="@+id/settings_network_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:drawablePadding="10dp"
-                    android:paddingBottom="5dp"
-                    android:paddingEnd="15dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingStart="15dp"
-                    android:paddingTop="17dp"
-                    android:text="@string/left_arrow"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
+            <!--<TextView-->
+            <!--android:id="@+id/settings_network_back"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left"-->
+            <!--android:drawablePadding="10dp"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:paddingEnd="15dp"-->
+            <!--android:paddingLeft="15dp"-->
+            <!--android:paddingRight="15dp"-->
+            <!--android:paddingStart="15dp"-->
+            <!--android:paddingTop="17dp"-->
+            <!--android:text="@string/left_arrow"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="13sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Network connection"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:text="Network connection"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="20sp" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/colorAccent" />
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:layout_marginBottom="12dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:background="@color/colorAccent" />-->
 
 
             <LinearLayout
@@ -141,9 +142,9 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1" />-->
 
 </RelativeLayout>
