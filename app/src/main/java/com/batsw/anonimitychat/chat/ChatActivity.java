@@ -3,6 +3,7 @@ package com.batsw.anonimitychat.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -26,6 +27,7 @@ import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.mainScreen.popup.EmptyHistoryPopup;
 import com.batsw.anonimitychat.mainScreen.popup.NoNetworkPopup;
 import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
@@ -61,12 +63,14 @@ public class ChatActivity extends AppCompatActivity {
     private EditText chatEditText;
 
     private TextView mNetworkConnection, mHistory, mChatName, mBack;
+    private TextView mConnectionStatus;
 
     private ImageView mEnterChatMessage;
 
     private IChatActivityManager mChatActivityManager = new ChatActivityManagerImpl();
 
     private NoNetworkPopup mNoNetworkPopup;
+    private EmptyHistoryPopup mEmptyHistoryPopup;
 
 
     /**
@@ -182,24 +186,12 @@ public class ChatActivity extends AppCompatActivity {
         mChatName.setText(contactEntity.getName());
 
         mNetworkConnection = (TextView) findViewById(R.id.chat_network_status_button);
-        AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mNetworkConnection);
 
-        mNetworkConnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(LOG, "mNetworkConnection.setOnClickListener -> ENTER");
+        mConnectionStatus = new TextView(this);
 
-                if (!AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    AppController.getInstanceParameterized(null).startNetworkConnection();
-                } else {
-                    AppController.getInstanceParameterized(null).stopNetworkConnection();
-                }
+        AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mConnectionStatus);
 
-                Log.i(LOG, "mNetworkConnection.setOnClickListener -> LEAVE");
-            }
-        });
-
-        mNetworkConnection.addTextChangedListener(new TextWatcher() {
+        mConnectionStatus.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -208,8 +200,13 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    ((ChatActivityManagerImpl) mChatActivityManager).connectToPartner();
+                    Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
+
+                    mNetworkConnection.setBackground(Drawable.createFromPath("@drawable/userstatus_online"));
                 } else {
+                    Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
+
+                    mNetworkConnection.setBackground(Drawable.createFromPath("@drawable/userstatus_busy"));
                     mChatActivityManager.onDestroy();
                 }
             }
@@ -244,6 +241,8 @@ public class ChatActivity extends AppCompatActivity {
                     }
 
                     mChatListAdapter.addMessageToList(chatMessages);
+                } else {
+                    mEmptyHistoryPopup.show();
                 }
 
                 Log.i(LOG, "mHistory.setOnClickListener -> LEAVE");
@@ -253,6 +252,7 @@ public class ChatActivity extends AppCompatActivity {
         mChatActivityManager.onCreate();
 
         mNoNetworkPopup = new NoNetworkPopup(this);
+        mEmptyHistoryPopup = new EmptyHistoryPopup(this);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
