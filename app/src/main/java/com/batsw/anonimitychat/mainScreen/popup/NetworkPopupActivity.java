@@ -85,6 +85,7 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
                     mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0, 16));
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartingTorStatus));
+                    mNetworkConnectionSwitch.setChecked(true);
                 } else {
                     mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStoppedTorStatus));
                     mNetworkConnectionSwitch.setChecked(false);

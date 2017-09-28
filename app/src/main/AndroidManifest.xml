@@ -39,7 +39,8 @@
         <!--</activity>-->
         <activity
             android:name=".chat.ChatActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.VIEW" />-->
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
@@ -67,7 +68,8 @@
         </activity>
         <activity
             android:name=".mainScreen.contactEditor.ContactEditorActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".mainScreen.addContact.ContactAddActivity"
             android:screenOrientation="portrait"></activity>

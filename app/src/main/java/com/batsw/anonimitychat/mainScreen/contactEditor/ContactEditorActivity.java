@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.system.Os;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class ContactEditorActivity extends AppCompatActivity {
     private DBChatEntity mChatEntity;
 
     private EditText mContactName, mHistoryCleanupTime;
-//    private EditText mContactNickname;
+    //    private EditText mContactNickname;
     private TextView mContactAddress, mContactEmail, mChangeContactAvatar, mEmailIcon, mBackIcon, mClockIcon;
     private ImageView mContactAvatar;
     private TextView mSave;
@@ -101,8 +102,10 @@ public class ContactEditorActivity extends AppCompatActivity {
                 try {
                     if (mHistoryCleanupTime.getText().toString() != null) {
                         historyCleanupTime = Long.parseLong(mHistoryCleanupTime.getText().toString());
+                        int intHistoryCleanupTime = ((Long) historyCleanupTime).intValue();
+                        mChatEntity.setHistoryCleanupTime(intHistoryCleanupTime);
                     }
-                    mChatEntity.setHistoryCleanupTime(historyCleanupTime);
+
                 } catch (NumberFormatException nfe) {
                     //TODO: pop-up history cleanup time numeric only - if <= 0 never delete
                 }

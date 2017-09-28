@@ -26,6 +26,7 @@ import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.mainScreen.popup.NoNetworkPopup;
 import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
@@ -65,6 +66,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private IChatActivityManager mChatActivityManager = new ChatActivityManagerImpl();
 
+    private NoNetworkPopup mNoNetworkPopup;
+
 
     /**
      * Sending the message when clicking on Send image
@@ -73,17 +76,25 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+            Log.i(LOG, "mClickForEnterChatView.onClick -> ENTER");
             if (view.equals(mEnterChatMessage)) {
-                if (!AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+                    Log.i(LOG, "sending message to partner");
+
                     final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
 
                     //sending the message HERE
                     mChatActivityManager.sendMessage(message.getMessage());
 
                     mChatMessageList.add(message);
+                } else {
+                    Log.i(LOG, "showing NoNetworkPopup");
+                    mNoNetworkPopup.show();
                 }
             }
             chatEditText.setText("");
+
+            Log.i(LOG, "mClickForEnterChatView.onClick -> LEAVE");
         }
     };
 
@@ -240,6 +251,10 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         mChatActivityManager.onCreate();
+
+        mNoNetworkPopup = new NoNetworkPopup(this);
+
+        Log.i(LOG, "onCreate -> LEAVE");
     }
 
     /**

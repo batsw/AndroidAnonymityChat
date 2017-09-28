@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +14,7 @@ import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
-import com.batsw.anonimitychat.mainScreen.adapters.ContactsAdapter;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
-import com.batsw.anonimitychat.persistence.entities.DBChatEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
 
@@ -32,6 +31,8 @@ public class ContactAddActivity extends AppCompatActivity {
     private TextView mBackIcon, mEmailIcon;
     private TextView mChangeContactAvatar;
     private Button mAdd;
+
+    private TextInputLayout mNameTextInputLayout, mAddressTextInputLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,38 +55,52 @@ public class ContactAddActivity extends AppCompatActivity {
 //        mEmailIcon = (TextView) findViewById(R.id.contact_email_icon_add);
 //        mEmailIcon.setTypeface(fontAwesome);
 
+        mNameTextInputLayout = (TextInputLayout) findViewById(R.id.name_contact_add_textInputLayout);
+        mAddressTextInputLayout = (TextInputLayout) findViewById(R.id.address_add_textInputLayout);
+
+
         mAdd = (Button) findViewById(R.id.contact_add_button);
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i(LOG, "mAdd.onClick -> ENTER");
 
-                final String enteredAddress = mContactAddress.getText().toString();
+                final String enteredName = mContactName.getText().toString();
+                if (enteredName.length() > 0) {
+                    final String enteredAddress = mContactAddress.getText().toString();
 
-                if (enteredAddress.length() == 16) {
-                    String myAddressComplete = enteredAddress + TorConstants.TOR_ADDRESS_SUFFIX;
+                    if (enteredAddress.length() > 0 && enteredAddress.length() == 16) {
+                        String myAddressComplete = enteredAddress + TorConstants.TOR_ADDRESS_SUFFIX;
 
-                    DBContactEntity contact = new DBContactEntity();
-                    contact.setAddress(myAddressComplete);
-                    contact.setName(mContactName.getText().toString());
-                    contact.setNickName(mContactName.getText().toString());
+                        DBContactEntity contact = new DBContactEntity();
+                        contact.setAddress(myAddressComplete);
+                        contact.setName(enteredName);
+                        contact.setNickName(mContactName.getText().toString());
 //                    contact.setNickName(mContactNickname.getText().toString());
 //                    contact.setEmail(mContactEmail.getText().toString());
 
-                    if (validateNewContact(contact)) {
+                        if (validateNewContact(contact)) {
 
-                        boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
+                            boolean insertSuccessfull = AppController.getInstanceParameterized(null).addNewContact(contact);
 
-                        if (insertSuccessfull) {
-                            ContactEntity newContactEntity = new ContactEntity(
-                                    (contact.getNickName() == null || contact.getNickName().isEmpty()) ? contact.getName() : contact.getNickName(),
-                                    contact.getSessionId());
-                            AppController.getInstanceParameterized(null).addNewContactToTab(newContactEntity);
-                            finish();
+                            if (insertSuccessfull) {
+                                ContactEntity newContactEntity = new ContactEntity(
+                                        (contact.getNickName() == null || contact.getNickName().isEmpty()) ? contact.getName() : contact.getNickName(),
+                                        contact.getSessionId());
+                                AppController.getInstanceParameterized(null).addNewContactToTab(newContactEntity);
+                                finish();
+                            }
+                        } else {
+                            mAddressTextInputLayout.setErrorEnabled(true);
+                            mAddressTextInputLayout.setError("Address must have 16 characters!");
                         }
+                    } else {
+                        mAddressTextInputLayout.setErrorEnabled(true);
+                        mAddressTextInputLayout.setError("Address must have 16 characters!");
                     }
                 } else {
-//                    TODO: popup on the screen the address must contain 16 characters (without suffix)
+                    mNameTextInputLayout.setErrorEnabled(true);
+                    mNameTextInputLayout.setError("Name cannot be empty!");
                 }
 
                 Log.i(LOG, "mAdd.onClick -> LEAVE");
@@ -116,10 +131,8 @@ public class ContactAddActivity extends AppCompatActivity {
 
         if (!(contactEntity.getAddress().length() == 22)) {
             retVal = false;
-//            TODO: address is incorrect popup
         } else if (contactEntity.getName() == null) {
             retVal = false;
-//            TODO: name cannot be empty popup
         } else if (contactEntity.getNickName() == null) {
             contactEntity.setNickName(contactEntity.getName());
         } else {

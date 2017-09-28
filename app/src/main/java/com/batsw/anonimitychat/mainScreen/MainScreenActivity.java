@@ -21,6 +21,9 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.batsw.anonimitychat.R;
@@ -55,6 +58,9 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
     private NetworkPopupActivity mNetworkPopupActivity;
     private TextView mTextView;
 
+    private Button mConnectButton;
+    private LinearLayout nctnLayout;
+
     private boolean mReceivedIntent = false;
 
 //    NavigationDrawerMenuFragment mDrawerFragment;
@@ -82,6 +88,18 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         mNetworkPopupActivity = new NetworkPopupActivity(this);
 
         AppController.getInstanceParameterized(null).setCurrentActivityContext(this);
+
+        nctnLayout = (LinearLayout) findViewById(R.id.not_connected_to_network);
+
+        mConnectButton = (Button) findViewById(R.id.nctn_connect);
+        mConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(LOG, "mConnectButton.onClick -> ENTER");
+                AppController.getInstanceParameterized(null).startNetworkConnection();
+                Log.i(LOG, "mConnectButton.onClick  -> LEAVE");
+            }
+        });
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
@@ -192,10 +210,13 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     networkItem.setIcon(R.drawable.simple_onion_green);
+                    nctnLayout.setVisibility(View.INVISIBLE);
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
                     networkItem.setIcon(R.drawable.simple_onion_blue);
+                    nctnLayout.setVisibility(View.INVISIBLE);
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
                     networkItem.setIcon(R.drawable.simple_onion_white);
+                    nctnLayout.setVisibility(View.VISIBLE);
                 }
 
                 Log.i(LOG, "onCreateOptionsMenu.mTextView.onTextChanged -> LEAVE");
