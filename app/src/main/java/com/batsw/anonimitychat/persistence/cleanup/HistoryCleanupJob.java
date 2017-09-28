@@ -58,7 +58,7 @@ public class HistoryCleanupJob implements Runnable {
     public void addHistoryCleanupJob(long sessionId, long cleanupTime) {
         Log.i(LOG, "addHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", cleanupTime=" + cleanupTime);
 
-        KeyValuePair<Long, Long> timeStartAndPeriod = new KeyValuePair<>(System.currentTimeMillis(), cleanupTime);
+        KeyValuePair<Long, Long> timeStartAndPeriod = new KeyValuePair<>(System.currentTimeMillis(), cleanupTime == 0 ? Long.MAX_VALUE : cleanupTime);
         mJobQueue.put(sessionId, timeStartAndPeriod);
 
         Log.i(LOG, "addHistoryCleanupJob -> LEAVE");
@@ -76,7 +76,7 @@ public class HistoryCleanupJob implements Runnable {
         Log.i(LOG, "updateHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", cleanupTime=" + newCleanupTime);
 
         KeyValuePair<Long, Long> keyValuePair = mJobQueue.get(sessionId);
-        keyValuePair.setK(newCleanupTime);
+        keyValuePair.setK(newCleanupTime == 0 ? Long.MAX_VALUE : newCleanupTime);
 
         mJobQueue.remove(sessionId);
         mJobQueue.put(sessionId, keyValuePair);
