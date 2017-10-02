@@ -17,6 +17,8 @@
         android:title="@string/action_network"
         app:showAsAction="always" />
 
+    <!--android:icon="@drawable/simple_onion_white"-->
+
     <!--<item-->
         <!--android:id="@+id/action_search"-->
         <!--android:icon="@drawable/search_white"-->

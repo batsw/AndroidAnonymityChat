@@ -16,7 +16,7 @@
             android:id="@+id/settings_profile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="ALIAS"
-                        android:textColor="@color/colorInfoText"
+                        android:textColor="@color/black"
                         android:textSize="17sp" />
 
                     <View
@@ -181,8 +181,8 @@
                         android:hint="Name"
                         android:imeOptions="actionNext"
                         android:singleLine="true"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         android:textSize="15sp" />
 
                     <!--<EditText-->
@@ -207,7 +207,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="TOR address"
-                android:textColor="@color/colorInfoText"
+                android:textColor="@color/black"
                 android:textSize="17sp" />
 
             <View
@@ -241,8 +241,8 @@
                     android:layout_weight="1"
                     android:hint="xxxxxxxxxxxxxxxx"
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16dip" />
 
                 <TextView
@@ -250,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dip"
                     android:text=".onion"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/black"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -270,7 +270,7 @@
                     android:hint="* You need to connect the first time to network to obtain your address !"
                     android:padding="10dip"
                     android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColorHint="@color/colorAccent"
                     android:textSize="10dip" />
             </LinearLayout>
 

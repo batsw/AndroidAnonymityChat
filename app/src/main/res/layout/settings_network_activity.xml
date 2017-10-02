@@ -18,7 +18,7 @@
             android:id="@+id/settings_network_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -113,17 +113,24 @@
             <LinearLayout
                 android:id="@+id/connect_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_wan_black" />
 
                 <TextView
                     android:id="@+id/start_stop_connection"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Start/Stop connection:"
+                    android:layout_marginLeft="13dp"
+                    android:layout_weight="0.81"
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:text="Start/Stop connection:"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16dip" />
 
                 <Switch

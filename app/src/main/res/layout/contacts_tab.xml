@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_8"
-        android:background="@color/colorInfoText"
+        android:background="@color/colorAccent"
         android:src="@drawable/ic_add_black"
         android:clickable="true"/>
 

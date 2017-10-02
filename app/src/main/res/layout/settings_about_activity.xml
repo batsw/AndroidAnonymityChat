@@ -15,7 +15,7 @@
             android:id="@+id/settings_about_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -99,10 +99,11 @@
             android:layout_weight="1"
             android:padding="25dip"
             android:text="Copyright BAT Software Organization"
-            android:textColor="@color/colorInfoText"
+            android:textColor="@color/black"
             android:textSize="16dip" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

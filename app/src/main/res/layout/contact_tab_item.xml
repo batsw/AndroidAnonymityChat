@@ -24,7 +24,7 @@
             android:id="@+id/contact_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_earth_white" />
+            android:src="@drawable/ic_account_black" />
 
         <TextView
             android:id="@+id/contact_name"
@@ -34,7 +34,7 @@
             android:layout_marginLeft="13dp"
             android:layout_marginRight="12dp"
             android:layout_weight="0.11"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             tools:text="Contact Name" />
 
@@ -50,7 +50,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="30dp"
-            android:src="@drawable/ic_edit_white" />
+            android:src="@drawable/ic_edit_black" />
     </LinearLayout>
 
     <View

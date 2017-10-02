@@ -15,7 +15,7 @@
             android:id="@+id/contact_edit_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -78,6 +78,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/contact_editor_appBar"
+        android:layout_marginTop="10dp"
         android:fillViewport="true">
 
         <LinearLayout
@@ -134,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="ALIAS"
-                        android:textColor="@color/colorInfoText"
+                        android:textColor="@color/black"
                         android:textSize="17sp" />
 
                     <View
@@ -152,8 +153,9 @@
                             android:id="@+id/name_contact_edit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorInfoText"
-                            android:textColorHint="@color/colorInfoText"
+                            android:hint="ALIAS"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
                             android:textSize="15sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -180,7 +182,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="DETAILS"
-                android:textColor="@color/colorInfoText"
+                android:textColor="@color/black"
                 android:textSize="17sp" />
 
             <View
@@ -213,8 +215,8 @@
                     android:layout_marginRight="10dip"
                     android:hint="xxxxxxxxxxxxxxxx"
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16dip" />
 
                 <!--android:layout_weight="1"-->
@@ -225,7 +227,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text=".onion"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
 
             </LinearLayout>
@@ -284,8 +286,8 @@
                     android:layout_height="wrap_content"
                     android:padding="10dip"
                     android:text="@string/settings_history_cleanup"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="17dip" />
                 <!--android:layout_marginStart="20dp"-->
 
@@ -301,7 +303,7 @@
                     android:gravity="center_horizontal"
                     android:hint="0"
                     android:inputType="number"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <!--</android.support.design.widget.TextInputLayout>-->
@@ -310,7 +312,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="min"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
 
                 <!--<me.grantland.widget.AutofitTextView-->
@@ -338,7 +340,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="* When 0 the history is NEVER deleted. Default: 0"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/colorAccent"
                     android:textSize="10sp" />
 
             </LinearLayout>

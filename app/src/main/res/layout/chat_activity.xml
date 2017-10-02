@@ -17,7 +17,7 @@
             android:id="@+id/contact_edit_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -102,11 +102,11 @@
         android:id="@+id/bottomlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -137,8 +137,8 @@
                 android:hint="@string/type_your_message"
                 android:inputType="textMultiLine"
                 android:singleLine="false"
-                android:textColor="#126B39"
-                android:textColorHint="#126B39"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
                 android:textSize="18sp" />
 
         </LinearLayout>

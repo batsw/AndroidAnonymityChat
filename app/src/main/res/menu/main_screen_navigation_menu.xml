@@ -5,24 +5,24 @@
 
         <item
             android:id="@+id/nav_my_profile"
-            android:icon="@drawable/message_got_receipt_from_server"
+            android:icon="@drawable/ic_wrench_white"
             android:title="My Profile" />
 
         <item
             android:id="@+id/nav_network"
-            android:icon="@drawable/message_got_receipt_from_server"
+            android:icon="@drawable/ic_wan_white"
             android:title="Network" />
 
         <item
             android:id="@+id/nav_storage"
-            android:icon="@drawable/message_got_receipt_from_server"
+            android:icon="@drawable/ic_hamburger_white"
             android:title="Storage" />
     </group>
 
     <group android:checkableBehavior="all"></group>
     <item
         android:id="@+id/nav_about"
-        android:icon="@drawable/message_got_receipt_from_server"
+        android:icon="@drawable/ic_info_outline_white"
         android:title="About" />
 
     <!--<item android:title="">-->

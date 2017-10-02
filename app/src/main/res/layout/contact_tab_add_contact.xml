@@ -15,7 +15,7 @@
             android:id="@+id/contact_add_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="ALIAS"
-                        android:textColor="@color/colorInfoText"
+                        android:textColor="@color/black"
                         android:textSize="17sp" />
 
                     <View
@@ -136,8 +136,8 @@
                             android:layout_height="wrap_content"
                             android:hint="Name"
                             android:imeOptions="actionNext"
-                            android:textColor="@color/colorInfoText"
-                            android:textColorHint="@color/colorInfoText"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
                             android:textSize="15sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -163,7 +163,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="TOR Address"
-                android:textColor="@color/colorInfoText"
+                android:textColor="@color/black"
                 android:textSize="17sp" />
 
             <View
@@ -206,8 +206,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:hint="xxxxxxxxxxxxxxxx"
-                        android:textColor="@color/colorInfoText"
-                        android:textColorHint="@color/colorInfoText"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
                         android:textSize="18dip" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dip"
                     android:text=".onion"
-                    android:textColor="@color/colorInfoText"
+                    android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -239,8 +239,8 @@
                     android:layout_weight="1"
                     android:hint="* TOR.onion address is the unique identifier in TOR Network"
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent"
                     android:textSize="10dip" />
             </LinearLayout>
 

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#262626</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#00e0c6</color>
+    <!--<color name="colorPrimary">#262626</color>-->
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#00e0c6</color>-->
+
+    <!--<color name="colorInfoText">#939393</color>-->
+
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">#009688</color>
 
     <color name="colorInfoText">#939393</color>
 
@@ -29,6 +35,7 @@
     <color name="chat_user_reply_background_color">#c8f0ff</color>
     <color name="chat_company_reply_background_color">#F5F5F5</color>
     <color name="gray">@android:color/darker_gray</color>
+    <color name="black">#000000</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="orange">@android:color/holo_blue_light</color>
     <color name="background_tab_pressed">#6633B5E5</color>

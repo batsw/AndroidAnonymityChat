@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:text="Network Connection"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/black"
         android:textSize="15dp"
         android:textStyle="bold" />
 
@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:text="Status:"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="15dp"
             android:textStyle="bold" />
 
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="My address: "
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="15dp" />
 
         <TextView

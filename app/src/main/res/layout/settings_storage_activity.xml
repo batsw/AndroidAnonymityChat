@@ -18,7 +18,7 @@
             android:id="@+id/settings_storage_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimaryDark">
             <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
 
             <TextView
@@ -227,8 +227,8 @@
                     android:layout_weight="0.03"
                     android:hint="History size: "
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16dip" />
 
                 <TextView
@@ -239,8 +239,8 @@
                     android:layout_weight="1"
                     android:hint=" xxxxx.xxx KB"
                     android:padding="10dip"
-                    android:textColor="@color/colorInfoText"
-                    android:textColorHint="@color/colorInfoText"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16dip" />
             </LinearLayout>
 

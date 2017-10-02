@@ -9,14 +9,16 @@
     android:paddingBottom="@dimen/margin_16"
     android:paddingLeft="@dimen/margin_16"
     android:paddingRight="@dimen/margin_16"
-    android:paddingTop="@dimen/margin_16"
-    >
+    android:paddingTop="@dimen/margin_16">
     <!--android:theme="@style/ThemeOverlay.AppCompat.Dark"-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Settings"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/margin_16"
+        android:textStyle="bold" />
 
 </LinearLayout>
