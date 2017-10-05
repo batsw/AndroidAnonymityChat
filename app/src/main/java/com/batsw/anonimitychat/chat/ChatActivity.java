@@ -62,10 +62,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText chatEditText;
 
-    private TextView mNetworkConnection, mHistory, mChatName, mBack;
+    private TextView mHistory, mChatName, mBack;
     private TextView mConnectionStatus;
 
-    private ImageView mEnterChatMessage;
+    private ImageView mEnterChatMessage, mNetworkConnection;
 
     private IChatActivityManager mChatActivityManager = new ChatActivityManagerImpl();
 
@@ -185,7 +185,7 @@ public class ChatActivity extends AppCompatActivity {
         mChatName = (TextView) findViewById(R.id.chat_name);
         mChatName.setText(contactEntity.getName());
 
-        mNetworkConnection = (TextView) findViewById(R.id.chat_network_status_button);
+        mNetworkConnection = (ImageView) findViewById(R.id.chat_network_status_button);
 
         mConnectionStatus = new TextView(this);
 
@@ -199,16 +199,18 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.i(LOG, "mConnectionStatus.onTextChanged -> ENTER");
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
 
-                    mNetworkConnection.setBackground(Drawable.createFromPath("@drawable/userstatus_online"));
+                    mNetworkConnection.setImageResource(R.drawable.userstatus_online);
                 } else {
                     Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
 
-                    mNetworkConnection.setBackground(Drawable.createFromPath("@drawable/userstatus_busy"));
+                    mNetworkConnection.setImageResource(R.drawable.userstatus_busy);
                     mChatActivityManager.onDestroy();
                 }
+                Log.i(LOG, "mConnectionStatus.onTextChanged -> LEAVE");
             }
 
             @Override

@@ -6,7 +6,7 @@ package com.batsw.anonimitychat.util;
 
 public interface AppConstants {
     //    Default My Profile value
-    public static final String MY_DEFAULT_ADDRESS = "Connect to Network";
+    public static final String MY_DEFAULT_ADDRESS = "ConnectToNetwork";
     public static final String MY_DEFAULT_NAME = "AnonimousUser";
     public static final String MY_DEFAULT_NICKNAME = "AnonimousUser";
 

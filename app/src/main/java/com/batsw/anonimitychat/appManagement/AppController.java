@@ -312,9 +312,9 @@ public class AppController {
     }
 
     public void removeMessagesForChat(long contactSessionId) {
-        Log.i(LOG, "addMessageToChatHistory -> ENTER contactSessionId=" + contactSessionId);
+        Log.i(LOG, "removeMessagesForChat -> ENTER contactSessionId=" + contactSessionId);
         mDatabaseHelper.getChatMessagesOperations().deleteAllMessagesForSessionId(contactSessionId);
-        Log.i(LOG, "addMessageToChatHistory -> LEAVE");
+        Log.i(LOG, "removeMessagesForChat -> LEAVE");
     }
 
 //    public void moveToChatsTab() {

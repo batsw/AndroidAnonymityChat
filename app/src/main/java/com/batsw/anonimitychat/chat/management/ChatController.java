@@ -80,7 +80,11 @@ public class ChatController implements IIncomingConnectionListener {
         if (partnerConnection != null && partnerConnection.isAlive()) {
             chatDetail.setIsAlive(true);
             chatDetail.setTorConnection(partnerConnection);
+        } else {
+            //        TODO: what happens if it is a test address and user tries to connect to it .....
+//            the its false
         }
+
         Log.i(CHAT_CONTROLLER_LOG, "establishConnectionToPartner -> LEAVE");
     }
 
