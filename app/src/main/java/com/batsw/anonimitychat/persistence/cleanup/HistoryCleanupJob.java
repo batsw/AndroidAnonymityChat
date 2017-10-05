@@ -40,25 +40,25 @@ public class HistoryCleanupJob implements Runnable {
                 KeyValuePair<Long, Long> valuePair = mJobQueue.get(sessionId);
 
                 long lastRun = valuePair.getK();
-                long cleanupFrequency = valuePair.getV();
+                long cleanupFrequency = valuePair.getV() == 0 ? Long.MAX_VALUE : valuePair.getV();
 
                 Log.i(LOG, "lastRun + cleanupFrequency * 60 * 1000 <= nowTime :::" + lastRun +
                         " + " + lastRun + "__" + cleanupFrequency * 60 * 1000 + "___nowtime: " + nowTime);
 
-                if (lastRun + cleanupFrequency * 60 * 1000 <= nowTime) {
+                if ((cleanupFrequency != Long.MAX_VALUE) && (lastRun + cleanupFrequency * 60 * 1000 <= nowTime)) {
                     AppController.getInstanceParameterized(null).removeMessagesForChat(sessionId);
                     Log.e(LOG, "HistoryCleanupJob: cleanup -> DONE for " + sessionId);
 
-                    updateHistoryCleanupJob(sessionId, nowTime);
+                    updateHistoryCleanupJob(sessionId, valuePair.getV());
                 }
             }
         }
     }
 
-    public void addHistoryCleanupJob(long sessionId, long cleanupTime) {
-        Log.i(LOG, "addHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", cleanupTime=" + cleanupTime);
+    public void addHistoryCleanupJob(long sessionId, long cleanupTimeFrequency) {
+        Log.i(LOG, "addHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", cleanupTimeFrequency=" + cleanupTimeFrequency);
 
-        KeyValuePair<Long, Long> timeStartAndPeriod = new KeyValuePair<>(System.currentTimeMillis(), cleanupTime == 0 ? Long.MAX_VALUE : cleanupTime);
+        KeyValuePair<Long, Long> timeStartAndPeriod = new KeyValuePair<>(System.currentTimeMillis(), cleanupTimeFrequency);
         mJobQueue.put(sessionId, timeStartAndPeriod);
 
         Log.i(LOG, "addHistoryCleanupJob -> LEAVE");
@@ -72,11 +72,12 @@ public class HistoryCleanupJob implements Runnable {
         Log.i(LOG, "removeHistoryCleanupJob -> LEAVE");
     }
 
-    public void updateHistoryCleanupJob(long sessionId, long newCleanupTime) {
-        Log.i(LOG, "updateHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", cleanupTime=" + newCleanupTime);
+    public void updateHistoryCleanupJob(long sessionId, long newCleanupTimeFrequency) {
+        Log.i(LOG, "updateHistoryCleanupJob -> ENTER sessionId=" + sessionId + ", newCleanupTimeFrequency=" + newCleanupTimeFrequency);
 
         KeyValuePair<Long, Long> keyValuePair = mJobQueue.get(sessionId);
-        keyValuePair.setK(newCleanupTime == 0 ? Long.MAX_VALUE : newCleanupTime);
+        keyValuePair.setK(System.currentTimeMillis());
+        keyValuePair.setV(newCleanupTimeFrequency);
 
         mJobQueue.remove(sessionId);
         mJobQueue.put(sessionId, keyValuePair);
