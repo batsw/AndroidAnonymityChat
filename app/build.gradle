@@ -18,21 +18,21 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    productFlavors {
-        free {
-            applicationId 'com.batsw.anonimitychat.personal'
-        }
-//        paid {
-//            applicationId 'com.batsw.anonimitychat.premium'
+//    productFlavors {
+//        free {
+//            applicationId 'com.batsw.anonimitychat.personal'
 //        }
-    }
+////        paid {
+////            applicationId 'com.batsw.anonimitychat.premium'
+////        }
+//    }
 
     buildTypes {
-        debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-debug'
-            testCoverageEnabled true
-        }
+//        debug {
+//            applicationIdSuffix '.debug'
+//            versionNameSuffix '-debug'
+//            testCoverageEnabled true
+//        }
 
         release {
             minifyEnabled false
