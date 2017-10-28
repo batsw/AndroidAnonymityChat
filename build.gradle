@@ -6,16 +6,34 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.1'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     }
 }
+
+ext {
+    configCompileSdkVersion = 24
+    configTargetSdkVersion = 24
+    configBuildToolsVersion = '24.0.1'
+
+    supportVersion = '24.0.1'
+    support = [annotations: "com.android.support:support-annotations:$supportVersion",
+               appCompat  : "com.android.support:appcompat-v7:$supportVersion"]
+
+    assertJCore = 'org.assertj:assertj-core:1.7.1'
+    junit = 'junit:junit:4.12'
+
+    supportTest = [espressoCore: 'com.android.support.test.espresso:espresso-core:2.2.2',
+                   rules       : 'com.android.support.test:rules:0.5'
+    ]
+}
+
 
 allprojects {
     repositories {
         jcenter()
     }
+
+    project.version = '0.7'
 }
 
 task clean(type: Delete) {
