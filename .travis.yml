@@ -14,8 +14,7 @@ android:
   - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 script:
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
-#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -no-skin -no-audio -no-window &
+  - echo no | android create avd --force -n anonChatDev -t $ANDROID_TARGET --abi $ANDROID_ABI
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 #  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
