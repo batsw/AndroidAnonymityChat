@@ -72,7 +72,7 @@ public class ChatController implements IIncomingConnectionListener {
         Log.i(CHAT_CONTROLLER_LOG, "initializeChatConnectionManagement -> LEAVE");
     }
 
-    public void establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sessionId) {
+    public ChatDetail establishConnectionToPartner(IMessageReceivedListener messageReceivedListener, long sessionId) {
         Log.i(CHAT_CONTROLLER_LOG, "establishConnectionToPartner -> ENTER messageReceivedListener=" + messageReceivedListener + " sessionId=" + sessionId);
         ChatDetail chatDetail = this.getChatDetail(sessionId);
 
@@ -85,7 +85,8 @@ public class ChatController implements IIncomingConnectionListener {
 //            the its false
         }
 
-        Log.i(CHAT_CONTROLLER_LOG, "establishConnectionToPartner -> LEAVE");
+        Log.i(CHAT_CONTROLLER_LOG, "establishConnectionToPartner -> LEAVE chatDetail=" + chatDetail);
+        return chatDetail;
     }
 
     public void sendMessage(long sessionId, String message) {
@@ -101,7 +102,7 @@ public class ChatController implements IIncomingConnectionListener {
     }
 
     private ChatDetail getChatDetailForChatAction(String partnerAddress) {
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER partnerAddress=" + partnerAddress);
+        Log.i(CHAT_CONTROLLER_LOG, "getChatDetailForChatAction -> ENTER partnerAddress=" + partnerAddress);
         ChatDetail retVal = null;
 
         if (mPersistenceManager.isPartnerInTheList(partnerAddress)) {
@@ -121,7 +122,7 @@ public class ChatController implements IIncomingConnectionListener {
 //            Means that the contact does not exist (chat request from new partner)
             if (dbContactEntity == null) {
                 dbContactEntity = new DBContactEntity();
-                dbContactEntity.setName(partnerAddress);
+                dbContactEntity.setName(partnerAddress.substring(0, 6));
                 dbContactEntity.setNickName(partnerAddress);
                 dbContactEntity.setAddress(partnerAddress);
 
@@ -155,18 +156,11 @@ public class ChatController implements IIncomingConnectionListener {
             isIncomingChatConnection = false;
         }
 
-        Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> LEAVE retVal=" + retVal);
+        mPersistenceManager.updatePartnerDetails(retVal);
+
+        Log.i(CHAT_CONTROLLER_LOG, "getChatDetailForChatAction -> LEAVE retVal=" + retVal);
         return retVal;
     }
-
-//    private long generateSessionId() {
-//        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> ENTER");
-//
-//        long retVal = UUID.randomUUID().getMostSignificantBits();
-//
-//        Log.i(CHAT_CONTROLLER_LOG, "generateSessionId -> LEAVE retVal=" + retVal);
-//        return retVal;
-//    }
 
     public ChatDetail getChatDetail(long sessionId) {
         Log.i(CHAT_CONTROLLER_LOG, "getChatDetail -> ENTER sessionId=" + sessionId);
@@ -247,14 +241,22 @@ public class ChatController implements IIncomingConnectionListener {
     }
 
     public static void cleanUp() {
+        Log.i(CHAT_CONTROLLER_LOG, "cleanUp -> ENTER");
         if (mInstance != null) {
             mInstance.destroy();
             mInstance = null;
         }
+        Log.i(CHAT_CONTROLLER_LOG, "cleanUp -> LEAVE");
     }
 
     private void destroy() {
+        Log.i(CHAT_CONTROLLER_LOG, "destroy -> ENTER");
+
         mPersistenceManager = null;
+
+        mChatConnectionManager.clearResources();
         mChatConnectionManager = null;
+
+        Log.i(CHAT_CONTROLLER_LOG, "destroy -> LEAVE");
     }
 }

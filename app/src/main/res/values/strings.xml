@@ -31,6 +31,9 @@
     <string name="check">&#xf00c;</string>
     <string name="clock">&#xf017;</string>
 
+    <string name="circle">&#xf111;</string>
+    <string name="plug">&#xf1e6;</string>
+
 
     <!--Settings-->
     <string name="settings_storage">Storage</string>

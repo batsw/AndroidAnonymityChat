@@ -112,7 +112,22 @@ public class AppController {
         }
 
         mTorProcessManager = new TorProcessManager(mMainScreenActivity, mTorStatusCarrier);
+//        TODO: activate automatic TOR connection
+//        Automatic TOR connection start
+//        final String networkStatus = mTorStatusCarrier.getText().toString().trim();
+//
+//        if (!mTorProcessManager.isTorBundleStarted() && (networkStatus.equals(TorConstants.TOR_BUNDLE_STOPPED))) {
+//            mTorProcessManager.startTorBundle();
+//
+//            detectFirstRun();
+//        }
+
         Log.i(LOG, "init -> mTorProcessManager - DONE");
+
+// initializing the ChatController and implicitly the TorReceiver
+        mMyAddress = getMyProfile().getMyAddress();
+        handleChatController();
+        Log.i(LOG, "init -> ChatController - DONE");
 
         Log.i(LOG, "initBackend -> LEAVE");
     }
@@ -122,7 +137,6 @@ public class AppController {
 
         final String networkStatus = mTorStatusCarrier.getText().toString().trim();
 
-        //TODO: add more conditionals --- involve PID ... etc
         if (!mTorProcessManager.isTorBundleStarted() && (networkStatus.equals(TorConstants.TOR_BUNDLE_STOPPED))) {
             mTorProcessManager.startTorBundle();
 
@@ -174,18 +188,16 @@ public class AppController {
                     }
                 }
                 if (textViewText.equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    handleChatController();
+//                    handleChatController();
+                    ChatController.getInstance().setMyAddress(mMyAddress);
                 }
 
-                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
-                    Log.i(LOG, "tor bundle has stopped ... clearing Chat Controller resources");
-                    // ChatController managed resources --- what is to be set to default
-
-                    //TODO: Must clear out the resources held by ChatController .....
-                    // when the tor bundle is stopped and ther started and stopped again for each stop the resources must be cleaned
-
-                    ChatController.cleanUp();
-                }
+//                if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+//                    Log.i(LOG, "tor bundle has stopped ... clearing Chat Controller resources");
+//                    // ChatController managed resources --- what is to be set to default
+//
+//                    ChatController.cleanUp();
+//                }
 
                 Log.i(LOG, "detectFirstRun.onTextChanged -> LEAVE");
             }
@@ -210,6 +222,8 @@ public class AppController {
             if (myAddress.length() == AppConstants.ADDRESS_SIZE) {
 
                 mDatabaseHelper.getMyProfileOperations().updateAddressOnFirstNetworkConnection(myAddress);
+
+                ChatController.getInstance().setMyAddress(mMyAddress);
 
                 retVal = true;
             }

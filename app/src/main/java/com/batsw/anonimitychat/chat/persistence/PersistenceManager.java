@@ -103,11 +103,31 @@ public class PersistenceManager {
     }
 
     public void addPartnerToList(ChatDetail chatDetail) {
+        Log.i(PERSISTENCE_MANAGER_LOG, "addPartnerToList -> ENTER chatDetail=" + chatDetail);
+
         mPartnerList.add(chatDetail);
+
+        Log.i(PERSISTENCE_MANAGER_LOG, "addPartnerToList -> LEAVE");
     }
 
     public void deletePartnerFromList() {
 
     }
 
+    public void updatePartnerDetails(ChatDetail chatDetail) {
+        Log.i(PERSISTENCE_MANAGER_LOG, "updatePartnerDetails -> ENTER chatDetail=" + chatDetail);
+
+        ChatDetail found = null;
+        for (ChatDetail cd : mPartnerList) {
+            if (chatDetail.getSessionId() == cd.getSessionId()) {
+                found = cd;
+                break;
+            }
+        }
+
+        mPartnerList.remove(found);
+        mPartnerList.add(chatDetail);
+
+        Log.i(PERSISTENCE_MANAGER_LOG, "updatePartnerDetails -> LEAVE");
+    }
 }

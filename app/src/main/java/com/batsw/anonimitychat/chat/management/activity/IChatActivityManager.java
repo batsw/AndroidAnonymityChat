@@ -1,6 +1,7 @@
 package com.batsw.anonimitychat.chat.management.activity;
 
 import com.batsw.anonimitychat.chat.ChatActivity;
+import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.util.activities.IViewModel;
 
 /**
@@ -23,4 +24,6 @@ public interface IChatActivityManager extends IViewModel {
     public void setChatActivity(ChatActivity chatActivity);
 
     public void configureChatDetail(long sessionId);
+
+    public ChatDetail getChatDetail();
 }

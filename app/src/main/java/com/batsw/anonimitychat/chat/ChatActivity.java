@@ -2,15 +2,18 @@ package com.batsw.anonimitychat.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,6 +32,7 @@ import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
 import com.batsw.anonimitychat.mainScreen.popup.EmptyHistoryPopup;
 import com.batsw.anonimitychat.mainScreen.popup.NoNetworkPopup;
+import com.batsw.anonimitychat.mainScreen.popup.PartnerOfflinePopup;
 import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
@@ -62,16 +66,18 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText chatEditText;
 
-    private TextView mHistory, mChatName, mBack;
+    private TextView mHistory, mChatName, mBack, mNetworkConnection;
     private TextView mConnectionStatus;
 
-    private ImageView mEnterChatMessage, mNetworkConnection;
+    private boolean mHistoryLoaded = false;
+
+    private ImageView mEnterChatMessage;
 
     private IChatActivityManager mChatActivityManager = new ChatActivityManagerImpl();
 
     private NoNetworkPopup mNoNetworkPopup;
     private EmptyHistoryPopup mEmptyHistoryPopup;
-
+    private PartnerOfflinePopup mPartnerOfflinePopup;
 
     /**
      * Sending the message when clicking on Send image
@@ -83,14 +89,25 @@ public class ChatActivity extends AppCompatActivity {
             Log.i(LOG, "mClickForEnterChatView.onClick -> ENTER");
             if (view.equals(mEnterChatMessage)) {
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-                    Log.i(LOG, "sending message to partner");
 
-                    final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+                    if (mChatActivityManager.getChatDetail().getTorConnection() != null) {
 
-                    //sending the message HERE
-                    mChatActivityManager.sendMessage(message.getMessage());
+                        Log.i(LOG, "sending message to partner");
 
-                    mChatMessageList.add(message);
+                        final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+
+                        //sending the message HERE
+                        mChatActivityManager.sendMessage(message.getMessage());
+
+                        mChatMessageList.add(message);
+                    } else {
+                        mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_busy_outline));
+
+                        //                    means starting the connection to the partner
+                        mChatActivityManager.onCreate();
+
+                        mPartnerOfflinePopup.show();
+                    }
                 } else {
                     Log.i(LOG, "showing NoNetworkPopup");
                     mNoNetworkPopup.show();
@@ -185,7 +202,13 @@ public class ChatActivity extends AppCompatActivity {
         mChatName = (TextView) findViewById(R.id.chat_name);
         mChatName.setText(contactEntity.getName());
 
-        mNetworkConnection = (ImageView) findViewById(R.id.chat_network_status_button);
+        mNetworkConnection = (TextView) findViewById(R.id.chat_partner_status_icon);
+        mNetworkConnection.setTypeface(fontAwesome);
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_online));
+        } else {
+            mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_offline));
+        }
 
         mConnectionStatus = new TextView(this);
 
@@ -203,11 +226,14 @@ public class ChatActivity extends AppCompatActivity {
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
 
-                    mNetworkConnection.setImageResource(R.drawable.userstatus_online);
+                    mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_online));
+
+//                    means starting the connection to the partner
+                    mChatActivityManager.onCreate();
                 } else {
                     Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
 
-                    mNetworkConnection.setImageResource(R.drawable.userstatus_busy);
+                    mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_offline));
                     mChatActivityManager.onDestroy();
                 }
                 Log.i(LOG, "mConnectionStatus.onTextChanged -> LEAVE");
@@ -227,7 +253,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 List<IDbEntity> messageHistoryForSessionId = AppController.getInstanceParameterized(null).getMessageHistoryForSessionId(mSessionId);
 
-                if (messageHistoryForSessionId.size() > 0) {
+                if (!mHistoryLoaded && messageHistoryForSessionId.size() > 0) {
 
                     List<ChatMessage> chatMessages = new ArrayList<>();
 
@@ -243,6 +269,8 @@ public class ChatActivity extends AppCompatActivity {
                     }
 
                     mChatListAdapter.addMessageToList(chatMessages);
+
+                    mHistoryLoaded = true;
                 } else {
                     mEmptyHistoryPopup.show();
                 }
@@ -255,6 +283,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mNoNetworkPopup = new NoNetworkPopup(this);
         mEmptyHistoryPopup = new EmptyHistoryPopup(this);
+        mPartnerOfflinePopup = new PartnerOfflinePopup(this, mChatActivityManager);
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

@@ -27,7 +27,6 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
     private MessageReceivedListenerManager mMessageReceivedListenerManager = null;
     private IncomingConnectionListenerManager mIncomingConnectionListenerManager = null;
 
-    //TODO:manage it... it is never stopped
     private TorConnectionReceiver mTorConnectionReceiver = null;
 
     private static Map<String, ITorConnection> mActiveConnections = new HashMap<>();
@@ -105,6 +104,16 @@ public class ChatConnectionManagerImpl implements IChatConnectionManager {
         mMessageReceivedListenerManager.removeTorBundleListener(chatDetail.getSessionId());
 
         Log.i(CHAT_CONNECTION_MANAGER_LOG, "closeConnection -> LEAVE");
+    }
+
+    @Override
+    public void clearResources(){
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "clearResources -> ENTER");
+
+        mTorConnectionReceiver.closeTorReceiver();
+        mTorConnectionReceiver = null;
+
+        Log.i(CHAT_CONNECTION_MANAGER_LOG, "clearResources -> LEAVE");
     }
 
     public static void addReceivedConnection(String partnerAddress, ITorConnection torConnection) {

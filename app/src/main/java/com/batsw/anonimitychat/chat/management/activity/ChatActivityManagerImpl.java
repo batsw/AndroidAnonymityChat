@@ -5,6 +5,7 @@ import android.util.Log;
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.management.ChatController;
+import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
@@ -18,6 +19,8 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
     private static final String CHAT_ACTIVITY_MANAGER_TAG = ChatActivityManagerImpl.class.getSimpleName();
 
     private ChatActivity mChatActivity = null;
+
+    private ChatDetail mChatDetail = null;
 
     private long mSessionId = 0L;
 
@@ -33,7 +36,7 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
 
         if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
             //Preparing TorConnection with partner
-            ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
+            mChatDetail = ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
         }
         //TODO get ChatDetail and if isAlive is False means Offline Mode
         //If the connection could not be established means that the partner is offline
@@ -114,9 +117,18 @@ public class ChatActivityManagerImpl implements IChatActivityManager, IMessageRe
         Log.i(CHAT_ACTIVITY_MANAGER_TAG, "setChatActivity -> LEAVE");
     }
 
-    public void connectToPartner() {
-        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> ENTER");
-        ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
-        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> LEAVE");
+    @Override
+    public ChatDetail getChatDetail() {
+        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "getChatDetail -> ENTER");
+
+
+        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "getChatDetail -> LEAVE mChatDetail=" + mChatDetail);
+        return mChatDetail;
     }
+
+//    public void connectToPartner() {
+//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> ENTER");
+//        ChatController.getInstance().establishConnectionToPartner(this, mSessionId);
+//        Log.i(CHAT_ACTIVITY_MANAGER_TAG, "connectToPartner -> LEAVE");
+//    }
 }

@@ -52,18 +52,28 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.network_popup);
 
-        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(getContext());
-
-        //Loading fontAwesome
-        Typeface fontAwesome = Typeface.createFromAsset(mContext.getAssets(), "font_awesome/fontawesome.ttf");
-
 //        mCheckIcon = (TextView) findViewById(R.id.network_popup_check);
 //        mCheckIcon.setTypeface(fontAwesome);
 
         mMyAddress = (TextView) findViewById(R.id.network_my_address);
         mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0, 16));
 
+        mNetworkConnectionSwitch = (Switch) findViewById(R.id.network_popup_toogle);
+
         mNetworkConnectionStatusLabel = (TextView) findViewById(R.id.network_popup_status);
+        mNetworkConnectionStatusLabel.setText(AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
+        if ((mNetworkConnectionStatusLabel.getText()).equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartedTorStatus));
+            mNetworkConnectionSwitch.setChecked(true);
+
+        } else if ((mNetworkConnectionStatusLabel.getText()).equals(TorConstants.TOR_BUNDLE_IS_STARTING)) {
+            mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStartingTorStatus));
+            mNetworkConnectionSwitch.setChecked(true);
+        } else {
+            mNetworkConnectionStatusLabel.setTextColor(mContext.getResources().getColor(R.color.colorStoppedTorStatus));
+            mNetworkConnectionSwitch.setChecked(false);
+        }
+
         AppController.getInstanceParameterized(null).updateWithNetworkConnectionStatus(mNetworkConnectionStatusLabel);
         mNetworkConnectionStatusLabel.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,7 +113,6 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
             }
         });
 
-        mNetworkConnectionSwitch = (Switch) findViewById(R.id.network_popup_toogle);
         mNetworkConnectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -118,6 +127,12 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
                 Log.i(LOG, "mNetworkConnectionSwitch.onCheckedChanged -> LEAVE");
             }
         });
+
+        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STOPPED)) {
+            mNetworkConnectionSwitch.setChecked(false);
+        } else {
+            mNetworkConnectionSwitch.setChecked(true);
+        }
 
 //        mDoneLabel = (TextView) findViewById(R.id.network_popup_done);
 //        mDoneLabel.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +151,13 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
 //        super.create();
 //
 //    }
+
+    private void handlePopupContent() {
+        Log.i(LOG, "handlePopupContent -> ENTER");
+
+
+        Log.i(LOG, "handlePopupContent -> LEAVE");
+    }
 
     @Override
     public void onClick(View view) {

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by tudor on 3/13/2017.
@@ -20,7 +21,7 @@ public class TorConnectionReceiver {
 
     private static final String LOG = TorConnectionReceiver.class.getSimpleName();
 
-    private Thread mWaitingForPartnerThread = null;
+    private ExecutorService mWaitingForPartnerThread = null;
 
     private IncomingConnectionListenerManager mIncomingConnectionListenerManager;
     private MessageReceivedListenerManager mMessageReceivedListenerManager;
@@ -40,21 +41,27 @@ public class TorConnectionReceiver {
     private void init() {
         Log.i(LOG, "init -> ENTER");
 
-        try {
-            mProviderSocket = new ServerSocket(TorConstants.TOR_BUNDLE_INTERNAL_HIDDEN_SERVICES_PORT, 10);
-        } catch (IOException e) {
-            Log.i(LOG, "error  when creating Server Socket: " + e.getMessage(), e);
-        }
+        initSocketServer();
 
-        mWaitingForPartnerThread = new Thread(new Runnable() {
+        mWaitingForPartnerThread = Executors.newSingleThreadScheduledExecutor();
+        mWaitingForPartnerThread.submit(new Runnable() {
             @Override
             public void run() {
                 waitForIncomingConnection();
             }
         });
-        mWaitingForPartnerThread.start();
 
         Log.i(LOG, "init -> LEAVE");
+    }
+
+    private void initSocketServer() {
+        Log.i(LOG, "initSocketServer -> ENTER");
+        try {
+            mProviderSocket = new ServerSocket(TorConstants.TOR_BUNDLE_INTERNAL_HIDDEN_SERVICES_PORT, 10);
+        } catch (IOException e) {
+            Log.i(LOG, "error  when creating Server Socket: " + e.getMessage(), e);
+        }
+        Log.i(LOG, "initSocketServer -> LEAVE");
     }
 
     private void waitForIncomingConnection() {
@@ -66,47 +73,47 @@ public class TorConnectionReceiver {
             StrictMode.setThreadPolicy(policy);
         }
 
-        //TODO: must see when breaking...
-        while (true) {
-            //always listening for new connections. When a new on comes start a new message receiving thread
-            try {
-                mCurrentPartnerConnection = mProviderSocket.accept();
+        if (mProviderSocket != null) {
+            while (mProviderSocket.isBound()) {
+                //always listening for new connections. When a new on comes start a new message receiving thread
+                try {
+                    mCurrentPartnerConnection = mProviderSocket.accept();
 
-                if (mCurrentPartnerConnection != mPreviousPartnerConnection) {
+                    if (mCurrentPartnerConnection != mPreviousPartnerConnection) {
 
-                    mPreviousPartnerConnection = mCurrentPartnerConnection;
+                        mPreviousPartnerConnection = mCurrentPartnerConnection;
 
-                    Log.i(LOG, "Connection received from " + mCurrentPartnerConnection.getInetAddress().getHostName());
+                        Log.i(LOG, "Connection received from " + mCurrentPartnerConnection.getInetAddress().getHostName());
 
-                    new TorReceiverDelegator(mCurrentPartnerConnection, mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
-
-//                    DataInputStream dataInputStream = new DataInputStream(mCurrentPartnerConnection.getInputStream());
-//
-//                    OutputStream outputStream = mCurrentPartnerConnection.getOutputStream();
-//
-//                    DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-//
-//                    startMessageReceivingThread(dataInputStream);
-//
-//                    //TODO: ...reevaluate
-//                    //maybe a wait of 1-2 seconds to receive the address
-//                    Thread.sleep(2000);
-//
-//                    if (!mPartnerAddress.isEmpty()) {
-//
-//                        TorReceiverDelegator torReceiverDelegator = new TorReceiverDelegator(mCurrentPartnerConnection, dataInputStream, dataOutputStream, mPartnerAddress);
-//
-//                        mIsConnected = true;
-//                        mIncomingConnectionListenerManager.triggerPartnerChatRequest(torReceiverDelegator);
-//                    }
+                        new TorReceiverDelegator(mCurrentPartnerConnection, mIncomingConnectionListenerManager, mMessageReceivedListenerManager);
+                    }
+                } catch (Exception ioException) {
+                    Log.i(LOG, "error handling socket: " + ioException.getMessage(), ioException);
                 }
-            } catch (IOException ioException) {
-                Log.i(LOG, "error: " + ioException.getMessage(), ioException);
             }
+        } else {
+//            something has happened and the socket must reinit
+            closeTorReceiver();
+            init();
         }
     }
 
-    public Thread getWaitingForConnectionThread() {
-        return mWaitingForPartnerThread;
+    public void closeTorReceiver() {
+        Log.i(LOG, "closeTorReceiver -> ENTER");
+
+//        try {
+//            if (mProviderSocket != null && !mProviderSocket.isClosed()) {
+//                mProviderSocket.close();
+//            }
+//
+//            mProviderSocket = null;
+//        } catch (IOException ioException) {
+//            Log.i(LOG, "error closing the socket: " + ioException.getMessage(), ioException);
+//        }
+
+        mWaitingForPartnerThread.shutdownNow();
+        mWaitingForPartnerThread = null;
+
+        Log.i(LOG, "closeTorReceiver -> LEAVE");
     }
 }

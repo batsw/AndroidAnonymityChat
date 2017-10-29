@@ -15,4 +15,6 @@ public interface IChatConnectionManager {
     public void closeConnection(ChatDetail chatDetail);
 
     public void initializeConnectionManagement();
+
+    public void clearResources();
 }
