@@ -106,7 +106,9 @@ public class HistoryCleanupManager {
 
         mHistoryCleanupJob = null;
 
-        mCleanupJobThread.shutdownNow();
+        if (mCleanupJobThread != null) {
+            mCleanupJobThread.shutdownNow();
+        }
         mCleanupJobThread = null;
 
         Log.i(LOG, "stopAllCleanupJobs -> LEAVE");

@@ -2,6 +2,7 @@ package com.batsw.anonimitychat.tor.connections;
 
 import android.util.Log;
 
+import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.listener.IncomingConnectionListenerManager;
 import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
@@ -119,6 +120,8 @@ public class TorReceiverDelegator implements ITorConnection {
                             ChatConnectionManagerImpl.addReceivedConnection(mPartnerAddress, this);
 
                             mIncomingConnectionListenerManager.triggerPartnerChatRequest(mPartnerAddress);
+
+                            AppController.getInstanceParameterized(null).triggerNotification(mPartnerAddress);
 
                             mTriggeredChatRequest = true;
                         }

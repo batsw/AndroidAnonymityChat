@@ -34,7 +34,6 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
     private Context mContext;
 
     private TextView mMyAddress;
-    //    private TextView mDoneLabel, mCheckIcon;
     private TextView mNetworkConnectionStatusLabel;
     private Switch mNetworkConnectionSwitch;
 
@@ -51,9 +50,6 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.network_popup);
-
-//        mCheckIcon = (TextView) findViewById(R.id.network_popup_check);
-//        mCheckIcon.setTypeface(fontAwesome);
 
         mMyAddress = (TextView) findViewById(R.id.network_my_address);
         mMyAddress.setText(AppController.getInstanceParameterized(null).getMyProfile().getMyAddress().substring(0, 16));
@@ -128,35 +124,7 @@ public class NetworkPopupActivity extends Dialog implements View.OnClickListener
             }
         });
 
-        if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STOPPED)) {
-            mNetworkConnectionSwitch.setChecked(false);
-        } else {
-            mNetworkConnectionSwitch.setChecked(true);
-        }
-
-//        mDoneLabel = (TextView) findViewById(R.id.network_popup_done);
-//        mDoneLabel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-
         Log.i(LOG, "onCreate -> LEAVE");
-    }
-
-//    @Override
-//    public void create() {
-//
-//        super.create();
-//
-//    }
-
-    private void handlePopupContent() {
-        Log.i(LOG, "handlePopupContent -> ENTER");
-
-
-        Log.i(LOG, "handlePopupContent -> LEAVE");
     }
 
     @Override

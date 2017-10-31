@@ -30,6 +30,7 @@ import com.batsw.anonimitychat.util.AppConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -43,6 +44,9 @@ public class AppController {
     private static AppController mInstance;
 
     private AppCompatActivity mMainScreenActivity = null;
+
+    private boolean mIsBackended = false;
+
     private static Context mCurrentActivityContext = null;
 
     private TabContacts mContactsTab;
@@ -58,6 +62,8 @@ public class AppController {
     private String mMyAddress;
 
     private HistoryCleanupManager mHistoryCleanupManager;
+
+    private ExecutorService mNSNotifTriggExec;
 
     private AppController(AppCompatActivity mainActivity) {
         mMainScreenActivity = mainActivity;
@@ -129,6 +135,9 @@ public class AppController {
         handleChatController();
         Log.i(LOG, "init -> ChatController - DONE");
 
+        triggerNSNotificationThread();
+        Log.i(LOG, "init -> triggerNSNotificationThread - DONE");
+
         Log.i(LOG, "initBackend -> LEAVE");
     }
 
@@ -144,6 +153,15 @@ public class AppController {
         }
 
         Log.i(LOG, "startNetworkConnection -> LEAVE");
+    }
+
+    public void stopNSTrigNotifThread(){
+        Log.i(LOG, "stopNSTrigNotifThread -> ENTER");
+        mNSNotifTriggExec.shutdown();
+        mNSNotifTriggExec.shutdownNow();
+
+        mNSNotifTriggExec = null;
+        Log.i(LOG, "stopNSTrigNotifThread -> LEAVE");
     }
 
     public void stopHistoryCleanupJob() {
@@ -244,6 +262,37 @@ public class AppController {
         ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
 
         Log.i(LOG, "handleChatController -> LEAVE");
+    }
+
+    private void triggerNSNotificationThread() {
+        Log.i(LOG, "triggerNSNotificationThread -> ENTER");
+
+        mNSNotifTriggExec = Executors.newSingleThreadScheduledExecutor();
+        mNSNotifTriggExec.submit(new Runnable() {
+            @Override
+            public void run() {
+
+                while (true) {
+
+                    try {
+                        Thread.sleep(AppConstants.NET_STAT_NOTIF_TRIG_INTERVAL_MILIS);
+                    } catch (InterruptedException e) {
+                        Log.i(LOG, "net status notification triggering loop error: " + e.getMessage(), e);
+                    }
+
+                    Log.i(LOG, "triggerNSNotificationThread: -> repeat");
+
+                    if (mIsBackended && !(mTorStatusCarrier.getText()).equals(TorConstants.TOR_BUNDLE_STARTED)) {
+
+                        ((MainScreenActivity) mMainScreenActivity).triggerNotification("Network disconnected", "Network connection unavailable. Please connect to network!");
+                        Log.i(LOG, "triggerNSNotificationThread: -> network is not active");
+                    }
+
+                }
+            }
+        });
+
+        Log.i(LOG, "triggerNSNotificationThread -> LEAVE");
     }
 
     public void updateBundlePid(long newPid) {
@@ -379,7 +428,28 @@ public class AppController {
         return retVal;
     }
 
-    //TODO: check this ...
+    public void triggerNotification(String partnerAddress) {
+        Log.i(LOG, "triggerNotification -> ENTER");
+
+        if (mIsBackended) {
+            IDbEntity iDbEntityByAddress = mDatabaseHelper.getContactsOperations().getIDbEntityByAddress(partnerAddress);
+
+            String title = "";
+
+            if (iDbEntityByAddress != null) {
+                DBContactEntity dbContactEntity = (DBContactEntity) iDbEntityByAddress;
+                title = dbContactEntity.getName() + " contacted you!";
+            } else {
+                title = partnerAddress.substring(0, 16) + " contacted you!";
+            }
+
+            ((MainScreenActivity) mMainScreenActivity).triggerNotification(title, "Incoming chat request from your contacts!");
+
+        }
+
+        Log.i(LOG, "triggerNotification -> LEAVE");
+    }
+
     public void setCurrentActivityContext(Context context) {
         Log.i(LOG, "setCurrentActivityContext -> ENTER context=" + context);
 
@@ -607,5 +677,12 @@ public class AppController {
         return retVal;
     }
 
+    public void setIsBackended(boolean isBackended) {
+        Log.i(LOG, "setIsBackended -> ENTER isBackended=" + isBackended);
+        mIsBackended = isBackended;
+        Log.i(LOG, "setIsBackended -> LEAVE");
+    }
+
 //    TODO create fontAwesome loading method here
+//    a generic FA loading method used throughout the app
 }

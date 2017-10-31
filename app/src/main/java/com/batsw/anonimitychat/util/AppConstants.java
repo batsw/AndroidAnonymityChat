@@ -15,4 +15,6 @@ public interface AppConstants {
 
     public static final int ADDRESS_SIZE = 16;
 
+    public static final long NET_STAT_NOTIF_TRIG_INTERVAL_MILIS = 60000*5;
+
 }

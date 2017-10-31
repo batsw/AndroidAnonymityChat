@@ -1,9 +1,13 @@
 package com.batsw.anonimitychat.mainScreen;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -234,6 +239,30 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
+    public void triggerNotification(String title, String content) {
+        Log.i(LOG, "triggerNotification -> ENTER");
+
+        //        Notifications section
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setSmallIcon(R.drawable.tor_onion);
+
+        Intent intent = new Intent(this, MainScreenActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        notificationBuilder.setContentIntent(pendingIntent);
+
+        notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        notificationBuilder.setContentTitle(title);
+        notificationBuilder.setContentText(content);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        // Will display the notification in the notification bar
+        notificationManager.notify(1, notificationBuilder.build());
+
+        Log.i(LOG, "triggerNotification -> LEAVE");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(LOG, "onOptionsItemSelected -> ENTER item=" + item);
@@ -388,7 +417,8 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         Log.i(LOG, "onResume -> ENTER");
         super.onResume();
 
-        Log.i(LOG, "do nothing");
+        AppController.getInstanceParameterized(null).setIsBackended(false);
+
         Log.i(LOG, "onResume -> LEAVE");
     }
 
@@ -408,7 +438,9 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 //        }
 
         super.onStop();
-        Log.i(LOG, "after super.onStop() --- do nothing");
+
+        AppController.getInstanceParameterized(null).setIsBackended(true);
+
         Log.i(LOG, "onStop -> LEAVE");
     }
 
@@ -416,10 +448,10 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
     protected void onDestroy() {
         Log.i(LOG, "onDestroy -> ENTER");
 
-//        TODO: stop history clearing thread
         AppController.getInstanceParameterized(null).stopHistoryCleanupJob();
-
         AppController.getInstanceParameterized(null).stopNetworkConnection();
+        AppController.getInstanceParameterized(null).stopNSTrigNotifThread();
+
         Log.i(LOG, "TOR Bundle is stopped");
 
         super.onDestroy();
