@@ -13,6 +13,7 @@ cache:
 env:
   global:
     - ANDROID_TARGET=17
+    - EMULATOR_API=21
     - ANDROID_ABI=armeabi-v7a
 
 android:
@@ -20,13 +21,18 @@ android:
   - tools
   - platform-tools
   - build-tools-24.0.2
-  - android-ANDROID_TARGET
+  - android-$ANDROID_TARGET
+  - android-$EMULATOR_API
   - extra-google-m2repository
   - extra-android-m2repository # for design library
   - addon-google_apis-google-19 # google play services
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$ANDROID_API_LEVEL
-#  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
+  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
+   licenses:
+   - android-sdk-preview-license-.+
+   - android-sdk-license-.+
+   - google-gdk-license-.+
 
 before_install:
   - chmod +x gradlew
