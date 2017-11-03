@@ -30,9 +30,9 @@ android:
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
   licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
-  - google-gdk-license-.+
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
 
 before_install:
   - chmod +x gradlew
