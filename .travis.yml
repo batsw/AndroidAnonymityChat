@@ -39,6 +39,7 @@ before_install:
   - ./gradlew dependencies || true
 
 script:
+  - android update sdk --no-ui --filter build-tools-24.0.1,android-24,extra-android-m2repository
   - echo no | android create avd --force -n test -t android-$ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-window &
   - android-wait-for-emulator
