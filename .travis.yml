@@ -30,7 +30,9 @@ android:
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
   licenses:
+  - android-sdk-preview-license-2742d1c5
   - 'android-sdk-preview-license-.+'
+  - android-sdk-license-2742d1c5
   - 'android-sdk-license-.+'
   - 'google-gdk-license-.+'
 
