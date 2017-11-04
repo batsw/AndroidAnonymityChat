@@ -27,7 +27,7 @@ android:
   - extra-android-m2repository # for design library
 #  - addon-google_apis-google-19 # google play services
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$ANDROID_TARGET
-#  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
+  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
   licenses:
   - android-sdk-preview-license-.+
@@ -43,7 +43,8 @@ script:
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+#  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+  - "./gradlew clean build connectedCheck --stacktrace"
 
 #script:
 ##  - ./gradlew build jacocoTestReport assembleAndroidTest
