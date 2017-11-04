@@ -1,4 +1,4 @@
-# AndroidAnonymityChat
+# AndroidAnonymityChat - https://travis-ci.org/batsw/AndroidAnonymityChat.svg?branch=development
 
 ## Purpose
 Anonymity Chat is an Android app that provides secure and anonymous messaging. It is using TOR Network to send the messages.
