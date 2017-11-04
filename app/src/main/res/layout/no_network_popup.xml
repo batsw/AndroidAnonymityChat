@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:lines="2"
-        android:text="Not connected to network.\nYou need network connection to do that." />
+        android:text="Not connected to TOR network.\nYou need TOR connection to do that." />
 
     <Button
         android:id="@+id/nnp_connect_button"

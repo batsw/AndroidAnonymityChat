@@ -30,6 +30,7 @@ import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
+import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.mainScreen.popup.EmptyHistoryPopup;
 import com.batsw.anonimitychat.mainScreen.popup.NoNetworkPopup;
 import com.batsw.anonimitychat.mainScreen.popup.PartnerOfflinePopup;
@@ -94,12 +95,22 @@ public class ChatActivity extends AppCompatActivity {
 
                         Log.i(LOG, "sending message to partner");
 
-                        final ChatMessage message = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
+                        final ChatMessage chatMessage = new ChatMessage(chatEditText.getText().toString(), ChatMessageType.USER, System.currentTimeMillis());
 
                         //sending the message HERE
-                        mChatActivityManager.sendMessage(message.getMessage());
+                        mChatActivityManager.sendMessage(chatMessage.getMessage());
 
-                        mChatMessageList.add(message);
+                        mChatMessageList.add(chatMessage);
+
+//                        binding MY message to this chat and have it to history
+                        DBChatMessageEntity chatMessageEntity = new DBChatMessageEntity();
+                        chatMessageEntity.setSessionId(mSessionId);
+                        chatMessageEntity.setMessage(chatMessage.getMessage());
+                        chatMessageEntity.setChatMessageType(chatMessage.getChatMessageType());
+                        chatMessageEntity.setTimestamp(chatMessage.getTimeStamp());
+                        AppController.getInstanceParameterized(null).addMessageToChatHistory(chatMessageEntity);
+
+                        mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_online));
                     } else {
                         mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_busy_outline));
 
@@ -205,7 +216,7 @@ public class ChatActivity extends AppCompatActivity {
         mNetworkConnection = (TextView) findViewById(R.id.chat_partner_status_icon);
         mNetworkConnection.setTypeface(fontAwesome);
         if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
-            mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_online));
+            mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         } else {
             mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_offline));
         }
@@ -226,7 +237,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
                     Log.i(LOG, "mNetworkConnection.onTextChanged to: " + AppController.getInstanceParameterized(null).getNetworkConnectionStatus());
 
-                    mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.userstatus_online));
+//                    mNetworkConnection.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
 //                    means starting the connection to the partner
                     mChatActivityManager.onCreate();

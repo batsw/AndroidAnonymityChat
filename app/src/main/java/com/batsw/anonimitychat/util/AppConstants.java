@@ -17,4 +17,7 @@ public interface AppConstants {
 
     public static final long NET_STAT_NOTIF_TRIG_INTERVAL_MILIS = 60000*5;
 
+    public static final String NO_TOR_NET_CONN_MSG = "No TOR network \nconnection!";
+    public static final String NO_INET_CONN_MSG = "No internet \nconnection!";
+
 }

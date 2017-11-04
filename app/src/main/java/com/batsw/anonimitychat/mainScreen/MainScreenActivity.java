@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +44,7 @@ import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsProfileAct
 import com.batsw.anonimitychat.mainScreen.settings.activities.SettingsStorageActivity;
 import com.batsw.anonimitychat.mainScreen.tabs.TabContacts;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
+import com.batsw.anonimitychat.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,7 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 
     private NetworkPopupActivity mNetworkPopupActivity;
     private TextView mTextView;
+    private TextView mNoConnectionMessage;
 
     private Button mConnectButton;
     private LinearLayout nctnLayout;
@@ -98,6 +102,8 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 
         nctnLayout = (LinearLayout) findViewById(R.id.not_connected_to_network);
 
+        mNoConnectionMessage = (TextView) findViewById(R.id.not_connected_to_network_msg);
+
         mConnectButton = (Button) findViewById(R.id.nctn_connect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +113,8 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
                 Log.i(LOG, "mConnectButton.onClick  -> LEAVE");
             }
         });
+
+        updateNetworkConnectivityStatus();
 
         Log.i(LOG, "onCreate -> LEAVE");
     }
@@ -223,6 +231,8 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
                     nctnLayout.setVisibility(View.INVISIBLE);
                 } else if (textViewText.equals(TorConstants.TOR_BUNDLE_STOPPED)) {
                     networkItem.setIcon(R.drawable.simple_onion_white);
+
+                    updateNetworkConnectivityStatus();
                     nctnLayout.setVisibility(View.VISIBLE);
                 }
 
@@ -340,12 +350,6 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    public TabContacts getContactsFragment() {
-        Log.i(LOG, "getFloatingActionButton -> ENTER");
-        Log.i(LOG, "getFloatingActionButton -> LEAVE");
-        return mTabContacts;
-    }
-
 //    @Override
 //    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 //
@@ -394,9 +398,37 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 //        Log.i(LOG, "moveToChatsTab -> LEAVE");
 //    }
 
+    private void updateNetworkConnectivityStatus() {
+        Log.i(LOG, "updateNetworkConnectivityStatus -> ENTER");
+
+        if (!isNetworkAvailable()) {
+            mNoConnectionMessage.setText(AppConstants.NO_INET_CONN_MSG);
+            mConnectButton.setVisibility(View.INVISIBLE);
+        } else if (!mTextView.getText().equals(TorConstants.TOR_BUNDLE_STARTED)) {
+            mNoConnectionMessage.setText(AppConstants.NO_TOR_NET_CONN_MSG);
+            mConnectButton.setVisibility(View.VISIBLE);
+        }
+
+        Log.i(LOG, "updateNetworkConnectivityStatus -> LEAVE");
+    }
+
+    private boolean isNetworkAvailable() {
+        Log.i(LOG, "isNetworkAvailable -> ENTER");
+
+        boolean retVal = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        retVal = activeNetworkInfo != null && activeNetworkInfo.isConnected();
+
+        Log.i(LOG, "isNetworkAvailable -> LEAVE retVal=" + retVal);
+        return retVal;
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.i(LOG, "onNewIntent -> LEAVE");
+        Log.i(LOG, "onNewIntent -> ENTER");
         super.onNewIntent(intent);
 
         mReceivedIntent = true;
@@ -418,6 +450,7 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         super.onResume();
 
         AppController.getInstanceParameterized(null).setIsBackended(false);
+        updateNetworkConnectivityStatus();
 
         Log.i(LOG, "onResume -> LEAVE");
     }
@@ -456,14 +489,6 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
         super.onDestroy();
 
         Log.i(LOG, "onDestroy -> LEAVE");
-    }
-
-    @Override
-    public void onActionModeFinished(ActionMode mode) {
-        Log.i(LOG, "onActionModeFinished -> ENTER");
-        super.onActionModeFinished(mode);
-        Log.i(LOG, "do nothing");
-        Log.i(LOG, "onActionModeFinished -> LEAVE");
     }
 
     @Override

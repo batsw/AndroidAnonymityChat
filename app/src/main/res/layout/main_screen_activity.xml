@@ -66,12 +66,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/not_connected_to_network_msg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:lines="2"
-                    android:text="No network \nconnection!"
+                    android:text="No TOR network \nconnection!"
                     android:textColor="@android:color/black" />
 
             </LinearLayout>
