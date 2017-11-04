@@ -25,7 +25,6 @@ android:
   - android-$EMULATOR_API
   - extra-google-m2repository
   - extra-android-m2repository # for design library
-#  - addon-google_apis-google-19 # google play services
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$ANDROID_TARGET
   - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
@@ -35,9 +34,6 @@ android:
   - google-gdk-license-.+
 
 before_install:
-   - mkdir "$ANDROID_HOME/licenses" || true
-   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
    - chmod +x gradlew
    - ./gradlew dependencies || true
 
@@ -47,16 +43,6 @@ script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
   - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
-#  - "./gradlew clean build connectedCheck --stacktrace"
-
-#script:
-##  - ./gradlew build jacocoTestReport assembleAndroidTest
-##  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-##  - emulator -avd test -no-skin -no-audio -no-window &
-##  - android-wait-for-emulator
-##  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-#  - gradle build connectedCheck
-#  - ./gradlew build connectedCheck
 
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
