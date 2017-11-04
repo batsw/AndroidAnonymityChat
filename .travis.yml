@@ -26,22 +26,19 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository # for design library
 #  - addon-google_apis-google-19 # google play services
-  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API
+  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$ANDROID_TARGET
 #  - sys-img-${ANDROID_ABI}-addon-google_apis-google-$EMULATOR_API_LEVEL
   - sys-img-${ANDROID_ABI}-android-${ANDROID_TARGET}
   licenses:
-#  - android-sdk-preview-license-2742d1c5
-  - 'android-sdk-preview-license-.+'
-#  - android-sdk-license-2742d1c5
-  - 'android-sdk-license-.+'
-  - 'google-gdk-license-.+'
+  - android-sdk-preview-license-.+
+  - android-sdk-license-.+
+  - google-gdk-license-.+
 
 before_install:
   - chmod +x gradlew
   - ./gradlew dependencies || true
 
 script:
-  - android update sdk --no-ui --filter build-tools-24.0.2,android-24,extra-android-m2repository
   - echo no | android create avd --force -n test -t android-$ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-window &
   - android-wait-for-emulator
