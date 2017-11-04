@@ -450,7 +450,6 @@ public class MainScreenActivity extends AppCompatActivity implements NavigationV
 
         AppController.getInstanceParameterized(null).stopHistoryCleanupJob();
         AppController.getInstanceParameterized(null).stopNetworkConnection();
-        AppController.getInstanceParameterized(null).stopNSTrigNotifThread();
 
         Log.i(LOG, "TOR Bundle is stopped");
 

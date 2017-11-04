@@ -63,8 +63,6 @@ public class AppController {
 
     private HistoryCleanupManager mHistoryCleanupManager;
 
-    private ExecutorService mNSNotifTriggExec;
-
     private AppController(AppCompatActivity mainActivity) {
         mMainScreenActivity = mainActivity;
 //        binding the textView to the MainScreen
@@ -135,9 +133,6 @@ public class AppController {
         handleChatController();
         Log.i(LOG, "init -> ChatController - DONE");
 
-        triggerNSNotificationThread();
-        Log.i(LOG, "init -> triggerNSNotificationThread - DONE");
-
         Log.i(LOG, "initBackend -> LEAVE");
     }
 
@@ -153,15 +148,6 @@ public class AppController {
         }
 
         Log.i(LOG, "startNetworkConnection -> LEAVE");
-    }
-
-    public void stopNSTrigNotifThread(){
-        Log.i(LOG, "stopNSTrigNotifThread -> ENTER");
-        mNSNotifTriggExec.shutdown();
-        mNSNotifTriggExec.shutdownNow();
-
-        mNSNotifTriggExec = null;
-        Log.i(LOG, "stopNSTrigNotifThread -> LEAVE");
     }
 
     public void stopHistoryCleanupJob() {
@@ -262,37 +248,6 @@ public class AppController {
         ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
 
         Log.i(LOG, "handleChatController -> LEAVE");
-    }
-
-    private void triggerNSNotificationThread() {
-        Log.i(LOG, "triggerNSNotificationThread -> ENTER");
-
-        mNSNotifTriggExec = Executors.newSingleThreadScheduledExecutor();
-        mNSNotifTriggExec.submit(new Runnable() {
-            @Override
-            public void run() {
-
-                while (true) {
-
-                    try {
-                        Thread.sleep(AppConstants.NET_STAT_NOTIF_TRIG_INTERVAL_MILIS);
-                    } catch (InterruptedException e) {
-                        Log.i(LOG, "net status notification triggering loop error: " + e.getMessage(), e);
-                    }
-
-                    Log.i(LOG, "triggerNSNotificationThread: -> repeat");
-
-                    if (mIsBackended && !(mTorStatusCarrier.getText()).equals(TorConstants.TOR_BUNDLE_STARTED)) {
-
-                        ((MainScreenActivity) mMainScreenActivity).triggerNotification("Network disconnected", "Network connection unavailable. Please connect to network!");
-                        Log.i(LOG, "triggerNSNotificationThread: -> network is not active");
-                    }
-
-                }
-            }
-        });
-
-        Log.i(LOG, "triggerNSNotificationThread -> LEAVE");
     }
 
     public void updateBundlePid(long newPid) {
