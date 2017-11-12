@@ -1,36 +1,38 @@
 package com.batsw.anonimitychat.chat;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.batsw.anonimitychat.MainActivity;
 import com.batsw.anonimitychat.R;
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.management.ChatController;
-import com.batsw.anonimitychat.chat.management.ChatDetail;
 import com.batsw.anonimitychat.chat.management.activity.ChatActivityManagerImpl;
 import com.batsw.anonimitychat.chat.management.activity.IChatActivityManager;
+import com.batsw.anonimitychat.chat.management.connection.IIncommingConnectionEvent;
 import com.batsw.anonimitychat.chat.message.ChatMessage;
 import com.batsw.anonimitychat.chat.message.ChatMessageType;
-import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.mainScreen.popup.EmptyHistoryPopup;
 import com.batsw.anonimitychat.mainScreen.popup.NoNetworkPopup;
 import com.batsw.anonimitychat.mainScreen.popup.PartnerOfflinePopup;
@@ -38,12 +40,9 @@ import com.batsw.anonimitychat.persistence.entities.DBChatMessageEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.persistence.util.IDbEntity;
 import com.batsw.anonimitychat.tor.bundle.TorConstants;
-import com.batsw.anonimitychat.tor.connections.TorPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by tudor on 1/27/2017.
@@ -89,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         public void onClick(View view) {
             Log.i(LOG, "mClickForEnterChatView.onClick -> ENTER");
             if (view.equals(mEnterChatMessage)) {
+
                 if (AppController.getInstanceParameterized(null).getNetworkConnectionStatus().equals(TorConstants.TOR_BUNDLE_STARTED)) {
 
                     if (mChatActivityManager.getChatDetail().getTorConnection() != null) {
@@ -160,7 +160,7 @@ public class ChatActivity extends AppCompatActivity {
 
         reltiveLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        ChatController.getInstance().setCurrentActivityContext(this);
+        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(this);
 
         mChatActivityManager.setChatActivity(this);
 
@@ -362,6 +362,26 @@ public class ChatActivity extends AppCompatActivity {
 
         Log.i(LOG, "chatEditTextKeyListener.OnKeyListener:onKey -> LEAVE");
         return false;
+    }
+
+//    @Override
+    public void triggerIncommingConnectionEvent(final String partnerHostname) {
+        Log.i(LOG, "triggerIncommingChatRequestMessage -> ENTER");
+
+//        Toast toast = Toast.makeText(ChatActivity.this, "New message from: " + partnerHostname, Toast.LENGTH_LONG);
+//        toast.setGravity(Gravity.TOP, 0, 0);
+//        toast.show();
+
+//        ChatActivity.this.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast toast = Toast.makeText(getApplicationContext(), "New message from: " + partnerHostname, Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.TOP, 0, 0);
+//                toast.show();
+//            }
+//        });
+
+        Log.i(LOG, "triggerIncommingChatRequestMessage -> LEAVE");
     }
 
     /**

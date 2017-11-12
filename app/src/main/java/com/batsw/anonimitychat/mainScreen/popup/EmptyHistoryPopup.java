@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.mainScreen.popup;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -25,11 +26,8 @@ public class EmptyHistoryPopup extends Dialog implements View.OnClickListener {
 
     private static final String LOG = EmptyHistoryPopup.class.getSimpleName();
 
-    private Context mContext;
-
     public EmptyHistoryPopup(@NonNull Context context) {
         super(context);
-        mContext = context;
     }
 
     @Override
@@ -39,8 +37,6 @@ public class EmptyHistoryPopup extends Dialog implements View.OnClickListener {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.empty_history_popup);
-
-        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(getContext());
 
         Log.i(LOG, "onCreate -> LEAVE");
     }

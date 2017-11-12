@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.mainScreen.popup;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -32,12 +33,10 @@ public class NoNetworkPopup extends Dialog implements View.OnClickListener {
 
     private static final String LOG = NoNetworkPopup.class.getSimpleName();
 
-    private Context mContext;
     private Button mConnectButton;
 
     public NoNetworkPopup(@NonNull Context context) {
         super(context);
-        mContext = context;
     }
 
     @Override
@@ -47,8 +46,6 @@ public class NoNetworkPopup extends Dialog implements View.OnClickListener {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.no_network_popup);
-
-        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(getContext());
 
         mConnectButton = (Button) findViewById(R.id.nnp_connect_button);
         mConnectButton.setOnClickListener(new View.OnClickListener() {

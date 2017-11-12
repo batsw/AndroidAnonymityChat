@@ -1,8 +1,18 @@
 package com.batsw.anonimitychat.chat.management;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.batsw.anonimitychat.appManagement.AppController;
 import com.batsw.anonimitychat.chat.ChatActivity;
@@ -10,13 +20,17 @@ import com.batsw.anonimitychat.chat.constants.ChatModelConstants;
 import com.batsw.anonimitychat.chat.listener.IIncomingConnectionListener;
 import com.batsw.anonimitychat.chat.management.connection.ChatConnectionManagerImpl;
 import com.batsw.anonimitychat.chat.management.connection.IChatConnectionManager;
+import com.batsw.anonimitychat.chat.management.connection.IIncommingConnectionEvent;
 import com.batsw.anonimitychat.chat.message.IMessageReceivedListener;
 import com.batsw.anonimitychat.chat.persistence.PersistenceManager;
 import com.batsw.anonimitychat.chat.util.ConnectionType;
+import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ContactEntity;
 import com.batsw.anonimitychat.persistence.entities.DBContactEntity;
 import com.batsw.anonimitychat.tor.connections.ITorConnection;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,7 +47,7 @@ public class ChatController implements IIncomingConnectionListener {
 
     private static ChatController mInstance;
 
-    private static Context mCurrentActivityContext = null;
+    private static Activity mCurrentActivityContext = null;
 
     private static boolean isIncomingChatConnection = false;
 
@@ -205,7 +219,7 @@ public class ChatController implements IIncomingConnectionListener {
     }
 
     @Override
-    public void triggerIncomingPartnerConnectionEvent(String partnerHostName) {
+    public void triggerIncomingPartnerConnectionEvent(final String partnerHostName) {
         Log.i(CHAT_CONTROLLER_LOG, "triggerIncomingPartnerConnectionEvent -> ENTER partnerHostName=" + partnerHostName);
 
         //TODO: trigger the creation of a POP-up on the screen to let the USER decide whether to continue the
@@ -213,13 +227,18 @@ public class ChatController implements IIncomingConnectionListener {
 
             isIncomingChatConnection = true;
 
-            ChatController.getInstance().startChatActivity(mCurrentActivityContext, partnerHostName);
+            if (!(mCurrentActivityContext instanceof MainScreenActivity)) {
+//TODO: fdo something to show the user that another contact si looking for him
+                Log.i(CHAT_CONTROLLER_LOG, "some activity already open -> ---");
+
+            } else {
+                ChatController.getInstance().startChatActivity(mCurrentActivityContext, partnerHostName);
+            }
         }
         Log.i(CHAT_CONTROLLER_LOG, "triggerIncomingPartnerConnectionEvent -> LEAVE");
     }
 
-    //TODO: check this ...
-    public void setCurrentActivityContext(Context context) {
+    public void setCurrentActivityContext(Activity context) {
         Log.i(CHAT_CONTROLLER_LOG, "setCurrentActivityContext -> ENTER context=" + context);
 
         mCurrentActivityContext = context;

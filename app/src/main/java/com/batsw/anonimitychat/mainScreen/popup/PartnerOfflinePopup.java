@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.mainScreen.popup;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -26,14 +27,12 @@ public class PartnerOfflinePopup extends Dialog implements View.OnClickListener 
 
     private static final String LOG = PartnerOfflinePopup.class.getSimpleName();
 
-    private Context mContext;
     private IChatActivityManager mChatActivityManager;
 
     private Button mRetryButton;
 
     public PartnerOfflinePopup(@NonNull Context context, IChatActivityManager chatActivityManager) {
         super(context);
-        mContext = context;
         mChatActivityManager = chatActivityManager;
     }
 
@@ -44,8 +43,6 @@ public class PartnerOfflinePopup extends Dialog implements View.OnClickListener 
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.partner_offline_popup);
-
-        AppController.getInstanceParameterized(null).setChatControllerCurrentActivityContext(getContext());
 
         mRetryButton = (Button) findViewById(R.id.pop_retry_button);
         mRetryButton.setOnClickListener(new View.OnClickListener() {

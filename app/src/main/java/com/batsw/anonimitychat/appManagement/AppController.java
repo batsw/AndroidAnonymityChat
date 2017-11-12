@@ -1,5 +1,6 @@
 package com.batsw.anonimitychat.appManagement;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.batsw.anonimitychat.chat.ChatActivity;
 import com.batsw.anonimitychat.chat.management.ChatController;
 import com.batsw.anonimitychat.mainScreen.MainScreenActivity;
 import com.batsw.anonimitychat.mainScreen.entities.ChatEntity;
@@ -47,7 +49,7 @@ public class AppController {
 
     private boolean mIsBackended = false;
 
-    private static Context mCurrentActivityContext = null;
+    private static Activity mCurrentActivityContext = null;
 
     private TabContacts mContactsTab;
     private TabChats mChatsTab;
@@ -242,10 +244,10 @@ public class AppController {
 
         ChatController.getInstance();
         ChatController.getInstance().setMyAddress(mMyAddress);
-        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
+        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity);
         ChatController.getInstance().initializeChatConnectionManagement();
 
-        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity.getApplicationContext());
+        ChatController.getInstance().setCurrentActivityContext(mMainScreenActivity);
 
         Log.i(LOG, "handleChatController -> LEAVE");
     }
@@ -295,11 +297,11 @@ public class AppController {
         Log.i(LOG, "setChatsTab -> LEAVE");
     }
 
-    private void addNewChatToTab(ChatEntity newChatEntity) {
-        Log.i(LOG, "addNewChatToTab -> ENTER newChatEntity=" + newChatEntity);
-        mChatsTab.addChatToList(newChatEntity);
-        Log.i(LOG, "addNewChatToTab -> LEAVE");
-    }
+//    private void addNewChatToTab(ChatEntity newChatEntity) {
+//        Log.i(LOG, "addNewChatToTab -> ENTER newChatEntity=" + newChatEntity);
+//        mChatsTab.addChatToList(newChatEntity);
+//        Log.i(LOG, "addNewChatToTab -> LEAVE");
+//    }
 
     public void editChatToTab(ChatEntity chatEntity) {
         Log.i(LOG, "editChatToTab -> ENTER chatEntity=" + chatEntity);
@@ -341,13 +343,14 @@ public class AppController {
 //        Log.i(LOG, "moveToChatsTab -> LEAVE");
 //    }
 
-    public void setChatControllerCurrentActivityContext(Context context) {
+    public void setChatControllerCurrentActivityContext(Activity context) {
         Log.i(LOG, "setChatControllerCurrentActivityContext -> ENTER context=" + context);
         ChatController.getInstance().setCurrentActivityContext(context);
+        mCurrentActivityContext = context;
         Log.i(LOG, "setChatControllerCurrentActivityContext -> LEAVE");
     }
 
-    public Context getCurrentActivityContext() {
+    public Activity getCurrentActivityContext() {
         return mCurrentActivityContext;
     }
 
@@ -405,7 +408,7 @@ public class AppController {
         Log.i(LOG, "triggerNotification -> LEAVE");
     }
 
-    public void setCurrentActivityContext(Context context) {
+    public void setCurrentActivityContext(Activity context) {
         Log.i(LOG, "setCurrentActivityContext -> ENTER context=" + context);
 
         mCurrentActivityContext = context;
